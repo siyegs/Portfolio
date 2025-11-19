@@ -33,8 +33,7 @@ const HomePage: React.FC<HomePageProps> = ({
            }`}
         style={{ fontFamily: "Special Gothic Expanded One" }}
       >
-        <h1
-          className="leading-[1.3] font-medium mb-[1rem] text-[clamp(26px,4.5vw,93px)]">
+        <h1 className="leading-[1.3] font-medium mb-[1rem] text-[clamp(26px,4.5vw,93px)]">
           <span className="stroked-text text-transparent stroke-slate-100">
             HEY, I'M{" "}
           </span>{" "}
@@ -80,7 +79,8 @@ const HomePage: React.FC<HomePageProps> = ({
             fontFamily: "Space Grotesk",
           }}
         >
-          I'm an App and Frontend Web Developer, web <br /> designer & design enthusiast
+          {/* I'm an App and Frontend Web Developer, web <br /> designer & design enthusiast */}
+          I build applications and services that help <br /> businesses scale. Let's turn your visions to reality!
         </p>
 
         <div

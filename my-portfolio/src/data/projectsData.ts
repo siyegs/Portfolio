@@ -12,6 +12,20 @@ import kdcERP3 from "../assets/kdcERP/kdc3.jpeg";
 
 const projectsData = [
   {
+    title: "Mystra",
+    slug: "mystra-app",
+    url: "",
+    category: "Mobile App",
+    tags: ["Influencer"],
+    color: "bg-green-400",
+    image: "",
+    ongoing: true,
+    description: `Mystra is an influencer marketing mobile application designed to connect brands with social media influencers for effective marketing campaigns. The app allows brands to discover, collaborate, and manage influencer partnerships seamlessly. Influencers can create profiles, showcase their work, and connect with potential brand partners. Key features include campaign management, performance analytics, and secure payment processing. Mystra aims to streamline the influencer marketing process, making it easier for brands to reach their target audience through authentic influencer collaborations.`,
+    tools: ["React Native", "Firebase"],
+    underMaintenance: false,
+    isDemo: false,
+  },
+  {
     title: "Business ERP",
     slug: "kids-design-company-erp",
     url: "http://factory.kidsdesigncompany.com/",

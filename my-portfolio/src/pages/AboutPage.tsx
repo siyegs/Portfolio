@@ -49,7 +49,11 @@ const AboutPage: React.FC<AboutPageProps> = ({
               } `}
               style={{ fontSize: "clamp(12px, 12em, 55px)" }}
             >
-              A<span className="mx-1 px-[3px] inline-block scale-x-[1.5]">B</span>OUT
+              A
+              <span className="mx-1 px-[3px] inline-block scale-x-[1.5]">
+                B
+              </span>
+              OUT
             </h1>
             <hr className={`border`} />
             <p
@@ -60,7 +64,13 @@ const AboutPage: React.FC<AboutPageProps> = ({
               }`}
               style={{ fontFamily: "Space Grotesk" }}
             >
-              With a unique blend of design and development experience, ISK thrives on creating projects that highlight the talents and passions of others. He is deeply committed to making the internet more accessible and enjoys bringing his love for the outdoors into his digital work. When I am not befriending bugs, I listen to music and (maybe) read a book.
+              With a unique blend of design and development experience, ISK
+              thrives on creating projects that highlight the talents and
+              passions of others. He is deeply committed to making the internet
+              more accessible and enjoys bringing his love for the outdoors into
+              his digital work. Enough of talking about myself in third person.
+              When I am not befriending bugs, I listen to music and (maybe) read
+              a book.
             </p>
             <a
               href={resumePDF}
