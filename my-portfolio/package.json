@@ -20,6 +20,7 @@
     "react-icons": "^5.5.0",
     "react-responsive": "^10.0.1",
     "react-router-dom": "^7.6.2",
+    "sharp": "^0.34.5",
     "three": "^0.177.0"
   },
   "devDependencies": {

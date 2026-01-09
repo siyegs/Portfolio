@@ -3,6 +3,7 @@ import asl from "../assets/asl.webp";
 import kdc from "../assets/kdc.webp";
 import amazite from "../assets/amazite.webp";
 import chatApp from "../assets/chatAppTablet.png";
+import mystra from "../assets/iuy.png";
 
 //kdcERP
 import kdcERP from "../assets/kdcERP/kdcERP.png";
@@ -17,11 +18,11 @@ const projectsData = [
     url: "",
     category: "Mobile App",
     tags: ["Influencer"],
-    color: "bg-green-400",
-    image: "",
+    color: "bg-purple-500",
+    image: mystra,
     ongoing: true,
-    description: `Mystra is an influencer marketing mobile application designed to connect brands with social media influencers for effective marketing campaigns. The app allows brands to discover, collaborate, and manage influencer partnerships seamlessly. Influencers can create profiles, showcase their work, and connect with potential brand partners. Key features include campaign management, performance analytics, and secure payment processing. Mystra aims to streamline the influencer marketing process, making it easier for brands to reach their target audience through authentic influencer collaborations.`,
-    tools: ["React Native", "Firebase"],
+    description: `Mystra is an influencer marketing mobile app that bridges the gap between businesses and content creators. Businesses can post campaigns and discover creators who fit their brand, while creators can browse opportunities and apply to collaborations that match their niche. The app features a vertical video feed where users can watch, like, comment, and share promotional content. A built-in chat system enables seamless communication between brands and creators. Once a creator meets campaign parameters and successfully promotes a brand, the integrated payment system handles secure compensation. Key features include campaign management, creator discovery, real-time messaging, video feed, and secure payment processing.`,
+    tools: ["React Native", "WebSockets", "Firebase", "Stripe"],
     underMaintenance: false,
     isDemo: false,
   },
@@ -35,7 +36,7 @@ const projectsData = [
     image: kdcERP,
     ongoing: false,
     description: `The ERP provides end-to-end tracking of company activities, including profit and loss calculations, employee and inventory records, delivering actionable insights for informed decision-making. Implemented Role-Based Access Control (RBAC) to enforce secure, granular access management, safeguarding sensitive data and tailoring permissions to user roles. Key functionalities include real-time inventory management, financial analytics, and employee administration, creating a unified platform for streamlined business processes.`,
-    tools: ["React", "Tailwind CSS", "TypeScript"],
+    tools: ["React", "Tailwind CSS", "TypeScript", "Stripe"],
     underMaintenance: false,
     isDemo: false,
     slideshowImages: [kdcERP1, kdcERP3, kdcERP2],
@@ -59,7 +60,7 @@ const projectsData = [
     ongoing: false,
     description:
       "Fully responsive e-commerce application, featuring secure JWT-based authentication, dynamic product data consumption from a RESTful API, and robust state management for cart and wishlist functionalities. Implements efficient API communication, protected routes, and modular component architecture to ensure scalability and maintainability across different devices. Hey! You are here. Why don't you shop for something special?",
-    tools: ["React", "Tailwind CSS", "TypeScript"],
+    tools: ["React", "Tailwind CSS", "TypeScript", "Stripe"],
     underMaintenance: false,
     isDemo: false,
   },
@@ -74,7 +75,7 @@ const projectsData = [
     ongoing: false,
     description: `Your kid will love it here, so would you! This features secure authentication using JWT and Google OAuth, dynamic product listings, and full e-commerce functionality including a shopping cart and wishlist. Online payments are processed through Flutterwave and Paystack, offering secure and flexible checkout options. 
     An admin dashboard allows authorized users to add, update, and delete products, managing the store's inventory directly from the platform. The admin panel, is available for demonstration upon request.`,
-    tools: ["React", "Tailwind CSS", "TypeScript"],
+    tools: ["React", "Tailwind CSS", "TypeScript", "Stripe"],
     underMaintenance: false,
     isDemo: false,
   },
@@ -103,7 +104,7 @@ const projectsData = [
     ongoing: false,
     description:
       "A modern e-commerce platform built with React and Tailwind CSS. Features secure JWT and Google OAuth authentication, dynamic product listings, shopping cart, wishlist, and online payment through Flutterwave and Paystack. REST API integration and responsive UI provide a seamless user experience.",
-    tools: ["React", "Tailwind CSS", "TypeScript"],
+    tools: ["React", "Tailwind CSS", "TypeScript", "Stripe"],
     underMaintenance: false,
     isDemo: false,
   },
