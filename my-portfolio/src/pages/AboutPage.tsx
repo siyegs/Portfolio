@@ -1,7 +1,5 @@
 import React from "react";
 import Layout from "../components/Layout";
-import myImageMobile from "../assets/about/aboutImgMobile.jpg";
-import myImageDesktop from "../assets/about/aboutImgDesktop.jpg";
 import resumePDF from "../assets/about/IyegereSuccessResume.pdf";
 
 interface AboutPageProps {
@@ -20,34 +18,20 @@ const AboutPage: React.FC<AboutPageProps> = ({
   return (
     <Layout theme={theme} toggleTheme={toggleTheme} hoveredName={hoveredName}>
       <div
-        className={`main-container relative z-[1] text-white flex flex-col justify-center items-center min-h-screen px-5 ${
+        className={`main-container relative z-[1] flex flex-col justify-center items-center min-h-screen px-5 py-20 ${
           theme === "dark"
-            ? "bg-[#18181b]/90  text-[#f3f2f9]"
+            ? "bg-[#18181b]/90 text-[#f3f2f9]"
             : "bg-[#f3f2f9]/90 text-[#18181b]"
         }`}
       >
-        <div className="flex flex-col md:flex-row justify-center items-center md:gap-12 max-w-5xl w-full mt-[30px] lg:mt-[150px]">
-          {/* Image Column */}
-          <div className="w-full sm:w-1/2 md:w-1/3 md:order-last mt-[90px] mb-8 md:mt-0 flex items-center">
-            <img
-              src={myImageMobile}
-              alt="Iyegere Success"
-              className="md:hidden rounded-lg w-full shadow-lg h-auto object-cover"
-            />
-            <img
-              src={myImageDesktop}
-              alt="Iyegere Success"
-              className="max-md:hidden rounded-lg w-full shadow-lg h-auto object-cover"
-            />
-          </div>
-
-          {/* Text Column */}
-          <div className="w-full md:w-2/3 md:text-left">
+        <div className="max-w-4xl w-full mt-[60px] md:mt-[100px]">
+          {/* Large decorative heading */}
+          <div className="text-center mb-12">
             <h1
-              className={`font-bold mb-2 ${
-                theme === "light" ? "text-[#18181b]" : ""
-              } `}
-              style={{ fontSize: "clamp(12px, 12em, 55px)" }}
+              className={`font-bold mb-4 ${
+                theme === "light" ? "text-[#18181b]" : "text-[#f3f2f9]"
+              }`}
+              style={{ fontSize: "clamp(40px, 10vw, 80px)" }}
             >
               A
               <span className="mx-1 px-[3px] inline-block scale-x-[1.5]">
@@ -55,35 +39,104 @@ const AboutPage: React.FC<AboutPageProps> = ({
               </span>
               OUT
             </h1>
-            <hr className={`border`} />
+            <div
+              className={`w-24 h-1 mx-auto rounded-full ${
+                theme === "dark" ? "bg-[#f3f2f9]/30" : "bg-[#18181b]/30"
+              }`}
+            />
+          </div>
+
+          {/* Main content card */}
+          <div
+            className={`relative p-8 md:p-12 rounded-2xl backdrop-blur-sm ${
+              theme === "dark"
+                ? "bg-white/5 border border-white/10"
+                : "bg-black/5 border border-black/10"
+            }`}
+          >
+            {/* Decorative quote mark */}
+            <span
+              className={`absolute -top-6 left-8 text-8xl font-serif opacity-20 ${
+                theme === "dark" ? "text-white" : "text-black"
+              }`}
+            >
+              "
+            </span>
+
             <p
-              className={`text-lg sm:text-xl md:text-3xl mt-5 mb-8 py-4 rounded-lg ${
+              className={`text-xl sm:text-2xl md:text-3xl leading-relaxed mb-8 ${
                 theme === "light"
                   ? "text-[#18181b] font-medium"
-                  : " text-[whitesmoke]/80"
+                  : "text-[whitesmoke]/90"
               }`}
               style={{ fontFamily: "Space Grotesk" }}
             >
               With a unique blend of design and development experience, ISK
               thrives on creating projects that highlight the talents and
-              passions of others. He is deeply committed to making the internet
-              more accessible and enjoys bringing his love for the outdoors into
-              his digital work. Enough of talking about myself in third person.
-              When I am not befriending bugs, I listen to music and (maybe) read
-              a book.
+              passions of others.
             </p>
-            <a
-              href={resumePDF}
-              download="IyegereSuccessResume.pdf"
-              className={`inline-block py-2 px-4 rounded-full font-bold text-lg transition-colors duration-300 border mb-12 ${
+
+            <p
+              className={`text-lg sm:text-xl md:text-2xl leading-relaxed mb-8 ${
                 theme === "light"
-                  ? " text-[#18181b] border-2 border-[#18181b]/60"
-                  : ""
+                  ? "text-[#18181b]/80"
+                  : "text-[whitesmoke]/70"
               }`}
               style={{ fontFamily: "Space Grotesk" }}
             >
-              ↓ Resumé
-            </a>
+              He is deeply committed to making the internet more accessible and
+              enjoys bringing his love for the outdoors into his digital work.
+            </p>
+
+            <p
+              className={`text-lg sm:text-xl md:text-2xl leading-relaxed mb-10 italic ${
+                theme === "light"
+                  ? "text-[#18181b]/70"
+                  : "text-[whitesmoke]/60"
+              }`}
+              style={{ fontFamily: "Space Grotesk" }}
+            >
+              Enough of talking about myself in third person. When I am not
+              befriending bugs, I listen to music and (maybe) read a book.
+            </p>
+
+            {/* Resume button */}
+            <div className="flex justify-center md:justify-start">
+              <a
+                href={resumePDF}
+                download="IyegereSuccessResume.pdf"
+                className={`group inline-flex items-center gap-2 py-3 px-6 rounded-full font-bold text-lg transition-all duration-300 ${
+                  theme === "light"
+                    ? "bg-[#18181b] text-white hover:bg-[#18181b]/80"
+                    : "bg-white text-[#18181b] hover:bg-white/90"
+                }`}
+                style={{ fontFamily: "Space Grotesk" }}
+              >
+                <span className="group-hover:-translate-y-0.5 transition-transform duration-300">
+                  ↓
+                </span>
+                Resumé
+              </a>
+            </div>
+          </div>
+
+          {/* Skills/Interests tags */}
+          <div className="flex flex-wrap justify-center gap-3 mt-10">
+            {["Design", "Development", "Accessibility", "Music", "Books"].map(
+              (tag) => (
+                <span
+                  key={tag}
+                  className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 hover:scale-105 ${
+                    theme === "dark"
+                      ? "bg-white/10 text-white/80 hover:bg-white/20"
+                      : "bg-black/10 text-black/80 hover:bg-black/20"
+                  }`}
+                  style={{ fontFamily: "Space Grotesk" }}
+                >
+                  {tag}
+                </span>
+              )
+            )}
           </div>
         </div>
       </div>
