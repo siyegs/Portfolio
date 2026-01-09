@@ -20,7 +20,7 @@ const projectsData = [
     tags: ["Social Media","UGC","Influencer Marketing"],
     color: "bg-purple-500",
     image: mystra,
-    ongoing: true,
+    ongoing: true,      
     description: `Mystra is an influencer marketing mobile app that bridges the gap between businesses and content creators. Businesses can post campaigns and discover creators who fit their brand, while creators can browse opportunities and apply to collaborations that match their niche. The app features a vertical video feed where users can watch, like, comment, and share promotional content. A built-in chat system enables seamless communication between brands and creators. Once a creator meets campaign parameters and successfully promotes a brand, the integrated payment system handles secure compensation. Key features include campaign management, creator discovery, real-time messaging, video feed, and secure payment processing.`,
     tools: ["React Native", "WebSockets", "Firebase", "Stripe"],
     underMaintenance: false,

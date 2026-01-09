@@ -90,7 +90,7 @@ const Header = ({ theme, toggleTheme }: HeaderProps) => {
   // };
 
   const handleMenuNavigation = (path: string) => {
-    if (path === location.pathname) return;
+    // if (path === location.pathname) return;
     navigate(path);
     setIsMenuOpen(false);
   };
@@ -101,6 +101,12 @@ const Header = ({ theme, toggleTheme }: HeaderProps) => {
   const pathsExceptHome = headerItems
     .filter((item) => item.path !== "/")
     .map((item) => item.path);
+
+    const aTags = (path: string, socialApp: string)=> {
+      return (
+        <a href={path} className="flex items-center mx-4"><FiArrowUpRight className="mr-2"/>{socialApp}</a>
+      )
+    }
 
   return (
     <>
@@ -278,24 +284,9 @@ const Header = ({ theme, toggleTheme }: HeaderProps) => {
             </p>
           </nav>
           <div className="social-media flex mt-8 text-lg">
-            <a
-              href="https://www.linkedin.com/in/success-iyegere-063457250"
-              className="flex items-center mx-4"
-            >
-              <FiArrowUpRight className="mr-2" /> linkedin
-            </a>
-            <a
-              href="https://github.com/siyegs"
-              className="flex items-center mx-4"
-            >
-              <FiArrowUpRight className="mr-2" /> github
-            </a>
-            <a
-              href="https://x.com/IyegereS"
-              className="flex items-center mx-4"
-            >
-              <FiArrowUpRight className="mr-2" /> x
-            </a>
+            {aTags("https://www.linkedin.com/in/success-iyegere-063457250", "linkedin")}
+            {aTags("https://github.com/siyegs", "github")}
+            {aTags("https://x.com/IyegereS", "x")}
           </div>
         </div>
       ) : (
