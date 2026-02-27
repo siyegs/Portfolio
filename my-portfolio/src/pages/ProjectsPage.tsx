@@ -30,7 +30,7 @@ const WorkPage: React.FC<WorkPageProps> = ({
           <img
             src={proj.image}
             alt={proj.title + " " + "img"}
-            className="object-contain w-full h-full cursor-pointer"
+            className={`object-cover w-full h-full cursor-pointer ${proj.curveImg ? 'rounded-md' : ''}`}
             onClick={() => navigate(`/projects/${proj.slug}`)}
           />
         ) : (
@@ -72,8 +72,8 @@ const WorkPage: React.FC<WorkPageProps> = ({
             <span
               key={tag}
               className={`px-2 py-1 rounded-full text-xs font-medium border ${theme === "dark"
-                  ? "bg-[#1a1a22] text-[#aab2d1] border-[#333]"
-                  : "bg-[#f3f2f9] text-[#18181b] border-[#ccc]"
+                ? "bg-[#1a1a22] text-[#aab2d1] border-[#333]"
+                : "bg-[#f3f2f9] text-[#18181b] border-[#ccc]"
                 }`}
             >
               {tag}
@@ -88,8 +88,8 @@ const WorkPage: React.FC<WorkPageProps> = ({
     <Layout theme={theme} toggleTheme={toggleTheme} hoveredName={hoveredName}>
       <div
         className={`min-h-screen w-full flex flex-col items-center px-4 pt-24 pb-20 transition-colors duration-30 overflow-x-hidden ${theme === "dark"
-            ? "bg-[#18181b]/90  text-[#f3f2f9]"
-            : "bg-[#f3f2f9]/90 text-[#18181b]"
+          ? "bg-[#18181b]/90  text-[#f3f2f9]"
+          : "bg-[#f3f2f9]/90 text-[#18181b]"
           } `}
         style={{ fontFamily: "Space Grotesk" }}
       >
@@ -117,8 +117,8 @@ const WorkPage: React.FC<WorkPageProps> = ({
         {/* Call to Action */}
         <div
           className={`w-full grid md:w-screen md:py-12 mt-8 rounded-xl py-7 ${theme === "dark"
-              ? "bg-[#232336]/30 text-[#f3f2f9]"
-              : "bg-[#e9e6fa] text-[#18181b]"
+            ? "bg-[#232336]/30 text-[#f3f2f9]"
+            : "bg-[#e9e6fa] text-[#18181b]"
             }`}
         >
           <div className="grid md:grid-cols-2 md:gap-4 w-[85%] mx-auto">
