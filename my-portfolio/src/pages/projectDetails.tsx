@@ -107,6 +107,13 @@ const ProjectDetailsPage: React.FC<ProjectDetailsPageProps> = ({
                   </span>
                 )}
               </a>
+            ) : project.requestDemoEmail ? (
+              <a
+                href={`mailto:${project.requestDemoEmail}`}
+                className="inline-flex w-fit items-center gap-2 px-4 py-2 rounded-full bg-[#aab2d1] text-[#18181b] font-semibold hover:bg-[#e5e7eb] transition text-[12.5px]"
+              >
+                Request Live Demo
+              </a>
             ) : (
               <div className="inline-flex w-fit items-center gap-3 px-4 py-2 rounded-full bg-[#aab2d1] text-[#18181b] font-semibold text-[12.5px]">
                 <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
@@ -166,3 +173,4 @@ const ProjectDetailsPage: React.FC<ProjectDetailsPageProps> = ({
 };
 
 export default ProjectDetailsPage;
+

@@ -5,6 +5,7 @@ import amazite from "../assets/amazite.webp";
 import chatApp from "../assets/chatAppTablet.png";
 import mystra from "../assets/iuy.png";
 import mystraLandingPage from "../assets/mystra-landing-page/ipad-pro-mockup.png";
+import proverseDisplay from "../assets/proverse-display.png";
 
 //kdcERP
 import kdcERP from "../assets/kdcERP/kdcERP.png";
@@ -16,17 +17,14 @@ const projectsData = [
   {
     title: "Mystra App",
     slug: "mystra-app",
-    url: "",
     category: "Mobile App",
     tags: ["Social Media", "UGC", "Influencer Marketing"],
     color: "bg-purple-500",
     image: mystra,
     curveImg: true,
     ongoing: true,
-    description: `Mystra is a cross-platform influencer marketing mobile app connecting businesses with content creators. The app features role-based user flows — businesses can create and manage marketing campaigns with budgets, creator requirements, and niche targeting, then review, approve, or reject creator applications. Creators can browse available campaigns, apply to collaborations, and bookmark opportunities. A fullscreen vertical video feed lets users swipe through posts with auto-scrolling media carousels, double-tap to like, and engage through comments, reposts, and quote posts. Real-time messaging is powered by WebSockets with optimistic UI updates, offline message queuing, delivery/read receipts, and multimedia support. The app also includes push notifications, a follower/following system, user profiles with editable media galleries, and a structured onboarding flow with niche selection and profile setup.`,
+    description: `Cross-platform influencer marketing app that connects brands with creators through structured, role-based flows. Businesses define campaigns (budget, niche, deliverables) and review applications, while creators discover opportunities, apply, and track outcomes. Built a vertical, full-screen media feed with auto-advancing carousels, plus real-time chat via WebSockets with optimistic UI, offline queueing, and read receipts. Push notifications, follower graphs, and editable profile galleries complete the social layer.`,
     tools: ["React Native", "TypeScript", "Socket.IO", "NativeWind", "Firebase"],
-    underMaintenance: false,
-    isDemo: false,
   },
   {
     title: "Business ERP",
@@ -36,12 +34,8 @@ const projectsData = [
     tags: ["ERP", "Financial Analytics"],
     color: "bg-blue-500",
     image: kdcERP,
-    // curveImg: false,
-    ongoing: false,
-    description: `The ERP provides end-to-end tracking of company activities, including profit and loss calculations, employee and inventory records, delivering actionable insights for informed decision-making. Implemented Role-Based Access Control (RBAC) to enforce secure, granular access management, safeguarding sensitive data and tailoring permissions to user roles. Key functionalities include real-time inventory management, financial analytics, and employee administration, creating a unified platform for streamlined business processes.`,
+    description: `End-to-end ERP that unifies inventory, employee records, and financials to deliver real-time operational visibility. Implemented RBAC with role-scoped dashboards and permissions to protect sensitive data while keeping workflows efficient. Includes inventory movement tracking, P&L insights, and admin tooling for daily operations.`,
     tools: ["React", "Tailwind CSS", "TypeScript", "Stripe"],
-    underMaintenance: false,
-    isDemo: false,
     slideshowImages: [kdcERP1, kdcERP3, kdcERP2],
     hasRBAC: true,
     demoRolesURL: [
@@ -52,21 +46,22 @@ const projectsData = [
       { role: "Admin", url: "https://erp.fluxdevs.com/admin/dashboard" },
     ],
   },
-  // {
-  //   title: "ProVerse",
-  //   slug: "proverse",
-  //   url: "",
-  //   category: "Desktop App",
-  //   tags: ["Church Tech", "AI", "Real-Time"],
-  //   color: "bg-purple-500",
-  //   image: mystra,
-  //   curveImg: false,
-  //   ongoing: true,
-  //   description: `ProVerse is an AI-powered desktop application designed for churches to display Bible verses on a projector in real-time as the pastor speaks. The app captures live sermon audio, transcribes speech using Groq's Whisper model, and intelligently detects Bible verse references — whether spoken formally (e.g., "John 3:16") or informally (e.g., "the verse about God so loved the world") — using an LLM. Detected verses are fetched from a Bible API and displayed in a fullscreen, projector-friendly interface with elegant typography, fade-in animations, and a clickable verse history panel. Key features include rolling transcription context for improved accuracy, keyword pre-filtering to minimize unnecessary AI calls, duplicate verse suppression, and auto-clear timeouts.`,
-  //   tools: ["Python", "Groq AI (Whisper + Llama)", "Tkinter", "SoundDevice"],
-  //   underMaintenance: false,
-  //   isDemo: false,
-  // },
+    {
+    title: "ProVerse",
+    slug: "proverse",
+    url: "",
+    category: "Desktop App",
+    tags: ["Church Tech", "AI", "Real-Time"],
+    color: "bg-purple-500",
+    image: proverseDisplay,
+    curveImg: true,
+    ongoing: false,
+    description: `Desktop app for live church projection that listens to sermon audio, transcribes speech with Groq Whisper, and detects verse references using a Groq Llama model. Verses resolve instantly from a local KJV dataset with API fallback, plus caching and deduplication to minimize latency and repeat displays. Projector-optimized UI includes manual text mode, chapter and verse selection, recent-verse history, and smooth fade-in transitions.`,
+    tools: ["Python", "Groq Whisper", "Groq Llama", "Tkinter", "SoundDevice"],
+    requestDemoEmail: "iyegeresuccess@gmail.com",
+    underMaintenance: false,
+    isDemo: false,
+  },
   {
     title: "Kids Design Company",
     slug: "kids-design-company",
@@ -77,13 +72,11 @@ const projectsData = [
     image: kdc,
     curveImg: false,
     ongoing: false,
-    description: `Your kid will love it here, so would you! This features secure authentication using JWT and Google OAuth, dynamic product listings, and full e-commerce functionality including a shopping cart and wishlist. Online payments are processed through Flutterwave and Paystack, offering secure and flexible checkout options. 
-    An admin dashboard allows authorized users to add, update, and delete products, managing the store's inventory directly from the platform. The admin panel, is available for demonstration upon request.`,
+    description: `Production e-commerce storefront with secure JWT and Google OAuth authentication, product catalog, cart, and wishlist. Integrated Flutterwave and Paystack for payments and built an admin dashboard for inventory and order management. Focused on reliable API integration, clean UX, and maintainable component structure.`,
     tools: ["React", "Tailwind CSS", "TypeScript", "Stripe"],
     underMaintenance: false,
     isDemo: false,
   },
-
   {
     title: "Mystra Landing Page",
     slug: "mystra-landing-page",
@@ -94,7 +87,7 @@ const projectsData = [
     image: mystraLandingPage,
     curveImg: true,
     ongoing: false,
-    description: `A modern marketing landing page for the Mystra influencer marketing platform. The page features a hero section with animated overlapping phone mockups showcasing the app, a "How It Works" section with dual flows for businesses (create campaigns, get matched, track performance) and creators (build profile, get opportunities, earn), a features grid highlighting key capabilities like creator discovery, campaign management, secure payments, and analytics, an app showcase section, user testimonials, and a call-to-action. The entire page is enriched with scroll-triggered animations and micro-interactions powered by Framer Motion, delivering a polished, conversion-focused experience.`,
+    description: `High-converting marketing site for Mystra with a clear narrative from hero to features, workflows, and social proof. Implemented animated device mockups, scroll-triggered reveals, and micro-interactions using Framer Motion without sacrificing performance. Built with a modular layout system to keep content updates simple.`,
     tools: ["React", "TypeScript", "Tailwind CSS", "Framer Motion"],
     underMaintenance: false,
     isDemo: false,
@@ -109,8 +102,7 @@ const projectsData = [
     image: asl,
     curveImg: false,
     ongoing: false,
-    description:
-      "Fully responsive e-commerce application, featuring secure JWT-based authentication, dynamic product data consumption from a RESTful API, and robust state management for cart and wishlist functionalities. Implements efficient API communication, protected routes, and modular component architecture to ensure scalability and maintainability across different devices. Hey! You are here. Why don't you shop for something special?",
+    description: `Responsive e-commerce experience with JWT authentication, REST API integration, and state-managed cart and wishlist. Implemented protected routes and modular components for maintainability and scale. Optimized for smooth browsing and consistent performance across devices.`,
     tools: ["React", "Tailwind CSS", "TypeScript", "Stripe"],
     underMaintenance: false,
     isDemo: false,
@@ -125,7 +117,7 @@ const projectsData = [
     image: chatApp,
     curveImg: false,
     ongoing: false,
-    description: `Modern, real-time chat application powered by a serverless backend. Features secure, persistent user authentication, real-time messaging, and a sophisticated, permission-based chat access system with requests, accept/revoke, and grant-back capabilities. The application includes multimedia support and real-time notifications. Leveraging Firestore for live data synchronization, the fully responsive interface provides a seamless and intuitive user experience across all devices.`,
+    description: `Real-time chat app on Firebase with secure authentication, live message sync, and permission-based room access. Supports media sharing, notifications, and a clean responsive UI across mobile and desktop. Designed for reliability with resilient data updates and clear access workflows.`,
     tools: ["React", "Tailwind CSS", "Firebase"],
     underMaintenance: false,
     isDemo: false,
@@ -140,8 +132,7 @@ const projectsData = [
     image: shopCo,
     curveImg: false,
     ongoing: false,
-    description:
-      "A modern e-commerce platform built with React and Tailwind CSS. Features secure JWT and Google OAuth authentication, dynamic product listings, shopping cart, wishlist, and online payment through Flutterwave and Paystack. REST API integration and responsive UI provide a seamless user experience.",
+    description: `Modern e-commerce platform with JWT and Google OAuth, dynamic product listings, and a full checkout flow. Integrated Flutterwave and Paystack for payments and built reusable components for cart and wishlist management. Emphasized responsive design and clean API boundaries.`,
     tools: ["React", "Tailwind CSS", "TypeScript", "Stripe"],
     underMaintenance: false,
     isDemo: false,
@@ -156,8 +147,7 @@ const projectsData = [
     image: amazite,
     curveImg: false,
     ongoing: true,
-    description:
-      "A responsive web application for students seeking educational programs and guidance. Developed with React.js and styled with Tailwind CSS, the platform features dynamic course listings, an intuitive navigation flow, and mobile-friendly design to improve user engagement.",
+    description: `Education platform with dynamic program listings, clear navigation, and mobile-first layouts. Built with React and Tailwind CSS to keep the UI fast and consistent across devices. Focused on content discoverability and a smooth onboarding path for prospective students.`,
     tools: ["React", "Tailwind CSS"],
     underMaintenance: false,
     isDemo: false,
@@ -165,3 +155,5 @@ const projectsData = [
 ];
 
 export default projectsData;
+
+
