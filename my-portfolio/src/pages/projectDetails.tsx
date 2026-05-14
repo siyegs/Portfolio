@@ -2,6 +2,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import projectsData from "../data/projectsData";
 import Layout from "../components/Layout";
 import { FiExternalLink, FiArrowLeft } from "react-icons/fi";
+import { FaApple, FaGooglePlay } from "react-icons/fa";
 
 interface ProjectDetailsPageProps {
   theme: string;
@@ -17,8 +18,6 @@ const ProjectDetailsPage: React.FC<ProjectDetailsPageProps> = ({
   const { slugTextId } = useParams();
   const navigate = useNavigate();
   const project = projectsData.find((p) => p.slug === slugTextId);
-
-  console.log(project);
 
   document.title = project
     ? `${project.title} | ISK`
@@ -80,7 +79,53 @@ const ProjectDetailsPage: React.FC<ProjectDetailsPageProps> = ({
                 </span>
               ))}
             </div>
-            {project.url ? (
+            {project.androidAvailableByRequest || project.iosComingSoon ? (
+              <div className="mt-6 grid w-full max-w-[620px] grid-cols-1 gap-3 sm:grid-cols-2">
+                {project.androidAvailableByRequest && (
+                  <a
+                    href={`mailto:${project.androidRequestEmail}?subject=Mystra%20Android%20download%20link%20request`}
+                    className={`group inline-flex min-h-[72px] w-full items-center gap-3 rounded-lg border px-4 py-3 text-sm font-bold transition-all duration-200 ${theme === "dark"
+                      ? "border-emerald-300/35 bg-emerald-300 text-[#111316] shadow-[0_14px_35px_rgba(52,211,153,0.16)] hover:bg-emerald-200"
+                      : "border-emerald-800/15 bg-[#18181b] text-white shadow-[0_14px_35px_rgba(24,24,27,0.14)] hover:bg-emerald-700"
+                      }`}
+                    aria-label={`Request the ${project.title} Android download link`}
+                  >
+                    <span className="grid h-9 w-9 place-items-center rounded-md bg-white/18">
+                      <FaGooglePlay className="text-lg" />
+                    </span>
+                    <span className="flex flex-col leading-tight">
+                      <span className="text-[11px] uppercase tracking-[0.18em] opacity-75">
+                        Android Available
+                      </span>
+                      <span className="flex items-center gap-2 text-base">
+                        Request download link
+                        <FiExternalLink className="transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                      </span>
+                    </span>
+                  </a>
+                )}
+
+                {project.iosComingSoon && (
+                  <div
+                    className={`inline-flex min-h-[72px] w-full items-center gap-3 rounded-lg border px-4 py-3 text-sm font-bold ${theme === "dark"
+                      ? "border-white/10 bg-white/[0.06] text-[#f3f2f9]"
+                      : "border-[#18181b]/10 bg-white/70 text-[#18181b]"
+                      }`}
+                    aria-label={`${project.title} for iOS is coming soon`}
+                  >
+                    <span className="grid h-9 w-9 place-items-center rounded-md bg-[#aab2d1]/35">
+                      <FaApple className="text-xl" />
+                    </span>
+                    <span className="flex flex-col leading-tight">
+                      <span className="text-[11px] uppercase tracking-[0.18em] opacity-65">
+                        iOS
+                      </span>
+                      <span className="text-base">Coming Soon</span>
+                    </span>
+                  </div>
+                )}
+              </div>
+            ) : project.url ? (
               <a
                 href={
                   project.hasRBAC
