@@ -65,20 +65,6 @@ const ProjectDetailsPage: React.FC<ProjectDetailsPageProps> = ({
               {project.description}
             </p>
 
-            {/* tech stack */}
-            <div className="flex gap-2 mb-4 flex-wrap">
-              {project.tools.map((tool) => (
-                <span
-                  key={tool}
-                  className={`px-3 py-1 rounded-full text-xs font-medium border ${theme === "dark"
-                    ? "bg-[#1a1a22] text-[#aab2d1] border-[#333]"
-                    : "bg-[#f3f2f9] text-[#18181b] border-[#ccc]"
-                    }`}
-                >
-                  {tool}
-                </span>
-              ))}
-            </div>
             {project.androidAvailableByRequest || project.iosComingSoon ? (
               <div className="mt-6 grid w-full max-w-[620px] grid-cols-1 gap-3 sm:grid-cols-2">
                 {project.androidAvailableByRequest && (
@@ -193,12 +179,12 @@ const ProjectDetailsPage: React.FC<ProjectDetailsPageProps> = ({
           </div>
 
           <div
-            className={`rounded-lg w-full max-md:max-w-[560px] max-w-[800px] flex items-center justify-center mt-9 hover:scale-95 transition-all duration-200`}
+            className={`mt-9 flex h-[260px] w-full max-w-[800px] items-center justify-center rounded-lg transition-all duration-200 hover:scale-95 sm:h-[320px] lg:h-[420px]`}
           >
             <img
               src={project.image}
               alt={project.title}
-              className="object-contain w-full h-full"
+              className="h-full max-h-full w-full object-contain"
             />
           </div>
         </div>
