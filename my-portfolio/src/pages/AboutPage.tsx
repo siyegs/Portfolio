@@ -1,6 +1,5 @@
 import React from "react";
 import Layout from "../components/Layout";
-import resumePDF from "../assets/about/IyegereSuccessResume.pdf";
 
 interface AboutPageProps {
   theme: string;
@@ -18,45 +17,42 @@ const AboutPage: React.FC<AboutPageProps> = ({
   return (
     <Layout theme={theme} toggleTheme={toggleTheme} hoveredName={hoveredName}>
       <div
-        className={`main-container relative z-[1] flex flex-col justify-center items-center min-h-screen px-5 py-20 ${
+        className={`main-container relative z-[1] flex min-h-screen flex-col items-center justify-center px-5 py-20 ${
           theme === "dark"
             ? "bg-[#18181b]/90 text-[#f3f2f9]"
             : "bg-[#f3f2f9]/90 text-[#18181b]"
         }`}
       >
-        <div className="max-w-4xl w-full mt-[60px] md:mt-[100px]">
-          {/* Large decorative heading */}
-          <div className="text-center mb-12">
+        <div className="mt-[60px] w-full max-w-4xl md:mt-[100px]">
+          <div className="mb-12 text-center">
             <h1
-              className={`font-bold mb-4 ${
+              className={`mb-4 font-bold ${
                 theme === "light" ? "text-[#18181b]" : "text-[#f3f2f9]"
               }`}
               style={{ fontSize: "clamp(40px, 10vw, 80px)" }}
             >
               A
-              <span className="mx-1 px-[3px] inline-block scale-x-[1.5]">
+              <span className="mx-1 inline-block scale-x-[1.5] px-[3px]">
                 B
               </span>
               OUT
             </h1>
             <div
-              className={`w-24 h-1 mx-auto rounded-full ${
+              className={`mx-auto h-1 w-24 rounded-full ${
                 theme === "dark" ? "bg-[#f3f2f9]/30" : "bg-[#18181b]/30"
               }`}
             />
           </div>
 
-          {/* Main content card */}
           <div
-            className={`relative p-8 md:p-12 rounded-2xl backdrop-blur-sm ${
+            className={`relative rounded-2xl p-8 backdrop-blur-sm md:p-12 ${
               theme === "dark"
-                ? "bg-white/5 border border-white/10"
-                : "bg-black/5 border border-black/10"
+                ? "border border-white/10 bg-white/5"
+                : "border border-black/10 bg-black/5"
             }`}
           >
-            {/* Decorative quote mark */}
             <span
-              className={`absolute -top-6 left-8 text-8xl font-serif opacity-20 ${
+              className={`absolute -top-6 left-8 font-serif text-8xl opacity-20 ${
                 theme === "dark" ? "text-white" : "text-black"
               }`}
             >
@@ -64,9 +60,9 @@ const AboutPage: React.FC<AboutPageProps> = ({
             </span>
 
             <p
-              className={`text-xl sm:text-2xl md:text-3xl leading-relaxed mb-8 ${
+              className={`mb-8 text-xl leading-relaxed sm:text-2xl md:text-3xl ${
                 theme === "light"
-                  ? "text-[#18181b] font-medium"
+                  ? "font-medium text-[#18181b]"
                   : "text-[whitesmoke]/90"
               }`}
               style={{ fontFamily: "Space Grotesk" }}
@@ -77,7 +73,7 @@ const AboutPage: React.FC<AboutPageProps> = ({
             </p>
 
             <p
-              className={`text-lg sm:text-xl md:text-2xl leading-relaxed mb-8 ${
+              className={`mb-8 text-lg leading-relaxed sm:text-xl md:text-2xl ${
                 theme === "light"
                   ? "text-[#18181b]/80"
                   : "text-[whitesmoke]/70"
@@ -89,7 +85,7 @@ const AboutPage: React.FC<AboutPageProps> = ({
             </p>
 
             <p
-              className={`text-lg sm:text-xl md:text-2xl leading-relaxed mb-10 italic ${
+              className={`mb-10 text-lg italic leading-relaxed sm:text-xl md:text-2xl ${
                 theme === "light"
                   ? "text-[#18181b]/70"
                   : "text-[whitesmoke]/60"
@@ -100,33 +96,27 @@ const AboutPage: React.FC<AboutPageProps> = ({
               befriending bugs, I listen to music and (maybe) read a book.
             </p>
 
-            {/* Resume button */}
             <div className="flex justify-center md:justify-start">
               <a
-                href={resumePDF}
-                download="IyegereSuccessResume.pdf"
-                className={`group inline-flex items-center gap-2 py-3 px-6 rounded-full font-bold text-lg transition-all duration-300 ${
+                href="mailto:iyegeresuccess@gmail.com?subject=Resume%20request"
+                className={`inline-flex items-center gap-2 rounded-full px-6 py-3 text-lg font-bold transition-all duration-300 ${
                   theme === "light"
                     ? "bg-[#18181b] text-white hover:bg-[#18181b]/80"
                     : "bg-white text-[#18181b] hover:bg-white/90"
                 }`}
                 style={{ fontFamily: "Space Grotesk" }}
               >
-                <span className="group-hover:-translate-y-0.5 transition-transform duration-300">
-                  ↓
-                </span>
-                Resumé
+                Request Resume
               </a>
             </div>
           </div>
 
-          {/* Skills/Interests tags */}
-          <div className="flex flex-wrap justify-center gap-3 mt-10">
+          <div className="mt-10 flex flex-wrap justify-center gap-3">
             {["Design", "Development", "Accessibility", "Music", "Books"].map(
               (tag) => (
                 <span
                   key={tag}
-                  className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 hover:scale-105 ${
+                  className={`rounded-full px-4 py-2 text-sm font-medium transition-all duration-300 hover:scale-105 ${
                     theme === "dark"
                       ? "bg-white/10 text-white/80 hover:bg-white/20"
                       : "bg-black/10 text-black/80 hover:bg-black/20"
@@ -135,7 +125,7 @@ const AboutPage: React.FC<AboutPageProps> = ({
                 >
                   {tag}
                 </span>
-              )
+              ),
             )}
           </div>
         </div>
