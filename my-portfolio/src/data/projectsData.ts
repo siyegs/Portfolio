@@ -23,9 +23,10 @@ const projectsData = [
     image: mystra,
     curveImg: true,
     ongoing: true,
-    androidAvailableByRequest: true,
-    androidRequestEmail: "iyegeresuccess@gmail.com",
-    iosComingSoon: true,
+    androidDownloadUrl:
+      "https://play.google.com/store/apps/details?id=com.iyegeres.mystraappfinal",
+    iosBetaByRequest: true,
+    iosBetaEmail: "iyegeresuccess@gmail.com",
     description: `Influencer marketing app that connects brands with creators through structured, role-based flows. Businesses can define campaigns with budgets, niches, and deliverables, then review creator applications from one place. Creators can discover opportunities, apply, track outcomes, build profile galleries, and stay connected through real-time messaging, read receipts, push notifications, follower graphs, and a full-screen media feed built for social discovery.`,
   },
   {

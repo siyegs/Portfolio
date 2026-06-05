@@ -55,10 +55,10 @@ const WorkPage: React.FC<WorkPageProps> = ({
           )}
         </div>
 
-        {proj.androidAvailableByRequest && (
+        {proj.androidDownloadUrl && (
           <div className="absolute bottom-3 right-3">
             <span className="rounded bg-[#101114]/85 px-2.5 py-1 text-xs font-semibold text-emerald-200 shadow-lg backdrop-blur">
-              Android by request
+              Get on Google Play
             </span>
           </div>
         )}
