@@ -92,7 +92,7 @@ const projectsData = [
   {
     title: "Mystra Landing Page",
     slug: "mystra-landing-page",
-    url: "https://mystrahq.com",
+    url: "https://www.mystrahq.com",
     category: "Web Dev",
     tags: ["Landing Page", "Marketing"],
     color: "bg-emerald-200",
