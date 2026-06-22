@@ -1,5 +1,10 @@
 import { useState, useEffect } from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  useLocation,
+} from "react-router-dom";
 import { Canvas } from "@react-three/fiber";
 import Scene from "./components/Scene";
 import "./App.css";
@@ -8,6 +13,22 @@ import ProjectsPage from "./pages/ProjectsPage";
 import AboutPage from "./pages/AboutPage";
 import ContactPage from "./pages/ContactPage";
 import ProjectDetailsPage from "./pages/projectDetails";
+import NotFoundPage from "./pages/NotFound";
+
+// Reset scroll to the top on every route change so a detail page never opens
+// part-scrolled (which left the title hidden under the fixed navbar).
+function ScrollToTop() {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    if ("scrollRestoration" in window.history) {
+      window.history.scrollRestoration = "manual";
+    }
+    window.scrollTo(0, 0);
+  }, [pathname]);
+
+  return null;
+}
 
 function App() {
   const [theme, setTheme] = useState("dark");
@@ -37,6 +58,7 @@ function App() {
         <Scene hoveredName={hoveredName} theme={theme} />
       </Canvas>
       <Router>
+        <ScrollToTop />
         <Routes>
           <Route
             path="/"
@@ -83,6 +105,16 @@ function App() {
             path="/projects/:slugTextId"
             element={
               <ProjectDetailsPage
+                theme={theme}
+                toggleTheme={toggleTheme}
+                hoveredName={hoveredName}
+              />
+            }
+          />
+          <Route
+            path="*"
+            element={
+              <NotFoundPage
                 theme={theme}
                 toggleTheme={toggleTheme}
                 hoveredName={hoveredName}
