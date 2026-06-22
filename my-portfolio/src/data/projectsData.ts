@@ -119,7 +119,7 @@ const projectsData: Project[] = [
     image: mystraLandingPage,
     curveImg: true,
     ongoing: false,
-    description: `Mystra is a performance-first influencer marketing platform that connects brands with creators worldwide and pays for results, not follower counts. Businesses post a campaign brief, get matched to verified creators by niche, location, and audience, review and approve submissions, and pay only as content earns real views and engagement. Creators apply to paid campaigns from verified brands, build a portfolio of real work, and receive automatic milestone payouts straight to their bank account, earning more as their content performs. Escrow-funded campaigns, identity and business verification, and built-in product shipping keep the whole flow trustworthy and friction-free for both sides.`,
+    description: `MystraHQ deploys AI-powered automation for businesses across Africa and Europe: WhatsApp sales agents, voice booking systems, and full order-management pipelines, often live in as little as 48 hours. Every client onboards as a MystraHQ Business account that also unlocks Mystra's influencer marketing platform: post a campaign brief, get matched to verified creators by niche and audience, approve submissions, and pay for real performance instead of follower counts. Creators apply to paid campaigns from verified brands, build a portfolio of real work, and receive automatic milestone payouts straight to their bank as their content performs. One account spans done-for-you AI automation and creator-driven growth, with escrow, identity and business verification, and product shipping built in.`,
     underMaintenance: false,
     isDemo: false,
   },
