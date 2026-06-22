@@ -17,6 +17,10 @@ const WorkPage: React.FC<WorkPageProps> = ({
   document.title = "Projects | ISK";
   const navigate = useNavigate();
 
+  // One neutral card surface for every project (cool slate, brand family) so
+  // the grid reads calm instead of rainbow.
+  const cardBg = theme === "dark" ? "bg-[#222530]" : "bg-[#e5e6ef]";
+
   const renderProjectCard = (proj: (typeof projectsData)[0]) => (
     <div
       key={proj.title}
@@ -24,7 +28,7 @@ const WorkPage: React.FC<WorkPageProps> = ({
     >
       {/* Placeholder Thumbnail*/}
       <div
-        className={`relative flex items-center justify-center mb-4 p-6 rounded-lg ${proj.color} sm:h-[200px] sm:w-[280px] md:h-[240px] md:w-[320px] lg:w-[290px] xl:w-[350px] 2xl:w-[430px] hover:scale-95 transition-all duration-200`}
+        className={`relative flex items-center justify-center mb-4 p-6 rounded-lg ${cardBg} sm:h-[200px] sm:w-[280px] md:h-[240px] md:w-[320px] lg:w-[290px] xl:w-[350px] 2xl:w-[430px] hover:scale-95 transition-all duration-200`}
       >
         {proj.image ? (
           <img
