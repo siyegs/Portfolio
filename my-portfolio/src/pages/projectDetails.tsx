@@ -42,7 +42,7 @@ const ProjectDetailsPage: React.FC<ProjectDetailsPageProps> = ({
   return (
     <Layout theme={theme} toggleTheme={toggleTheme} hoveredName={hoveredName}>
       <div
-        className={`min-h-screen flex flex-col items-center justify-center  px-5 lg:px-20 py-16 pt-32 ${theme === "dark"
+        className={`min-h-screen flex flex-col items-center px-5 lg:px-20 py-16 pt-32 ${theme === "dark"
           ? "bg-[#18181b]/90 text-[#f3f2f9]"
           : "bg-[#f3f2f9]/90 text-[#18181b]"
           }`}
