@@ -25,13 +25,16 @@ const HomePage: React.FC<HomePageProps> = ({
   return (
     <Layout theme={theme} toggleTheme={toggleTheme} hoveredName={hoveredName}>
       <div
-        className={`main-container relative z-[1] text-white flex flex-col justify-center items-center h-screen text-center px-2
-           ${
-             theme === "dark"
-               ? "bg-[#18181b]/90  text-[#f3f2f9]"
-               : "bg-[#f3f2f9]/85 text-[#18181b]"
-           }`}
-        style={{ fontFamily: "Special Gothic Expanded One" }}
+        className={`main-container relative z-[1] text-white flex flex-col justify-center items-center h-screen text-center px-2 ${
+          theme === "dark" ? "text-[#f3f2f9]" : "text-[#18181b]"
+        }`}
+        style={{
+          fontFamily: "Special Gothic Expanded One",
+          background:
+            theme === "dark"
+              ? "radial-gradient(ellipse at 50% 45%, rgba(24,24,27,0.62) 0%, rgba(24,24,27,0.82) 55%, rgba(24,24,27,0.92) 100%)"
+              : "radial-gradient(ellipse at 50% 45%, rgba(243,242,249,0.60) 0%, rgba(243,242,249,0.80) 55%, rgba(243,242,249,0.92) 100%)",
+        }}
       >
         <h1 className="leading-[1.3] font-medium mb-[1rem] text-[clamp(26px,4.5vw,93px)]">
           <span className="stroked-text text-transparent stroke-slate-100">
