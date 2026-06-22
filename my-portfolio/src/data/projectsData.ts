@@ -13,21 +13,41 @@ import kdcERP1 from "../assets/kdcERP/Screenshot_3-8-2025_14529_factory.kidsdesi
 import kdcERP2 from "../assets/kdcERP/kdcERPLaptopWOFrame.jpeg";
 import kdcERP3 from "../assets/kdcERP/kdc3.jpeg";
 
-const projectsData = [
+export interface Project {
+  title: string;
+  slug: string;
+  category: string;
+  tags: string[];
+  color: string;
+  image: string;
+  description: string;
+  curveImg?: boolean;
+  ongoing?: boolean;
+  url?: string;
+  androidDownloadUrl?: string;
+  iosAppStoreUrl?: string;
+  slideshowImages?: string[];
+  hasRBAC?: boolean;
+  demoRolesURL?: { role: string; url: string }[];
+  requestDemoEmail?: string;
+  underMaintenance?: boolean;
+  isDemo?: boolean;
+}
+
+const projectsData: Project[] = [
   {
     title: "Mystra App",
     slug: "mystra-app",
     category: "Mobile App",
-    tags: ["Social Media", "UGC", "Influencer Marketing"],
+    tags: ["Influencer Marketing", "Creator Economy", "Real-Time", "In-App Payments"],
     color: "bg-purple-500",
     image: mystra,
     curveImg: true,
-    ongoing: true,
+    ongoing: false,
+    iosAppStoreUrl: "https://apps.apple.com/ng/app/mystra/id6761019285",
     androidDownloadUrl:
       "https://play.google.com/store/apps/details?id=com.iyegeres.mystraappfinal",
-    iosBetaByRequest: true,
-    iosBetaEmail: "iyegeresuccess@gmail.com",
-    description: `Influencer marketing app that connects brands with creators through structured, role-based flows. Businesses can define campaigns with budgets, niches, and deliverables, then review creator applications from one place. Creators can discover opportunities, apply, track outcomes, build profile galleries, and stay connected through real-time messaging, read receipts, push notifications, follower graphs, and a full-screen media feed built for social discovery.`,
+    description: `Cross-platform influencer marketing app that connects brands with creators through structured, role-based flows. Businesses create campaigns with budgets, niches, and deliverables, then review and approve creator applications from one place. Creators discover opportunities, apply, track milestones, build profile galleries, and get paid through an in-app wallet with identity-verified payouts. Real-time messaging, read receipts, push notifications, follower graphs, and a full-screen video feed round out a product built for social discovery and trust.`,
   },
   {
     title: "Business ERP",
@@ -90,16 +110,16 @@ const projectsData = [
     isDemo: false,
   },
   {
-    title: "Mystra Landing Page",
+    title: "Mystra - AI and automation",
     slug: "mystra-landing-page",
     url: "https://www.mystrahq.com",
     category: "Web Dev",
-    tags: ["Landing Page", "Marketing"],
+    tags: ["Landing Page", "Marketing Site", "Motion Design"],
     color: "bg-emerald-200",
     image: mystraLandingPage,
     curveImg: true,
     ongoing: false,
-    description: `High-converting marketing site for Mystra with a clear narrative from hero to features, workflows, and social proof. Implemented animated device mockups, scroll-triggered reveals, and micro-interactions using Framer Motion without sacrificing performance. Built with a modular layout system to keep content updates simple.`,
+    description: `Mystra is a performance-first influencer marketing platform that connects brands with creators worldwide and pays for results, not follower counts. Businesses post a campaign brief, get matched to verified creators by niche, location, and audience, review and approve submissions, and pay only as content earns real views and engagement. Creators apply to paid campaigns from verified brands, build a portfolio of real work, and receive automatic milestone payouts straight to their bank account, earning more as their content performs. Escrow-funded campaigns, identity and business verification, and built-in product shipping keep the whole flow trustworthy and friction-free for both sides.`,
     underMaintenance: false,
     isDemo: false,
   },

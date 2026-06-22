@@ -55,13 +55,6 @@ const WorkPage: React.FC<WorkPageProps> = ({
           )}
         </div>
 
-        {proj.androidDownloadUrl && (
-          <div className="absolute bottom-3 right-3">
-            <span className="rounded bg-[#101114]/85 px-2.5 py-1 text-xs font-semibold text-emerald-200 shadow-lg backdrop-blur">
-              Get on Google Play
-            </span>
-          </div>
-        )}
       </div>
 
       {/* Project Info - centered below image */}
@@ -73,21 +66,6 @@ const WorkPage: React.FC<WorkPageProps> = ({
         >
           {proj.title}
         </p>
-
-        {/* tag */}
-        <div className="flex gap-2 mt-1 flex-wrap">
-          {proj.tags.map((tag) => (
-            <span
-              key={tag}
-              className={`px-2 py-1 rounded-full text-xs font-medium border ${theme === "dark"
-                ? "bg-[#1a1a22] text-[#aab2d1] border-[#333]"
-                : "bg-[#f3f2f9] text-[#18181b] border-[#ccc]"
-                }`}
-            >
-              {tag}
-            </span>
-          ))}
-        </div>
       </div>
     </div>
   );

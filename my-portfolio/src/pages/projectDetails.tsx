@@ -65,7 +65,7 @@ const ProjectDetailsPage: React.FC<ProjectDetailsPageProps> = ({
               {project.description}
             </p>
 
-            {project.androidDownloadUrl || project.iosBetaByRequest ? (
+            {project.androidDownloadUrl || project.iosAppStoreUrl ? (
               <div className="mt-6 grid w-full max-w-[620px] grid-cols-1 gap-3 sm:grid-cols-2">
                 {project.androidDownloadUrl && (
                   <a
@@ -93,14 +93,16 @@ const ProjectDetailsPage: React.FC<ProjectDetailsPageProps> = ({
                   </a>
                 )}
 
-                {project.iosBetaByRequest && (
+                {project.iosAppStoreUrl && (
                   <a
-                    href={`mailto:${project.iosBetaEmail}?subject=Mystra%20iOS%20TestFlight%20beta%20access%20request`}
+                    href={project.iosAppStoreUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className={`group inline-flex min-h-[72px] w-full items-center gap-3 rounded-lg border px-4 py-3 text-sm font-bold transition-all duration-200 ${theme === "dark"
                       ? "border-white/10 bg-white/[0.06] text-[#f3f2f9] hover:bg-white/[0.1]"
                       : "border-[#18181b]/10 bg-white/70 text-[#18181b] hover:bg-white"
                       }`}
-                    aria-label={`Request TestFlight beta access for ${project.title} on iOS`}
+                    aria-label={`Download ${project.title} on the App Store`}
                   >
                     <span className="grid h-9 w-9 place-items-center rounded-md bg-[#aab2d1]/35">
                       <FaApple className="text-xl" />
@@ -110,7 +112,7 @@ const ProjectDetailsPage: React.FC<ProjectDetailsPageProps> = ({
                         iOS
                       </span>
                       <span className="flex items-center gap-2 text-base">
-                        Request TestFlight Access
+                        Download on the App Store
                         <FiExternalLink className="transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                       </span>
                     </span>
@@ -165,7 +167,7 @@ const ProjectDetailsPage: React.FC<ProjectDetailsPageProps> = ({
             {project.hasRBAC && (
               <div className="mt-3">
                 <div className="flex gap-2 flex-wrap">
-                  {project.demoRolesURL.map((role) => (
+                  {project.demoRolesURL?.map((role) => (
                     <a
                       key={role.role}
                       href={role.url}
