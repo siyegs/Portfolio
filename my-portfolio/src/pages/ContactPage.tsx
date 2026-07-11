@@ -1,5 +1,6 @@
 import React from "react";
 import Layout from "../components/Layout";
+import SEO from "../components/SEO";
 // import { FiGithub, FiLinkedin, FiX, FiInstagram } from "react-icons/fi";
 // import logoWhite from "../assets/logo-white.webp";
 // import logoBlack from "../assets/logo-black.webp";
@@ -33,8 +34,6 @@ const ContactPage: React.FC<ContactPageProps> = ({
   toggleTheme,
   hoveredName,
 }) => {
-  document.title = "Contact | ISK";
-
   const sayHello = (
     <h1 className={`marquee-text text-[clamp(3rem,8vw,6rem)] font-extrabold uppercase text-center whitespace-nowrap inline-block pr-[40px] md:pr-[54px] tracking-[-0.04em] leading-[1.1] ${theme === "light" ? "text-[#18181b]/80 hover:text-[#90754c]" : "text-[#aab2d1] hover:text-[whitesmoke]"}`}>
       SAY HELLO – WANNA BE STARTING SOMETHING? {" "}
@@ -44,6 +43,11 @@ const ContactPage: React.FC<ContactPageProps> = ({
 
   return (
     <Layout theme={theme} toggleTheme={toggleTheme} hoveredName={hoveredName}>
+      <SEO
+        title="Contact"
+        path="/contact"
+        description="Get in touch with Iyegere Success Karboloo - Full-Stack Engineer for web, mobile and backend projects, remote work and collaborations."
+      />
       <div
         className={`relative min-h-screen flex flex-col justify-between items-center px-4 pt-24 pb-10 transition-colors duration-300 ${
           theme === "dark"

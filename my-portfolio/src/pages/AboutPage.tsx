@@ -1,5 +1,6 @@
 import React from "react";
 import Layout from "../components/Layout";
+import SEO from "../components/SEO";
 
 interface AboutPageProps {
   theme: string;
@@ -12,10 +13,13 @@ const AboutPage: React.FC<AboutPageProps> = ({
   toggleTheme,
   hoveredName,
 }) => {
-  document.title = "About | ISK";
-
   return (
     <Layout theme={theme} toggleTheme={toggleTheme} hoveredName={hoveredName}>
+      <SEO
+        title="About"
+        path="/about"
+        description="About Iyegere Success Karboloo - a Full-Stack Engineer in Nigeria, Lead Developer at MystraHQ and Staff Software Engineer at Fluxdevs, working across web, mobile and backend."
+      />
       <div
         className={`main-container relative z-[1] flex min-h-screen flex-col items-center justify-center px-5 py-20 ${
           theme === "dark"
@@ -67,9 +71,10 @@ const AboutPage: React.FC<AboutPageProps> = ({
               }`}
               style={{ fontFamily: "Space Grotesk" }}
             >
-              With a unique blend of design and development experience, ISK
-              thrives on creating projects that highlight the talents and
-              passions of others.
+              I'm Iyegere Success Karboloo, a Full-Stack Engineer based in
+              Nigeria. I build fast, reliable products end to end and move
+              comfortably from interface to API to database, reaching for the
+              right tool for the job instead of forcing a favorite.
             </p>
 
             <p
@@ -80,8 +85,12 @@ const AboutPage: React.FC<AboutPageProps> = ({
               }`}
               style={{ fontFamily: "Space Grotesk" }}
             >
-              He is deeply committed to making the internet more accessible and
-              enjoys bringing his love for the outdoors into his digital work.
+              Currently Lead Developer at MystraHQ and Staff Software Engineer
+              at Fluxdevs, I've shipped e-commerce platforms, ERPs, real-time
+              apps and a cross-platform influencer marketing app - across web,
+              mobile and backend, including payment integrations - and handled
+              remote work for teams beyond Nigeria. I care about accessibility
+              and clean, maintainable code.
             </p>
 
             <p
@@ -92,8 +101,8 @@ const AboutPage: React.FC<AboutPageProps> = ({
               }`}
               style={{ fontFamily: "Space Grotesk" }}
             >
-              Enough of talking about myself in third person. When I am not
-              befriending bugs, I listen to music and (maybe) read a book.
+              When I'm not befriending bugs, I'm listening to music and (maybe)
+              reading a book.
             </p>
 
             <div className="flex justify-center md:justify-start">

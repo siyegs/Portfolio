@@ -1,8 +1,11 @@
 import { useParams, useNavigate } from "react-router-dom";
 import projectsData from "../data/projectsData";
 import Layout from "../components/Layout";
+import SEO from "../components/SEO";
 import NotFoundPage from "./NotFound";
 import { FiExternalLink, FiArrowLeft } from "react-icons/fi";
+
+const SITE_URL = "https://iyegeresk.web.app";
 
 interface ProjectDetailsPageProps {
   theme: string;
@@ -19,10 +22,6 @@ const ProjectDetailsPage: React.FC<ProjectDetailsPageProps> = ({
   const navigate = useNavigate();
   const project = projectsData.find((p) => p.slug === slugTextId);
   const isDark = theme === "dark";
-
-  document.title = project
-    ? `${project.title} | ISK`
-    : "Project Not Found | ISK";
 
   if (!project) {
     return (
@@ -60,8 +59,23 @@ const ProjectDetailsPage: React.FC<ProjectDetailsPageProps> = ({
     ? "border-white/[0.12] bg-white/[0.05] text-white hover:border-white/25"
     : "border-[#18181b]/15 bg-[#18181b] text-white hover:bg-black";
 
+  const metaDescription =
+    project.description.length > 155
+      ? `${project.description.slice(0, 152).trimEnd()}...`
+      : project.description;
+
   return (
     <Layout theme={theme} toggleTheme={toggleTheme} hoveredName={hoveredName}>
+      <SEO
+        title={project.title}
+        path={`/projects/${project.slug}`}
+        description={metaDescription}
+        image={
+          project.image?.startsWith("/")
+            ? `${SITE_URL}${project.image}`
+            : undefined
+        }
+      />
       <div
         className={`min-h-screen flex flex-col items-center px-5 lg:px-20 py-16 pt-32 ${
           isDark
@@ -228,7 +242,7 @@ const ProjectDetailsPage: React.FC<ProjectDetailsPageProps> = ({
           >
             <img
               src={project.image}
-              alt={project.title}
+              alt={`${project.title} - ${project.category} by Iyegere Success Karboloo`}
               className="mx-auto max-h-[460px] w-full object-contain p-3 sm:p-5"
             />
           </div>

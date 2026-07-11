@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import Layout from "../components/Layout";
+import SEO from "../components/SEO";
 import { FiArrowLeft } from "react-icons/fi";
 
 interface NotFoundPageProps {
@@ -20,10 +21,9 @@ const NotFoundPage: React.FC<NotFoundPageProps> = ({
   const navigate = useNavigate();
   const isDark = theme === "dark";
 
-  document.title = `${heading} | ISK`;
-
   return (
     <Layout theme={theme} toggleTheme={toggleTheme} hoveredName={hoveredName}>
+      <SEO title={heading} noindex description={message} />
       <div
         className={`min-h-screen flex flex-col items-center justify-center px-5 text-center ${
           isDark

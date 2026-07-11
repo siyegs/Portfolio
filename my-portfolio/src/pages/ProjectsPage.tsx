@@ -1,5 +1,6 @@
 import React from "react";
 import Layout from "../components/Layout";
+import SEO from "../components/SEO";
 import { useNavigate } from "react-router-dom";
 import projectsData from "../data/projectsData";
 
@@ -14,7 +15,6 @@ const WorkPage: React.FC<WorkPageProps> = ({
   toggleTheme,
   hoveredName,
 }) => {
-  document.title = "Projects | ISK";
   const navigate = useNavigate();
 
   // One neutral card surface for every project (cool slate, brand family) so
@@ -33,7 +33,7 @@ const WorkPage: React.FC<WorkPageProps> = ({
         {proj.image ? (
           <img
             src={proj.image}
-            alt={proj.title + " " + "img"}
+            alt={`${proj.title} - ${proj.category} project by Iyegere Success Karboloo`}
             className={`object-cover w-full h-full cursor-pointer ${proj.curveImg ? 'rounded-md' : ''}`}
             onClick={() => navigate(`/projects/${proj.slug}`)}
           />
@@ -76,6 +76,11 @@ const WorkPage: React.FC<WorkPageProps> = ({
 
   return (
     <Layout theme={theme} toggleTheme={toggleTheme} hoveredName={hoveredName}>
+      <SEO
+        title="Projects"
+        path="/projects"
+        description="Selected projects by Iyegere Success Karboloo - influencer marketing apps, ERPs, e-commerce platforms and real-time products across web, mobile and backend."
+      />
       <div
         className={`min-h-screen w-full flex flex-col items-center px-4 pt-24 pb-20 transition-colors duration-30 overflow-x-hidden ${theme === "dark"
           ? "bg-[#18181b]/90  text-[#f3f2f9]"

@@ -3,6 +3,7 @@ import { FiArrowRight } from "react-icons/fi";
 import "../App.css";
 import { useMediaQuery } from "react-responsive";
 import Layout from "../components/Layout";
+import SEO from "../components/SEO";
 import { useNavigate } from "react-router-dom";
 
 interface HomePageProps {
@@ -18,12 +19,19 @@ const HomePage: React.FC<HomePageProps> = ({
   hoveredName,
   setHoveredName,
 }) => {
-  document.title = "Home | ISK";
   const is500andAbove = useMediaQuery({ minWidth: 500 });
   const navigate = useNavigate();
 
   return (
     <Layout theme={theme} toggleTheme={toggleTheme} hoveredName={hoveredName}>
+      <SEO isHome title="Iyegere Success Karboloo - Full-Stack Engineer" path="/" />
+      {/* Visually hidden, crawler- and screen-reader-friendly summary. The visible
+          hero is split into styled spans, so this gives search engines a clean sentence. */}
+      <p className="sr-only">
+        Iyegere Success Karboloo is a Full-Stack Engineer based in Nigeria,
+        building web, mobile and backend products with React, React Native,
+        Next.js, TypeScript and Node.js.
+      </p>
       <div
         className={`main-container relative z-[1] text-white flex flex-col justify-center items-center h-screen text-center px-2 ${
           theme === "dark" ? "text-[#f3f2f9]" : "text-[#18181b]"
@@ -70,7 +78,7 @@ const HomePage: React.FC<HomePageProps> = ({
             onMouseEnter={() => setHoveredName("KARBOLOO")}
             onMouseLeave={() => setHoveredName(null)}
           >
-            KABORLOO
+            KARBOLOO
           </span>
         </h1>
 
