@@ -7,6 +7,7 @@ import {
 } from "react-router-dom";
 import { Canvas } from "@react-three/fiber";
 import Scene from "./components/Scene";
+import InterviewChat from "./components/InterviewChat";
 import "./App.css";
 import HomePage from "./pages/HomePage";
 import ProjectsPage from "./pages/ProjectsPage";
@@ -123,6 +124,7 @@ function App() {
           />
         </Routes>
       </Router>
+      <InterviewChat theme={theme} />
     </>
   );
 }
