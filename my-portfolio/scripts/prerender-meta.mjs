@@ -63,7 +63,6 @@ const projects = [
   ["kids-design-company", "Kids Design Company", "A children's brand needed to sell online without clunky sign-in or shaky checkout: secure JWT and Google OAuth, cart, wishlist and Flutterwave/Paystack payments."],
   ["mystra-ai-automation", "Mystra - AI and automation", "Small businesses lose sales to slow replies and manual booking. MystraHQ deploys AI WhatsApp sales, voice booking and order pipelines, plus a creator marketplace."],
   ["asl-originals", "ASL Originals", "Shoppers abandon slow, insecure mobile stores. ASL Originals answers with a fast, responsive storefront: JWT auth, protected routes and REST API integration."],
-  ["isk-chat-room", "ISK Chat", "Group chats break down when the wrong people reach the wrong rooms. ISK Chat keeps it tight with permission-based rooms, live updates and media sharing."],
   ["shop-co", "Shop Co", "Browsers become buyers only with frictionless sign-in and trusted checkout. Shop Co delivers JWT and Google OAuth, dynamic listings and Flutterwave/Paystack payments."],
 ].map(([slug, title, description]) => ({
   path: `/projects/${slug}`,

@@ -56,11 +56,6 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://iyegeresk.web.app/projects/isk-chat-room</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
     <loc>https://iyegeresk.web.app/projects/shop-co</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>

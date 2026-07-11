@@ -1,7 +1,7 @@
 import shopCo from "../assets/shopCo.webp";
 import asl from "../assets/asl.webp";
 import kdc from "../assets/kdc.webp";
-import chatApp from "../assets/chatAppTablet.png";
+// import chatApp from "../assets/chatAppTablet.png"; // ISK Chat removed
 import mystra from "../assets/iuy.png";
 import packaMark from "../assets/packa-mark.jpg";
 import mystraLandingPage from "../assets/mystra-landing-page/ipad-pro-mockup.png";
@@ -173,25 +173,25 @@ const projectsData: Project[] = [
     underMaintenance: false,
     isDemo: false,
   },
-  {
-    title: "ISK Chat",
-    slug: "isk-chat-room",
-    url: "https://isk-chat-room.web.app",
-    category: "Web Dev",
-    tags: ["Real-Time Messaging", "Permission-Based Rooms", "Media Sharing & Notifications"],
-    color: "bg-purple-400",
-    image: chatApp,
-    curveImg: false,
-    ongoing: false,
-    description: `Group conversations break down when the wrong people reach the wrong rooms and updates lag behind. ISK Chat keeps communication tight and controlled: secure sign-in with permission-based room access, live message updates, media sharing, and notifications across mobile and desktop. It is built around reliable delivery, clear access rules, and simple flows that keep conversations moving.`,
-    highlights: [
-      "Secure sign-in with permission-based rooms",
-      "Live message updates and media sharing",
-      "Notifications across mobile and desktop",
-    ],
-    underMaintenance: false,
-    isDemo: false,
-  },
+  // {
+  //   title: "ISK Chat",
+  //   slug: "isk-chat-room",
+  //   url: "https://isk-chat-room.web.app",
+  //   category: "Web Dev",
+  //   tags: ["Real-Time Messaging", "Permission-Based Rooms", "Media Sharing & Notifications"],
+  //   color: "bg-purple-400",
+  //   image: chatApp,
+  //   curveImg: false,
+  //   ongoing: false,
+  //   description: `Group conversations break down when the wrong people reach the wrong rooms and updates lag behind. ISK Chat keeps communication tight and controlled: secure sign-in with permission-based room access, live message updates, media sharing, and notifications across mobile and desktop. It is built around reliable delivery, clear access rules, and simple flows that keep conversations moving.`,
+  //   highlights: [
+  //     "Secure sign-in with permission-based rooms",
+  //     "Live message updates and media sharing",
+  //     "Notifications across mobile and desktop",
+  //   ],
+  //   underMaintenance: false,
+  //   isDemo: false,
+  // },
   {
     title: "Shop Co",
     slug: "shop-co",
