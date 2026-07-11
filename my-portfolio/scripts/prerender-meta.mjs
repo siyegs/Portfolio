@@ -56,15 +56,15 @@ const routes = [
 // Project routes. Kept as a compact map here (build-time only) so this script
 // stays dependency-free; update alongside src/data/projectsData.ts.
 const projects = [
-  ["mystra-app", "Mystra App", "Cross-platform influencer marketing app connecting brands with creators through role-based campaigns, an in-app wallet with verified payouts, real-time chat and a full-screen video feed."],
-  ["kids-design-company-erp", "Business ERP", "End-to-end ERP unifying inventory, employee records and financials with role-scoped dashboards (RBAC), inventory movement tracking and P&L insights."],
-  ["proverse", "ProVerse", "Desktop app for live church projection that turns sermon audio into text and auto-detects Bible verse references with fast local KJV lookup and caching."],
-  ["packa", "Packa", "Mobile-first waste pickup marketplace connecting Nigerian apartment residents with waste pickers, with status-based tracking from request to completion."],
-  ["kids-design-company", "Kids Design Company", "Production e-commerce storefront with JWT and Google OAuth, catalog, cart and wishlist, an admin dashboard, and Flutterwave and Paystack payments."],
-  ["mystra-ai-automation", "Mystra - AI and automation", "MystraHQ landing site: AI-powered automation for businesses - WhatsApp sales agents, voice booking and order-management pipelines - plus a creator marketplace."],
-  ["asl-originals", "ASL Originals", "Responsive e-commerce experience with JWT authentication, REST API integration, protected routes and state-managed cart and wishlist."],
-  ["isk-chat-room", "ISK Chat", "Real-time chat app with secure sign-in, live message updates, permission-based rooms and media sharing across mobile and desktop."],
-  ["shop-co", "Shop Co", "Modern e-commerce platform with JWT and Google OAuth, dynamic product listings, a full checkout flow and Flutterwave and Paystack integration."],
+  ["mystra-app", "Mystra App", "Influencer marketing app that fixes brand-creator trust: verified matching, escrow and identity-verified payouts, and pay-for-performance campaigns across web and mobile."],
+  ["kids-design-company-erp", "Business ERP", "A factory ran inventory, staff and finances on disconnected spreadsheets. This ERP unifies them with RBAC dashboards, inventory tracking and P&L insights."],
+  ["proverse", "ProVerse", "Live services stall when operators hunt for verses mid-sermon. ProVerse auto-detects Bible references from speech with fast local KJV lookup and caching."],
+  ["packa", "Packa", "Residents cannot get waste collected reliably and pickers lack nearby jobs. Packa connects both with pickup requests and status tracking to completion."],
+  ["kids-design-company", "Kids Design Company", "A children's brand needed to sell online without clunky sign-in or shaky checkout: secure JWT and Google OAuth, cart, wishlist and Flutterwave/Paystack payments."],
+  ["mystra-ai-automation", "Mystra - AI and automation", "Small businesses lose sales to slow replies and manual booking. MystraHQ deploys AI WhatsApp sales, voice booking and order pipelines, plus a creator marketplace."],
+  ["asl-originals", "ASL Originals", "Shoppers abandon slow, insecure mobile stores. ASL Originals answers with a fast, responsive storefront: JWT auth, protected routes and REST API integration."],
+  ["isk-chat-room", "ISK Chat", "Group chats break down when the wrong people reach the wrong rooms. ISK Chat keeps it tight with permission-based rooms, live updates and media sharing."],
+  ["shop-co", "Shop Co", "Browsers become buyers only with frictionless sign-in and trusted checkout. Shop Co delivers JWT and Google OAuth, dynamic listings and Flutterwave/Paystack payments."],
 ].map(([slug, title, description]) => ({
   path: `/projects/${slug}`,
   title: `${title} | ${NAME}`,

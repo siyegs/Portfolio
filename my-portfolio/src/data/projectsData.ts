@@ -40,7 +40,7 @@ const projectsData: Project[] = [
     title: "Mystra App",
     slug: "mystra-app",
     category: "Mobile App",
-    tags: ["Role-Based Campaign Flows", "In-App Wallet & Verified Payouts", "Real-Time Chat & Push", "Full-Screen Video Feed"],
+    tags: ["Verified Brand-Creator Matching", "Escrow & Identity-Verified Payouts", "Pay-for-Performance Campaigns", "Social Discovery & Collaboration"],
     color: "bg-purple-500",
     image: mystra,
     curveImg: true,
@@ -48,7 +48,7 @@ const projectsData: Project[] = [
     iosAppStoreUrl: "https://apps.apple.com/ng/app/mystra/id6761019285",
     androidDownloadUrl:
       "https://play.google.com/store/apps/details?id=com.iyegeres.mystraappfinal",
-    description: `Cross-platform influencer marketing app that connects brands with creators through structured, role-based flows. Businesses create campaigns with budgets, niches, and deliverables, then review and approve creator applications from one place. Creators discover opportunities, apply, track milestones, build profile galleries, and get paid through an in-app wallet with identity-verified payouts. Real-time messaging, read receipts, push notifications, follower graphs, and a full-screen video feed round out a product built for social discovery and trust.`,
+    description: `Brands waste budget on influencers they cannot vet, and creators get burned doing unpaid work. Mystra closes that trust gap. Businesses post campaigns with budgets, niches, and deliverables, then review and approve verified applicants from one place, while creators discover paid opportunities, track milestones, and get paid through an in-app wallet with identity-verified, escrow-backed payouts. Real-time messaging, follower graphs, and a social video feed keep discovery and collaboration in one place people can trust.`,
     highlights: [
       "Brand campaign creation with budgets, niches, and deliverables",
       "Creator wallet with identity-verified milestone payouts",
@@ -63,7 +63,7 @@ const projectsData: Project[] = [
     tags: ["Role-Based Access Control", "Inventory Movement Tracking", "P&L Analytics"],
     color: "bg-blue-500",
     image: kdcERP,
-    description: `End-to-end ERP that unifies inventory, employee records, and financials to deliver real-time operational visibility. Implemented RBAC with role-scoped dashboards and permissions to protect sensitive data while keeping workflows efficient. Includes inventory movement tracking, P&L insights, and admin tooling for daily operations.`,
+    description: `A growing factory was running inventory, staff, and finances across disconnected spreadsheets with no single source of truth. This ERP pulls them into one system with real-time operational visibility. Role-based access control and role-scoped dashboards protect sensitive data while keeping workflows efficient, inventory movement is tracked end to end, and P&L insights plus admin tooling turn day-to-day operations into decisions.`,
     highlights: [
       "Role-scoped dashboards and permissions (RBAC)",
       "Inventory movement tracking and P&L insights",
@@ -89,7 +89,7 @@ const projectsData: Project[] = [
     image: proverseDisplay,
     curveImg: true,
     ongoing: false,
-    description: `Desktop app for live church projection that listens to sermon audio, turns speech into text, and detects Bible verse references as they are spoken. Verses resolve quickly from a local KJV library with fallback lookup, caching, and deduplication to reduce delays and avoid repeat displays. The projector-focused interface includes manual text mode, chapter and verse selection, recent-verse history, and smooth fade-in transitions for services.`,
+    description: `During live services, operators scramble to find and project Bible verses the moment they are spoken, and every delay breaks the flow of worship. ProVerse removes the manual work: it listens to sermon audio, turns speech into text, and detects verse references as they are spoken, resolving them fast from a local KJV library with fallback lookup, caching, and deduplication to cut delays and avoid repeats. Manual text mode, chapter and verse selection, recent-verse history, and smooth fade-in transitions keep operators in control when they need it.`,
     highlights: [
       "Live speech-to-text from sermon audio",
       "Automatic Bible verse detection with local KJV lookup",
@@ -109,7 +109,7 @@ const projectsData: Project[] = [
     curveImg: true,
     ongoing: true,
     requestDemoEmail: "iyegeresuccess@gmail.com",
-    description: `Mobile-first waste pickup marketplace for Nigerian apartments, connecting residents who need collection with waste pickers ready to accept nearby jobs. Residents can create an account, save their apartment details, request a pickup with the waste type and notes, and track their own pickup board. Pickers get a focused view of open jobs in their service area, can accept requests quickly, and keep their queue organized by pickup status. The experience is designed to make apartment waste collection easier to request, easier to assign, and easier to follow from start to completion.`,
+    description: `Apartment residents struggle to get waste collected reliably, and informal pickers lack a steady stream of nearby jobs. Packa connects the two sides of that problem. Residents save their apartment details, request a pickup with the waste type and notes, and track their board from request to completion, while pickers get a focused view of open jobs in their service area, accept quickly, and keep their queue organized by status. The result makes apartment waste collection easier to request, assign, and follow through.`,
     highlights: [
       "Resident pickup requests with waste type and notes",
       "Picker job board scoped to each service area",
@@ -126,7 +126,7 @@ const projectsData: Project[] = [
     image: kdc,
     curveImg: false,
     ongoing: false,
-    description: `Production e-commerce storefront with secure JWT and Google OAuth authentication, product catalog, cart, and wishlist. Integrated Flutterwave and Paystack for payments and built an admin dashboard for inventory and order management. Focused on reliable API integration, clean UX, and maintainable component structure.`,
+    description: `A children's brand needed to sell online without losing customers to clunky sign-in or unreliable checkout. This storefront removes that friction with secure JWT and Google OAuth authentication and a smooth catalog, cart, and wishlist flow, backed by Flutterwave and Paystack payments and an admin dashboard for inventory and orders. Reliable API integration, clean UX, and a maintainable component structure keep it converting as it grows.`,
     highlights: [
       "JWT and Google OAuth authentication",
       "Catalog, cart, and wishlist with an admin dashboard",
@@ -145,7 +145,7 @@ const projectsData: Project[] = [
     image: mystraLandingPage,
     curveImg: true,
     ongoing: false,
-    description: `MystraHQ deploys AI-powered automation for businesses across Africa and Europe: WhatsApp sales agents, voice booking systems, and full order-management pipelines, often live in as little as 48 hours. Every client onboards as a MystraHQ Business account that also unlocks Mystra's influencer marketing platform: post a campaign brief, get matched to verified creators by niche and audience, approve submissions, and pay for real performance instead of follower counts. Creators apply to paid campaigns from verified brands, build a portfolio of real work, and receive automatic milestone payouts straight to their bank as their content performs. One account spans done-for-you AI automation and creator-driven growth, with escrow, identity and business verification, and product shipping built in.`,
+    description: `Small businesses lose sales to slow replies and manual booking, and most cannot afford a full operations team. MystraHQ deploys AI automation that answers and sells on WhatsApp, books by voice, and runs full order-management pipelines, often live in as little as 48 hours. The same account also unlocks a creator marketplace: brands post a brief, get matched to verified creators by niche and audience, approve submissions, and pay for real performance instead of follower counts, while creators receive automatic milestone payouts as their content performs. One account spans done-for-you AI automation and creator-driven growth, with escrow, identity and business verification, and shipping built in.`,
     highlights: [
       "WhatsApp sales agents and voice booking systems",
       "Full order-management pipelines, live in about 48 hours",
@@ -164,7 +164,7 @@ const projectsData: Project[] = [
     image: asl,
     curveImg: false,
     ongoing: false,
-    description: `Responsive e-commerce experience with JWT authentication, REST API integration, and state-managed cart and wishlist. Implemented protected routes and modular components for maintainability and scale. Optimized for smooth browsing and consistent performance across devices.`,
+    description: `Shoppers abandon stores that feel slow or insecure on their phones. ASL Originals answers with a responsive storefront built for trust and speed: JWT authentication with protected routes, REST API integration, and state-managed cart and wishlist. Modular components keep it maintainable and consistent, so browsing stays smooth and performance holds up as the catalog scales.`,
     highlights: [
       "JWT authentication with protected routes",
       "REST API integration with cart and wishlist state",
@@ -183,7 +183,7 @@ const projectsData: Project[] = [
     image: chatApp,
     curveImg: false,
     ongoing: false,
-    description: `Real-time chat app with secure sign-in, live message updates, and permission-based room access. Users can join the right rooms, share media, receive notifications, and keep conversations moving through a clean interface that works across mobile and desktop. The experience is designed around reliable updates, clear access rules, and simple communication flows.`,
+    description: `Group conversations break down when the wrong people reach the wrong rooms and updates lag behind. ISK Chat keeps communication tight and controlled: secure sign-in with permission-based room access, live message updates, media sharing, and notifications across mobile and desktop. It is built around reliable delivery, clear access rules, and simple flows that keep conversations moving.`,
     highlights: [
       "Secure sign-in with permission-based rooms",
       "Live message updates and media sharing",
@@ -202,7 +202,7 @@ const projectsData: Project[] = [
     image: shopCo,
     curveImg: false,
     ongoing: false,
-    description: `Modern e-commerce platform with JWT and Google OAuth, dynamic product listings, and a full checkout flow. Integrated Flutterwave and Paystack for payments and built reusable components for cart and wishlist management. Emphasized responsive design and clean API boundaries.`,
+    description: `Turning browsers into buyers takes frictionless sign-in and a checkout people actually trust. Shop Co delivers both: JWT and Google OAuth authentication, dynamic product listings, and a full checkout flow, with Flutterwave and Paystack payments and reusable cart and wishlist components. Responsive design and clean API boundaries keep the experience fast and easy to build on.`,
     highlights: [
       "JWT and Google OAuth with a full checkout flow",
       "Dynamic product listings and reusable cart/wishlist",
