@@ -3,6 +3,7 @@ import asl from "../assets/asl.webp";
 import kdc from "../assets/kdc.webp";
 // import chatApp from "../assets/chatAppTablet.png"; // ISK Chat removed
 import mystra from "../assets/iuy.png";
+import payKit from "../assets/pay-kit.png";
 import packaMark from "../assets/packa-mark.jpg";
 import mystraLandingPage from "../assets/mystra-landing-page/ipad-pro-mockup.png";
 import proverseDisplay from "../assets/proverse-display.png";
@@ -53,6 +54,23 @@ const projectsData: Project[] = [
       "Brand campaign creation with budgets, niches, and deliverables",
       "Creator wallet with identity-verified milestone payouts",
       "Real-time chat, push notifications, and a full-screen video feed",
+    ],
+  },
+  {
+    title: "pay-kit",
+    slug: "pay-kit",
+    category: "Open Source",
+    tags: ["Unified Payments API", "Automatic Provider Fallback", "Signature-Verified Webhooks", "Published on npm"],
+    color: "bg-[#cb3837]",
+    image: payKit,
+    curveImg: true,
+    ongoing: false,
+    url: "https://github.com/siyegs/pay-kit",
+    description: `Every serious African product ends up wiring both Paystack and Flutterwave for coverage and better rates, then rewriting the same fragile glue each time - different APIs, webhook signatures, and currency units. pay-kit removes that: one typed SDK over both providers with initialize, verify, refunds, and signature-verified webhooks, plus automatic provider fallback so a Paystack outage does not stop you taking money. Amounts stay subunit-safe to kill rounding bugs, everything is fully typed, and it ships to npm with a green test suite.`,
+    highlights: [
+      "One typed API across Paystack and Flutterwave",
+      "Automatic provider fallback on outages (network / 5xx / 429)",
+      "Signature-verified webhooks normalized to one event shape",
     ],
   },
   {
