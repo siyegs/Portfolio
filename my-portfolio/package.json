@@ -8,7 +8,10 @@
     "build": "tsc -b && vite build",
     "postbuild": "node scripts/prerender-meta.mjs",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "chat:login": "wrangler login",
+    "chat:secret": "wrangler secret put GROQ_API_KEY",
+    "chat:deploy": "wrangler deploy"
   },
   "dependencies": {
     "@emailjs/browser": "^4.4.1",
@@ -42,6 +45,7 @@
     "postcss": "^8.4.32",
     "tailwindcss": "^3.4.0",
     "typescript": "^5.3.3",
-    "vite": "^5.0.8"
+    "vite": "^5.0.8",
+    "wrangler": "^4.111.0"
   }
 }

@@ -1,0 +1,7 @@
+name = "interview-chat"
+main = "worker/chat.ts"
+compatibility_date = "2026-07-17"
+
+# GROQ_API_KEY is a secret, never a [vars] entry - set it once with:
+#   bun run chat:secret
+# Local `wrangler dev` reads it from .dev.vars instead.
