@@ -101,6 +101,13 @@ const InterviewChat: React.FC<InterviewChatProps> = ({ theme }) => {
         throw new Error(info.error || `Request failed (${res.status})`);
       }
 
+      // A misconfigured VITE_CHAT_ENDPOINT lands on the SPA's catch-all rewrite,
+      // which answers 200 with index.html - a body that reads as an empty stream
+      // and fails silently. Only an SSE content-type is a real answer.
+      if (!res.headers.get("Content-Type")?.includes("text/event-stream")) {
+        throw new Error("Chat endpoint is misconfigured.");
+      }
+
       const reader = res.body.getReader();
       const decoder = new TextDecoder();
       let buffer = "";
