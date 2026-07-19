@@ -58,6 +58,7 @@ const routes = [
 const projects = [
   ["mystra-app", "Mystra App", "Influencer marketing app that fixes brand-creator trust: verified matching, escrow and identity-verified payouts, and pay-for-performance campaigns across web and mobile."],
   ["pay-kit", "pay-kit", "Open-source TypeScript SDK unifying Paystack and Flutterwave: one typed API to collect (initialize, verify, refunds) and pay out (bank transfers), with signature-verified webhooks and automatic provider fallback. Published on npm."],
+  ["react-native-lossless-trim", "react-native-lossless-trim", "Open-source React Native / Expo module for lossless, ffmpeg-free video trimming. Stream-copy passthrough on native APIs (AVAssetExportSession / MediaMuxer): no re-encode, near-instant, and it fixes the Android audio/video desync."],
   ["kids-design-company-erp", "Business ERP", "A factory ran inventory, staff and finances on disconnected spreadsheets. This ERP unifies them with RBAC dashboards, inventory tracking and P&L insights."],
   ["proverse", "ProVerse", "Live services stall when operators hunt for verses mid-sermon. ProVerse auto-detects Bible references from speech with fast local KJV lookup and caching."],
   ["packa", "Packa", "Residents cannot get waste collected reliably and pickers lack nearby jobs. Packa connects both with pickup requests and status tracking to completion."],
