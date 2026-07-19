@@ -4,6 +4,7 @@ import kdc from "../assets/kdc.webp";
 // import chatApp from "../assets/chatAppTablet.png"; // ISK Chat removed
 import mystra from "../assets/iuy.png";
 import payKit from "../assets/pay-kit.png";
+import losslessTrim from "../assets/react-native-lossless-trim.svg";
 import packaMark from "../assets/packa-mark.jpg";
 import mystraLandingPage from "../assets/mystra-landing-page/ipad-pro-mockup.png";
 import proverseDisplay from "../assets/proverse-display.png";
@@ -72,6 +73,24 @@ const projectsData: Project[] = [
       "Collect and pay out: charges, refunds, and bank transfers",
       "Automatic provider fallback on outages (network / 5xx / 429)",
       "Signature-verified webhooks normalized to one event shape",
+    ],
+  },
+  {
+    title: "react-native-lossless-trim",
+    slug: "react-native-lossless-trim",
+    category: "Open Source",
+    tags: ["Lossless Video Trim", "Zero ffmpeg, Native APIs", "Near-Instant Stream-Copy", "iOS + Android, New Arch"],
+    color: "bg-[#0b1120]",
+    image: losslessTrim,
+    curveImg: true,
+    ongoing: false,
+    url: "https://github.com/siyegs/react-native-lossless-trim",
+    description: `Every popular React Native video-trimming library bundles ffmpeg: tens of megabytes of binary, a re-encode on every clip that quietly degrades quality, and a dependency on ffmpeg-kit, which was retired in 2025. react-native-lossless-trim takes the opposite path. It trims by stream-copying the encoded frames on the platform's own native APIs - AVAssetExportSession passthrough on iOS, MediaExtractor and MediaMuxer on Android - so the cut is lossless, near-instant, and adds essentially no binary weight. It also fixes the subtle Android audio/video desync that most passthrough trimmers ship with, by rebasing both tracks to a single shared keyframe origin, and documents the iOS-versus-Android precision tradeoff openly instead of hiding it. Shipped as an Expo module with a typed TypeScript API, New Architecture support, an example app, unit-tested timing logic, and CI.`,
+    highlights: [
+      "Lossless, ffmpeg-free trim on native platform APIs",
+      "Near-instant stream-copy: no re-encode, ~0 MB added",
+      "Fixes the Android audio/video desync via a shared keyframe origin",
+      "Typed Expo module, New Arch, example app, and CI",
     ],
   },
   {
