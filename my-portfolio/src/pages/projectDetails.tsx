@@ -40,6 +40,14 @@ const ProjectDetailsPage: React.FC<ProjectDetailsPageProps> = ({
     !!project.androidDownloadUrl ||
     (!!project.url && project.url.length > 0);
 
+  // Label the primary link by where it actually points: an open-source repo or
+  // npm package is not a "live site".
+  const urlCtaLabel = project.url?.includes("npmjs.com")
+    ? "View on npm"
+    : project.url?.includes("github.com")
+    ? "View on GitHub"
+    : "Visit Live Site";
+
   const status = project.ongoing
     ? { label: "Ongoing", dot: "bg-green-500", pulse: true }
     : project.underMaintenance
@@ -183,7 +191,7 @@ const ProjectDetailsPage: React.FC<ProjectDetailsPageProps> = ({
                 rel="noopener noreferrer"
                 className="inline-flex w-fit items-center gap-2 rounded-full bg-[#aab2d1] px-5 py-2.5 text-sm font-semibold text-[#18181b] transition hover:bg-[#e5e7eb]"
               >
-                Visit Live Site <FiExternalLink />
+                {urlCtaLabel} <FiExternalLink />
               </a>
             ) : project.requestDemoEmail ? (
               <a
