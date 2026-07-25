@@ -1,3 +1,6 @@
+/* Position comes from an inline translate3d written once per frame by Layout,
+   so this rule only owns the look. `left/top` stay at 0: they are the origin
+   the transform offsets from. */
 .cursor {
   position: fixed;
   left: 0;
@@ -8,7 +11,7 @@
   background-color: white;
   pointer-events: none;
   mix-blend-mode: difference;
-  transform: translate(-50%, -50%);
+  will-change: transform;
   transition: width 0.3s, height 0.3s;
   z-index: 1000;
 }
@@ -80,23 +83,27 @@ body.light {
   color: #18181b;
 }
 
+/* The track holds its content twice and travels exactly -50%, so the loop is
+   seamless. translate3d rather than translateX keeps it on the compositor:
+   the band carries very large outlined type, and repainting that every frame
+   is what makes a marquee stutter. */
 .marquee-track {
   display: flex;
   width: max-content;
   animation: marquee 21s linear infinite;
   will-change: transform;
+  backface-visibility: hidden;
 }
 
 .marquee-track:hover {
   animation-play-state: paused;
 }
 
-
 @keyframes marquee {
   0% {
-    transform: translateX(0%);
+    transform: translate3d(0, 0, 0);
   }
   100% {
-    transform: translateX(-50%);
+    transform: translate3d(-50%, 0, 0);
   }
 }
