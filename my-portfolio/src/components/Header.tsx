@@ -1,10 +1,17 @@
-import { startTransition, useEffect, useRef, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import {
+  startTransition,
+  useEffect,
+  useRef,
+  useState,
+  type MouseEvent,
+} from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import { FiArrowUpRight, FiMoon, FiSun } from "react-icons/fi";
 import logoWhite from "../assets/logo-white.webp";
 import logoBlack from "../assets/logo-black.webp";
 import { MetaLabel } from "./work/primitives";
+import { scheduleEntranceHold } from "../lib/entrance";
 import { tone } from "../lib/work";
 
 interface HeaderProps {
@@ -21,18 +28,48 @@ const NAV = [
 
 const SOCIALS = [
   { label: "GitHub", url: "https://github.com/siyegs" },
-  { label: "LinkedIn", url: "https://www.linkedin.com/in/success-iyegere-063457250" },
+  {
+    label: "LinkedIn",
+    url: "https://www.linkedin.com/in/success-iyegere-063457250",
+  },
   { label: "X", url: "https://x.com/IyegereS" },
 ];
 
 const EASE = [0.16, 1, 0.3, 1] as const;
 
+/* The menu-navigation timeline, in ms. Content fades by CONTENT_FADE_MS, the
+   route is committed at NAVIGATE_AT_MS behind the still-solid panel, and the
+   panel starts its own fade REVEAL_AFTER_MS later, once the commit's work is
+   done and painted. */
+const CONTENT_FADE_MS = 220;
+const NAVIGATE_AT_MS = 240;
+const REVEAL_AFTER_MS = 150;
+
+/* How far into the panel's fade the page's entrance choreography starts. The
+   panel is about half gone by then, so the letters and sections play their
+   full reveal in the clear instead of behind an opaque screen. */
+const ENTRANCE_INTO_FADE_MS = 250;
+
 const Header = ({ theme, toggleTheme }: HeaderProps) => {
   const location = useLocation();
+  const navigate = useNavigate();
   const t = tone(theme);
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [hidden, setHidden] = useState(false);
+
+  /* True from the moment a menu link is tapped until the overlay has fully
+     exited: drives the content fade, blocks double-taps, and tells the exit
+     variant which goodbye to play. */
+  const [leaving, setLeaving] = useState(false);
+  const timers = useRef<number[]>([]);
+
+  useEffect(
+    () => () => {
+      timers.current.forEach((id) => window.clearTimeout(id));
+    },
+    [],
+  );
 
   /* Retract on the way down, return on the way up, and always come back once
      scrolling stops so the nav is never more than a flick away. */
@@ -65,27 +102,68 @@ const Header = ({ theme, toggleTheme }: HeaderProps) => {
     };
   }, []);
 
-  useEffect(() => setMenuOpen(false), [location.pathname]);
-
   /* True while the menu is closing because a link in it was tapped, so the
      exit variant can tell the two goodbyes apart (see the overlay below). */
   const closedByNavigation = useRef(false);
 
+  /* Close on route changes the menu did not cause (e.g. the back button while
+     it is open). The menu's own link sequence times its close itself. */
+  useEffect(() => {
+    if (closedByNavigation.current) return;
+    setMenuOpen(false);
+  }, [location.pathname]);
+
   /**
-   * Close the index in the same update as the navigation it triggered.
+   * Navigate from the menu without a single dropped frame showing.
    *
-   * React Router wraps navigations in startTransition, so a route change is a
-   * non-urgent update. Closing the menu with a plain setState is an urgent one,
-   * and React commits urgent work first - which painted one frame with the
-   * overlay already gone and the page you were leaving still mounted behind
-   * it. That frame was the flash of the previous screen. Scheduling the close
-   * as a transition too puts both in the same lane, so they commit together:
-   * the instant the overlay leaves, the new route is what is behind it.
+   * Mounting the destination page is the most expensive thing this app does,
+   * and any animation running in the same instant stutters - which is why
+   * every earlier version of this handoff (instant swap, curtain, crossfade)
+   * still felt rough. So the work is hidden instead of raced:
+   *
+   *   1. The menu's content fades out. The panel itself stays solid.
+   *   2. Behind that motionless panel, the route commits, scroll resets and
+   *      the body unlocks. A dropped frame here is invisible: nothing moves.
+   *   3. A beat later the panel fades away over the new page, which is
+   *      already mounted and easing in. Both are compositor-only animations,
+   *      so the reveal itself cannot stutter.
    */
-  const closeMenuWithNavigation = () => {
-    closedByNavigation.current = true;
-    startTransition(() => setMenuOpen(false));
-  };
+  const goFromMenu =
+    (path: string) => (event: MouseEvent<HTMLAnchorElement>) => {
+      event.preventDefault();
+      if (leaving) return;
+
+      /* Already there: nothing to load ahead, just close. */
+      if (path === location.pathname) {
+        setMenuOpen(false);
+        return;
+      }
+
+      closedByNavigation.current = true;
+      setLeaving(true);
+
+      /* The page will mount early, behind the panel. Tell it when the reveal
+         happens so its entrance plays then, exactly as it would on a reload,
+         rather than half-finishing under cover. */
+      scheduleEntranceHold(
+        NAVIGATE_AT_MS + REVEAL_AFTER_MS + ENTRANCE_INTO_FADE_MS,
+      );
+
+      timers.current.push(
+        window.setTimeout(() => {
+          /* Unlock while still covered, so the scrollbar reappearing (and the
+             layout shift it causes) happens behind the opaque panel. */
+          document.body.style.overflow = "";
+          startTransition(() => {
+            void navigate(path);
+          });
+
+          timers.current.push(
+            window.setTimeout(() => setMenuOpen(false), REVEAL_AFTER_MS),
+          );
+        }, NAVIGATE_AT_MS),
+      );
+    };
 
   useEffect(() => {
     document.body.style.overflow = menuOpen ? "hidden" : "";
@@ -95,7 +173,8 @@ const Header = ({ theme, toggleTheme }: HeaderProps) => {
   }, [menuOpen]);
 
   useEffect(() => {
-    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setMenuOpen(false);
+    const onKey = (e: KeyboardEvent) =>
+      e.key === "Escape" && setMenuOpen(false);
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, []);
@@ -112,20 +191,28 @@ const Header = ({ theme, toggleTheme }: HeaderProps) => {
         } ${t.isDark ? "text-paper" : "text-ink"}`}
       >
         <div className="mx-auto flex h-16 w-full max-w-shell items-center justify-between gap-6 px-5 md:h-[4.5rem] md:px-10 lg:px-16">
-          <Link to="/" aria-label="Home" className="flex shrink-0 items-center gap-2.5">
+          <Link
+            to="/"
+            aria-label="Home"
+            className="flex shrink-0 items-center gap-2.5"
+          >
             <img
               src={t.isDark ? logoWhite : logoBlack}
               alt=""
               className="h-6 w-auto object-contain md:h-7"
             />
-            <span className="font-display text-lg tracking-tight md:text-xl">ISK</span>
+            <span className="font-display text-lg tracking-tight md:text-xl">
+              ISK
+            </span>
           </Link>
 
           <div className="flex items-center gap-5 md:gap-7">
             <button
               type="button"
               onClick={toggleTheme}
-              aria-label={t.isDark ? "Switch to light theme" : "Switch to dark theme"}
+              aria-label={
+                t.isDark ? "Switch to light theme" : "Switch to dark theme"
+              }
               className={`transition-colors duration-300 ${t.dim} ${
                 t.isDark ? "hover:text-paper" : "hover:text-ink"
               }`}
@@ -176,18 +263,17 @@ const Header = ({ theme, toggleTheme }: HeaderProps) => {
         custom={closedByNavigation.current}
         onExitComplete={() => {
           closedByNavigation.current = false;
+          setLeaving(false);
         }}
       >
         {menuOpen && (
           <motion.div
-            /* Two different goodbyes. When a link in the menu was tapped, the
-               overlay vanishes instantly: the navigation commits in the same
-               update, so what appears in its place is the new page playing the
-               exact same arrival it plays from any in-page link - one motion,
-               nothing competing with it. (An earlier curtain lift here ran on
-               top of that arrival and the pair never read as smooth.) Closing
-               without navigating keeps the curtain, since there is no page
-               change to compete with. */
+            /* Two different goodbyes. After a menu link was tapped, the new
+               page is already mounted and easing in behind this panel (see
+               goFromMenu), so the panel simply fades off it - a pure-opacity,
+               compositor-only reveal that cannot stutter. Closing without
+               navigating plays the curtain lift instead, since there is no
+               arrival underneath to reveal. */
             variants={{
               hidden: { opacity: 0, y: 0 },
               visible: {
@@ -197,7 +283,7 @@ const Header = ({ theme, toggleTheme }: HeaderProps) => {
               },
               exit: (byNavigation: boolean) =>
                 byNavigation
-                  ? { opacity: 0, transition: { duration: 0 } }
+                  ? { opacity: 0, transition: { duration: 0.45, ease: EASE } }
                   : {
                       y: "-100%",
                       transition: { duration: 0.55, ease: EASE },
@@ -210,118 +296,130 @@ const Header = ({ theme, toggleTheme }: HeaderProps) => {
               t.isDark ? "bg-ink text-paper" : "bg-paper text-ink"
             }`}
           >
-            {/* The bar retracts while this is open, so the overlay carries its
+            {/* Everything visible fades as one block when a link is tapped,
+                leaving the solid panel to cover the route commit. */}
+            <motion.div
+              animate={{ opacity: leaving ? 0 : 1 }}
+              transition={{ duration: CONTENT_FADE_MS / 1000, ease: "easeOut" }}
+              className="flex min-h-full flex-col"
+            >
+              {/* The bar retracts while this is open, so the overlay carries its
                 own rail: the mark on the left, Close on the right. */}
-            <div className="mx-auto flex h-16 w-full max-w-shell items-center justify-between gap-6 px-5 md:h-[4.5rem] md:px-10 lg:px-16">
-              <Link
-                to="/"
-                aria-label="Home"
-                onClick={closeMenuWithNavigation}
-                className="flex shrink-0 items-center gap-2.5"
-              >
-                <img
-                  src={t.isDark ? logoWhite : logoBlack}
-                  alt=""
-                  className="h-6 w-auto object-contain md:h-7"
-                />
-                <span className="font-display text-lg tracking-tight md:text-xl">
-                  ISK
-                </span>
-              </Link>
+              <div className="mx-auto flex h-16 w-full max-w-shell items-center justify-between gap-6 px-5 md:h-[4.5rem] md:px-10 lg:px-16">
+                <Link
+                  to="/"
+                  aria-label="Home"
+                  onClick={goFromMenu("/")}
+                  className="flex shrink-0 items-center gap-2.5"
+                >
+                  <img
+                    src={t.isDark ? logoWhite : logoBlack}
+                    alt=""
+                    className="h-6 w-auto object-contain md:h-7"
+                  />
+                  <span className="font-display text-lg tracking-tight md:text-xl">
+                    ISK
+                  </span>
+                </Link>
 
-              <button
-                type="button"
-                onClick={() => setMenuOpen(false)}
-                aria-label="Close menu"
-                className="group flex items-center gap-3"
-              >
-                <MetaLabel className="hidden sm:inline">Close</MetaLabel>
-                <span className="relative flex h-4 w-6 items-center justify-center">
-                  <span className="absolute block h-px w-full rotate-45 bg-current" />
-                  <span className="absolute block h-px w-full -rotate-45 bg-current" />
-                </span>
-              </button>
-            </div>
+                <button
+                  type="button"
+                  onClick={() => setMenuOpen(false)}
+                  aria-label="Close menu"
+                  className="group flex items-center gap-3"
+                >
+                  <MetaLabel className="hidden sm:inline">Close</MetaLabel>
+                  <span className="relative flex h-4 w-6 items-center justify-center">
+                    <span className="absolute block h-px w-full rotate-45 bg-current" />
+                    <span className="absolute block h-px w-full -rotate-45 bg-current" />
+                  </span>
+                </button>
+              </div>
 
-            <nav className="mx-auto flex min-h-[calc(100%-4rem)] w-full max-w-shell flex-col justify-center px-5 pb-14 pt-6 md:min-h-[calc(100%-4.5rem)] md:px-10 md:pb-16 lg:px-16">
-              {NAV.map((item, i) => {
-                const current = location.pathname === item.path;
-                return (
-                  <motion.div
-                    key={item.path}
-                    initial={{ opacity: 0, y: 24 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.55, delay: 0.05 + i * 0.06, ease: EASE }}
-                  >
-                    <Link
-                      to={item.path}
-                      onClick={closeMenuWithNavigation}
-                      className={`group relative flex items-center gap-5 border-t py-5 md:gap-10 md:py-7 ${
-                        t.rule
-                      } ${i === NAV.length - 1 ? "border-b" : ""}`}
+              <nav className="mx-auto flex w-full max-w-shell flex-1 flex-col justify-center px-5 pb-14 pt-6 md:px-10 md:pb-16 lg:px-16">
+                {NAV.map((item, i) => {
+                  const current = location.pathname === item.path;
+                  return (
+                    <motion.div
+                      key={item.path}
+                      initial={{ opacity: 0, y: 24 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{
+                        duration: 0.55,
+                        delay: 0.05 + i * 0.06,
+                        ease: EASE,
+                      }}
                     >
-                      <span
-                        aria-hidden
-                        className={`pointer-events-none absolute inset-0 origin-bottom scale-y-0 transition-transform duration-500 ease-editorial group-hover:scale-y-100 ${t.inset}`}
-                      />
-                      <MetaLabel
-                        className={`tnum relative shrink-0 ${
-                          current ? t.accent : t.faint
-                        }`}
+                      <Link
+                        to={item.path}
+                        onClick={goFromMenu(item.path)}
+                        className={`group relative flex items-center gap-5 border-t py-5 md:gap-10 md:py-7 ${
+                          t.rule
+                        } ${i === NAV.length - 1 ? "border-b" : ""}`}
                       >
-                        {String(i + 1).padStart(2, "0")}
-                      </MetaLabel>
-                      <span className="relative font-display text-[clamp(30px,8vw,68px)] leading-[0.95] transition-transform duration-500 ease-editorial group-hover:translate-x-3">
-                        {item.label}
-                      </span>
-                      {current && (
                         <span
                           aria-hidden
-                          className={`relative ml-auto h-1.5 w-1.5 rounded-full ${t.accentFill}`}
+                          className={`pointer-events-none absolute inset-0 origin-bottom scale-y-0 transition-transform duration-500 ease-editorial group-hover:scale-y-100 ${t.inset}`}
                         />
-                      )}
-                    </Link>
-                  </motion.div>
-                );
-              })}
+                        <MetaLabel
+                          className={`tnum relative shrink-0 ${
+                            current ? t.accent : t.faint
+                          }`}
+                        >
+                          {String(i + 1).padStart(2, "0")}
+                        </MetaLabel>
+                        <span className="relative font-display text-[clamp(30px,8vw,68px)] leading-[0.95] transition-transform duration-500 ease-editorial group-hover:translate-x-3">
+                          {item.label}
+                        </span>
+                        {current && (
+                          <span
+                            aria-hidden
+                            className={`relative ml-auto h-1.5 w-1.5 rounded-full ${t.accentFill}`}
+                          />
+                        )}
+                      </Link>
+                    </motion.div>
+                  );
+                })}
 
-              <motion.div
-                initial={{ opacity: 0, y: 18 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.32, ease: EASE }}
-                className="mt-10 flex flex-col gap-6 md:flex-row md:items-end md:justify-between"
-              >
-                <div>
-                  <MetaLabel className={t.faint}>Get in touch</MetaLabel>
-                  <a
-                    href="mailto:iyegeresuccess@gmail.com"
-                    className="mt-2 block text-[15px] md:text-lg"
-                  >
-                    iyegeresuccess@gmail.com
-                  </a>
-                </div>
-
-                <div className="flex flex-wrap gap-x-7 gap-y-2">
-                  {SOCIALS.map((social) => (
+                <motion.div
+                  initial={{ opacity: 0, y: 18 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: 0.32, ease: EASE }}
+                  className="mt-10 flex flex-col gap-6 md:flex-row md:items-end md:justify-between"
+                >
+                  <div>
+                    <MetaLabel className={t.faint}>Get in touch</MetaLabel>
                     <a
-                      key={social.label}
-                      href={social.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className={`group inline-flex items-center gap-1.5 transition-colors duration-300 ${t.dim} ${
-                        t.isDark ? "hover:text-paper" : "hover:text-ink"
-                      }`}
+                      href="mailto:iyegeresuccess@gmail.com"
+                      className="mt-2 block text-[15px] md:text-lg"
                     >
-                      <MetaLabel>{social.label}</MetaLabel>
-                      <FiArrowUpRight
-                        aria-hidden
-                        className="transition-transform duration-500 ease-editorial group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
-                      />
+                      iyegeresuccess@gmail.com
                     </a>
-                  ))}
-                </div>
-              </motion.div>
-            </nav>
+                  </div>
+
+                  <div className="flex flex-wrap gap-x-7 gap-y-2">
+                    {SOCIALS.map((social) => (
+                      <a
+                        key={social.label}
+                        href={social.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className={`group inline-flex items-center gap-1.5 transition-colors duration-300 ${t.dim} ${
+                          t.isDark ? "hover:text-paper" : "hover:text-ink"
+                        }`}
+                      >
+                        <MetaLabel>{social.label}</MetaLabel>
+                        <FiArrowUpRight
+                          aria-hidden
+                          className="transition-transform duration-500 ease-editorial group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+                        />
+                      </a>
+                    ))}
+                  </div>
+                </motion.div>
+              </nav>
+            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
