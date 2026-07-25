@@ -1,10 +1,12 @@
 import React from "react";
-import { FiArrowRight } from "react-icons/fi";
+import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
+import { FiArrowUpRight } from "react-icons/fi";
 import "../App.css";
-import { useMediaQuery } from "react-responsive";
 import Layout from "../components/Layout";
 import SEO from "../components/SEO";
-import { useNavigate } from "react-router-dom";
+import { LineReveal, MetaLabel, Shell } from "../components/work/primitives";
+import { tone } from "../lib/work";
 
 interface HomePageProps {
   theme: string;
@@ -13,133 +15,123 @@ interface HomePageProps {
   setHoveredName: (name: string | null) => void;
 }
 
+const ROUTES = [
+  { label: "Work", path: "/projects" },
+  { label: "About", path: "/about" },
+  { label: "Contact", path: "/contact" },
+];
+
+const EASE = [0.16, 1, 0.3, 1] as const;
+
 const HomePage: React.FC<HomePageProps> = ({
   theme,
   toggleTheme,
   hoveredName,
   setHoveredName,
 }) => {
-  const is500andAbove = useMediaQuery({ minWidth: 500 });
-  const navigate = useNavigate();
+  const t = tone(theme);
+
+  /* The name is the hero. Hovering it swells the custom cursor, which is the
+     one interaction the whole site is built around. */
+  const nameProps = (name: string) => ({
+    onMouseEnter: () => setHoveredName(name),
+    onMouseLeave: () => setHoveredName(null),
+    className: `${t.accent} cursor-default`,
+  });
 
   return (
     <Layout theme={theme} toggleTheme={toggleTheme} hoveredName={hoveredName}>
       <SEO isHome title="Iyegere Success Karboloo - Full-Stack Engineer" path="/" />
-      {/* Visually hidden, crawler- and screen-reader-friendly summary. The visible
-          hero is split into styled spans, so this gives search engines a clean sentence. */}
+
+      {/* Visually hidden, crawler- and screen-reader-friendly summary. The
+          visible hero is split into styled spans, so this gives search engines
+          a clean sentence. */}
       <p className="sr-only">
         Iyegere Success Karboloo is a Full-Stack Engineer based in Nigeria,
         building web, mobile and backend products with React, React Native,
         Next.js, TypeScript and Node.js.
       </p>
-      <div
-        className={`main-container relative z-[1] text-white flex flex-col justify-center items-center h-screen text-center px-2 ${
-          theme === "dark" ? "text-[#f3f2f9]" : "text-[#18181b]"
-        }`}
-        style={{
-          fontFamily: "Special Gothic Expanded One",
-          background:
-            theme === "dark"
-              ? "radial-gradient(ellipse at 50% 45%, rgba(24,24,27,0.62) 0%, rgba(24,24,27,0.82) 55%, rgba(24,24,27,0.92) 100%)"
-              : "radial-gradient(ellipse at 50% 45%, rgba(243,242,249,0.60) 0%, rgba(243,242,249,0.80) 55%, rgba(243,242,249,0.92) 100%)",
-        }}
+
+      <main
+        className={`relative z-[1] flex min-h-screen flex-col justify-between pb-10 pt-24 md:pb-12 md:pt-28 ${t.page}`}
       >
-        <h1 className="leading-[1.3] font-medium mb-[1rem] text-[clamp(26px,4.5vw,93px)]">
-          <span className="stroked-text text-transparent stroke-slate-100">
-            HEY, I'M{" "}
-          </span>{" "}
-          <br className={is500andAbove ? "hidden" : ""} />
-          <span
-            className="text-[#aab2d1] italic font-black"
-            onMouseEnter={() => setHoveredName("IYEGERE")}
-            onMouseLeave={() => setHoveredName(null)}
+        {/* Top meta rail */}
+        <Shell>
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.8, delay: 0.5 }}
+            className={`flex items-center justify-between gap-4 border-b pb-3 ${t.rule}`}
           >
-            IY
-            <span className="w-fill inline-block scale-x-150 mx-[5px]">E</span>G
-            <span className="w-fill inline-block scale-x-150 mx-[5px]">E</span>R
-            <span className="w-fill inline-block scale-x-150 mx-[5px]">E</span>
-          </span>{" "}
-          <span
-            className="text-[#aab2d1] italic font-black"
-            onMouseEnter={() => setHoveredName("SUCCESS")}
-            onMouseLeave={() => setHoveredName(null)}
-          >
-            SUCC
-            <span className="w-fill inline-block scale-x-150 mx-[5px]">E</span>
-            SS
-          </span>
-          <br />
-          <span className="stroked-text text-transparent">
-            BUT YOU CAN CALL <br className={is500andAbove ? "hidden" : ""} />
-            ME{" "}
-          </span>
-          <span
-            className="text-[#aab2d1] italic font-black"
-            onMouseEnter={() => setHoveredName("KARBOLOO")}
-            onMouseLeave={() => setHoveredName(null)}
-          >
-            KARBOLOO
-          </span>
-        </h1>
+            <MetaLabel className={t.dim}>Full-Stack Engineer</MetaLabel>
+            <MetaLabel className={t.dim}>Nigeria · Remote</MetaLabel>
+          </motion.div>
+        </Shell>
 
-        {/* what i do */}
-        <p
-          className="px-3 font-light doings"
-          style={{
-            fontSize: "clamp(15px, 2vw, 25px)",
-            fontFamily: "Space Grotesk",
-          }}
-        >
-          {/* I'm an App and Frontend Web Developer, web <br /> designer & design enthusiast */}
-          I build applications and services that help <br /> businesses scale. Let's turn your visions to reality!
-        </p>
+        {/* The name */}
+        <Shell className="flex flex-1 items-center py-10">
+          <h1 className="w-full font-display leading-[0.88]">
+            <LineReveal delay={0.05} className="text-[clamp(15px,2.6vw,30px)]">
+              <span className="stroked-text text-transparent">HEY, I'M</span>
+            </LineReveal>
 
-        <div
-          className={`pt-6 flex ${
-            is500andAbove ? "flex-row gap-x-10" : "flex-col"
-          } gap-y-3 w-full justify-center items-center`}
-          style={{ fontFamily: "Space Grotesk" }}
-        >
-          <p
-            className={`flex items-center dynamic-text`}
-            style={{
-              fontSize: "clamp(15px, 2vw, 24px)",
-            }}
-            onClick={() => navigate("/projects")}
-          >
-            <FiArrowRight
-              className="mr-2"
-              style={{ fontSize: "clamp(17.5px, 2vw, 22px)" }}
-            />
-            <span className={`underline-hover`}>
-              see my{" "}
-              <span className="pl-[4px] inline-block scale-x-150">p</span>
-              rojects
-            </span>
-          </p>
+            <LineReveal delay={0.12} className="text-[clamp(38px,11.5vw,10rem)]">
+              <span {...nameProps("IYEGERE")}>IYEGERE</span>
+            </LineReveal>
 
-          <p
-            className="flex items-center dynamic-text"
-            style={{
-              fontSize: "clamp(15px, 2vw, 24px)",
-            }}
-            onClick={() => navigate("/about")}
+            <LineReveal delay={0.19} className="text-[clamp(38px,11.5vw,10rem)]">
+              <span {...nameProps("SUCCESS")}>SUCCESS</span>
+            </LineReveal>
+
+            <LineReveal delay={0.28} className="mt-3 text-[clamp(15px,2.6vw,30px)]">
+              <span className="stroked-text text-transparent">
+                BUT YOU CAN CALL ME{" "}
+              </span>
+              <span {...nameProps("KARBOLOO")}>KARBOLOO</span>
+            </LineReveal>
+          </h1>
+        </Shell>
+
+        {/* Bottom rail: the statement on the left, the routes on the right. */}
+        <Shell>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.55, ease: EASE }}
+            className={`grid gap-8 border-t pt-6 md:grid-cols-12 ${t.rule}`}
           >
-            <FiArrowRight
-              className="mr-2"
-              style={{ fontSize: "clamp(17.5px, 2vw, 22px)" }}
-            />
-            <span className="underline-hover">
-              more
-              <span className="pl-[4px] inline-block scale-x-150">a</span>
-              <span className="scale-x-150">b</span>o
-              <span className="scale-x-150">u</span>
-              <span className="scale-x-150">t</span>
-              <span className="ml-1">me</span>
-            </span>
-          </p>
-        </div>
-      </div>
+            <p
+              className={`max-w-read text-[clamp(15px,1.8vw,19px)] leading-relaxed md:col-span-6 ${t.body}`}
+            >
+              I build applications and services that help businesses scale, end
+              to end: interface, API, database and the payments in between.
+            </p>
+
+            <nav className="flex flex-wrap gap-x-8 gap-y-3 md:col-span-5 md:col-start-8 md:justify-end">
+              {ROUTES.map((route, i) => (
+                <Link
+                  key={route.path}
+                  to={route.path}
+                  className={`group inline-flex items-baseline gap-2 transition-colors duration-300 ${
+                    t.isDark ? "hover:text-accent" : "hover:text-accent-warm"
+                  }`}
+                >
+                  <MetaLabel className={`tnum ${t.faint}`}>
+                    {String(i + 1).padStart(2, "0")}
+                  </MetaLabel>
+                  <span className="text-[clamp(16px,2vw,20px)] font-medium">
+                    {route.label}
+                  </span>
+                  <FiArrowUpRight
+                    aria-hidden
+                    className="translate-y-[2px] transition-transform duration-500 ease-editorial group-hover:-translate-y-0 group-hover:translate-x-0.5"
+                  />
+                </Link>
+              ))}
+            </nav>
+          </motion.div>
+        </Shell>
+      </main>
     </Layout>
   );
 };
