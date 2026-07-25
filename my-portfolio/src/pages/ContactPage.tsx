@@ -1,9 +1,9 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { FiArrowUpRight, FiCheck, FiCopy } from "react-icons/fi";
 import Layout from "../components/Layout";
 import SEO from "../components/SEO";
-// import { FiGithub, FiLinkedin, FiX, FiInstagram } from "react-icons/fi";
-// import logoWhite from "../assets/logo-white.webp";
-// import logoBlack from "../assets/logo-black.webp";
+import { LineReveal, MetaLabel, Reveal, Shell } from "../components/work/primitives";
+import { tone } from "../lib/work";
 
 interface ContactPageProps {
   theme: string;
@@ -11,35 +11,43 @@ interface ContactPageProps {
   hoveredName?: string | null;
 }
 
+const EMAIL = "iyegeresuccess@gmail.com";
+
 const SOCIALS = [
+  { label: "GitHub", handle: "@siyegs", url: "https://github.com/siyegs" },
   {
-    label: "TWITTER",
-    url: "https://x.com/IyegereS",
-    // icon: <FiX className="inline-block mr-2" />,
-  },
-  {
-    label: "GITHUB",
-    url: "https://github.com/siyegs",
-    // icon: <FiGithub className="inline-block mr-2" />,
-  },
-  {
-    label: "LINKEDIN",
+    label: "LinkedIn",
+    handle: "Success Iyegere",
     url: "https://linkedin.com/in/success-iyegere-063457250",
-    // icon: <FiLinkedin className="inline-block mr-2" />,
   },
+  { label: "X", handle: "@IyegereS", url: "https://x.com/IyegereS" },
 ];
+
+const MARQUEE = ["SAY HELLO", "-", "WANNA BE STARTING SOMETHING?", "-"];
 
 const ContactPage: React.FC<ContactPageProps> = ({
   theme,
   toggleTheme,
   hoveredName,
 }) => {
-  const sayHello = (
-    <h1 className={`marquee-text text-[clamp(3rem,8vw,6rem)] font-extrabold uppercase text-center whitespace-nowrap inline-block pr-[40px] md:pr-[54px] tracking-[-0.04em] leading-[1.1] ${theme === "light" ? "text-[#18181b]/80 hover:text-[#90754c]" : "text-[#aab2d1] hover:text-[whitesmoke]"}`}>
-      SAY HELLO – WANNA BE STARTING SOMETHING? {" "}
-      SAY HELLO – WANNA BE STARTING SOMETHING?
-    </h1>
-  );
+  const t = tone(theme);
+  const [copied, setCopied] = useState(false);
+
+  useEffect(() => {
+    if (!copied) return;
+    const timer = setTimeout(() => setCopied(false), 2000);
+    return () => clearTimeout(timer);
+  }, [copied]);
+
+  const copy = async () => {
+    try {
+      await navigator.clipboard.writeText(EMAIL);
+      setCopied(true);
+    } catch {
+      /* Clipboard blocked (insecure context or denied): the mailto link and
+         the selectable address next to it still work. */
+    }
+  };
 
   return (
     <Layout theme={theme} toggleTheme={toggleTheme} hoveredName={hoveredName}>
@@ -48,75 +56,136 @@ const ContactPage: React.FC<ContactPageProps> = ({
         path="/contact"
         description="Get in touch with Iyegere Success Karboloo - Full-Stack Engineer for web, mobile and backend projects, remote work and collaborations."
       />
-      <div
-        className={`relative min-h-screen flex flex-col justify-between items-center px-4 pt-24 pb-10 transition-colors duration-300 ${
-          theme === "dark"
-            ? "bg-[#18181b] text-[#f3f2f9]/90"
-            : "bg-[#f3f2f9]/90 text-[#18181b]"
-        }`}
-        style={{ fontFamily: "Space Grotesk" }}
-      >
-        {/* Top Intro */}
-        <div className="w-full justify-center items-center max-w-3xl mx-auto text-center mt-8 lg:mt-16 mb-8">
-          <p className="text-base md:text-lg lg:text-2xl font-normal opacity-90">
-            Got a question, proposal or project or want to work together on
-            something? Feel free to reach out.
-          </p>
-        </div>
 
-        {/* Main Message */}
-        <div className="w-full flex-1 flex flex-col justify-center items-center h-fit">
-          <hr className="w-[94%] border-t border-gray-600 mb-6 md:mb-8 opacity-40" />
-          <div className="marquee-container overflow-hidden w-full relative">
-            <div className="marquee-track">
-              {sayHello}
+      <main
+        className={`relative z-[1] flex min-h-screen w-full flex-col overflow-x-hidden pb-10 pt-28 md:pt-36 ${t.page}`}
+      >
+        <Shell>
+          <div className={`flex items-center justify-between gap-4 border-b pb-4 ${t.rule}`}>
+            <MetaLabel className={t.dim}>Contact</MetaLabel>
+            <span className="inline-flex items-center gap-2">
+              <span
+                aria-hidden
+                className="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-500"
+              />
+              <MetaLabel className={t.dim}>Available for work</MetaLabel>
+            </span>
+          </div>
+
+          <p
+            className={`mt-8 max-w-read text-[clamp(17px,2.2vw,22px)] leading-relaxed ${t.body}`}
+          >
+            Got a question, a proposal, or something you want built? Tell me
+            what you are working on and I'll come back to you.
+          </p>
+        </Shell>
+
+        {/* Full-bleed statement band */}
+        <a
+          href={`mailto:${EMAIL}`}
+          aria-label={`Email ${EMAIL}`}
+          className={`group mt-10 block border-y py-8 md:mt-14 md:py-12 ${t.rule}`}
+        >
+          <div className="marquee-mask">
+            <div
+              className="marquee-track"
+              style={{ animationDuration: "36s" }}
+              aria-hidden
+            >
+              {[0, 1].map((copyIndex) => (
+                <span key={copyIndex} className="flex shrink-0 items-center">
+                  {MARQUEE.map((phrase, i) => (
+                    <span
+                      key={`${phrase}-${i}`}
+                      className={`stroked-text whitespace-nowrap px-6 font-display text-[12vw] leading-[0.9] text-transparent transition-colors duration-700 md:px-10 ${
+                        t.isDark
+                          ? "group-hover:text-accent"
+                          : "group-hover:text-accent-warm"
+                      }`}
+                    >
+                      {phrase}
+                    </span>
+                  ))}
+                </span>
+              ))}
             </div>
           </div>
-          <hr className="w-[94%] border-t border-gray-600 mt-6 md:mt-8 opacity-40" />
+        </a>
 
-          {/* Email */}
-          <div className="mt-10 group mb-14 lg:mb-24 flex flex-col w-fit h-[40px]">
-            <a
-              href="mailto:iyegeresuccess@gmail.com"
-              className={`md:text-3xl text-[clamp(1rem,4vw,12rem)] font-semibold tracking-[0.01em] hover:text-[#aab2d1] transition-colors duration-200 select-all mb-1 ${theme === "light" ? "text-[#18181b]/90 hover:text-[#20225cba]" : "text-[#f3f2f9]/90"}`}
+        {/* The address itself, at the largest size on the page. */}
+        <Shell className="mt-12 md:mt-16">
+          <MetaLabel className={t.faint}>Write to me</MetaLabel>
+
+          <div className="mt-4 flex flex-wrap items-center gap-x-6 gap-y-4">
+            <h1 className="font-display text-[clamp(24px,5.6vw,68px)] leading-[0.95]">
+              <LineReveal>
+                <a
+                  href={`mailto:${EMAIL}`}
+                  className={`break-all transition-colors duration-300 ${
+                    t.isDark ? "hover:text-accent" : "hover:text-accent-warm"
+                  }`}
+                >
+                  {EMAIL}
+                </a>
+              </LineReveal>
+            </h1>
+
+            <button
+              type="button"
+              onClick={copy}
+              aria-label={copied ? "Email copied" : "Copy email address"}
+              className={`inline-flex shrink-0 items-center gap-2 border px-4 py-2.5 transition-colors duration-300 ${
+                t.rule
+              } ${t.isDark ? "hover:border-paper/40" : "hover:border-ink/40"}`}
             >
-              iyegeresuccess@gmail.com
-            </a>
-
-            <button className={`text-[clamp(0.76rem,3vw,0.85rem)] opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto border w-fit mx-auto px-2 py-2 rounded-full transition-all duration-700 ease-in-out transform group-hover:translate-y-0 translate-y-2 ${theme === "dark" ? "border-[#aab2d1]" : "border-black"}`}>
-
-              <a
-              href="mailto:iyegeresuccess@gmail.com">
-                Click to send mail
-              {/* iyegeresuccess@gmail.com */}
-            </a>
+              {copied ? <FiCheck size={14} /> : <FiCopy size={14} />}
+              <MetaLabel>{copied ? "Copied" : "Copy"}</MetaLabel>
             </button>
           </div>
+        </Shell>
 
-          {/* Socials */}
-          <div className="flex flex-wrap justify-center gap-3 mt-2">
-            {SOCIALS.map((social) => (
-              <a
-                key={social.label}
-                href={social.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={`inline-flex items-center px-5 py-2 rounded-full border border-gray-600 bg-transparent transition-all duration-200 text-sm font-semibold tracking-wide shadow-sm ${theme === "light" ? "" : "text-[#f3f2f9]/90 hover:bg-[whitesmoke]/20 hover:text-[#18181b]"}`}
-              >
-                {/* {social.icon} */}
-                {social.label}
-              </a>
+        {/* Elsewhere */}
+        <Shell className="mt-16 md:mt-24">
+          <div className={`border-b pb-3 ${t.rule}`}>
+            <MetaLabel className={t.faint}>Elsewhere</MetaLabel>
+          </div>
+
+          <ul>
+            {SOCIALS.map((social, i) => (
+              <li key={social.label} className={`border-b ${t.rule}`}>
+                <Reveal delay={i * 0.06}>
+                  <a
+                    href={social.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group flex items-center gap-5 py-5"
+                  >
+                    <span className="font-display text-[clamp(20px,3.2vw,36px)] leading-none transition-transform duration-500 ease-editorial md:group-hover:translate-x-3">
+                      {social.label}
+                    </span>
+                    <MetaLabel className={`ml-auto ${t.dim}`}>
+                      {social.handle}
+                    </MetaLabel>
+                    <FiArrowUpRight
+                      aria-hidden
+                      className={`shrink-0 transition-transform duration-500 ease-editorial group-hover:-translate-y-1 group-hover:translate-x-1 ${t.faint}`}
+                    />
+                  </a>
+                </Reveal>
+              </li>
             ))}
-          </div>
-        </div>
+          </ul>
+        </Shell>
 
-        {/* Footer: Location/Time and Credit */}
-        <div className="w-full flex justify-center items-center text-xs md:text-sm font-medium mt-12">
-          <div className="pr-1">
-            © {new Date().getFullYear()} ISK. All rights reserved.
+        <Shell className="mt-auto pt-16">
+          <div className={`flex items-center justify-between gap-4 border-t pt-5 ${t.rule}`}>
+            <MetaLabel className={t.faint}>
+              © {new Date().getFullYear()} ISK
+            </MetaLabel>
+            <MetaLabel className={t.faint}>All rights reserved</MetaLabel>
           </div>
-        </div>
-      </div>
+        </Shell>
+      </main>
     </Layout>
   );
 };
