@@ -169,12 +169,14 @@ const Header = ({ theme, toggleTheme }: HeaderProps) => {
       <AnimatePresence>
         {menuOpen && (
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            /* Leaves faster than it arrives. The route has already changed by
-               the time this unmounts, so a slow fade just holds the new page
-               behind an overlay nobody is reading any more. */
-            exit={{ opacity: 0, transition: { duration: 0.18 } }}
+            initial={{ opacity: 0, y: 0 }}
+            animate={{ opacity: 1, y: 0 }}
+            /* Leaves as a curtain, not a fade. The new route mounts behind
+               this panel, so a fade-out revealed a page whose own entrance had
+               already played while hidden - it looked finished the moment you
+               saw it. Sliding the panel up uncovers the page top-down while
+               its entrance is still running, so the two motions read as one. */
+            exit={{ y: "-100%", transition: { duration: 0.55, ease: EASE } }}
             transition={{ duration: 0.28 }}
             className={`fixed inset-0 z-[110] overflow-y-auto ${
               t.isDark ? "bg-ink text-paper" : "bg-paper text-ink"
