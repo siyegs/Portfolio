@@ -1,7 +1,6 @@
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Encode+Sans+Expanded&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Kablammo&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Special+Gothic+Expanded+One&display=swap');
+/* Fonts are requested from index.html with preconnect, not @import: an @import
+   here cannot start until this stylesheet has downloaded and parsed, which
+   pushed the first text paint a full round trip later than it needed to be. */
 
 
 @tailwind base;
