@@ -21,48 +21,16 @@
   height: 50px;
 }
 
+/* Outlined display type. Used for the home masthead and the marquee bands,
+   which pair it with text-transparent and fill on hover. */
 .stroked-text {
   -webkit-text-stroke: 0.8px #aab2d1;
-}
-
-.underline-hover {
-  position: relative;
-  cursor: pointer;
-  display: inline-block;
-  padding-bottom: 2px;
-}
-
-.underline-hover::after {
-  content: "";
-  position: absolute;
-  width: 100%;
-  transform: scaleX(0);
-  height: 2.5px;
-  bottom: 0;
-  left: 0;
-  background-color: #aab2d1;
-  transform-origin: bottom left;
-  transition: transform 0.4s cubic-bezier(0.86, 0, 0.07, 1);
-}
-
-.underline-hover:hover::after {
-  transform: scaleX(1);
-  transform-origin: bottom left;
-}
-
-.light .underline-hover::after {
-  background-color: #90754c;
 }
 
 /* --- Theme Styles --- */
 
 body.light {
   background-color: #9fb389;
-}
-
-.light .doings {
-  color: #18181b;
-  font-weight: 500;
 }
 
 .light .stroked-text {
@@ -73,14 +41,6 @@ body.light {
 
 .light .cursor {
   background-color: #e5d2b8;
-}
-
-.light .text-\[\#aab2d1\] {
-  color: #90754c;
-}
-
-.light .dynamic-text {
-  color: #18181b;
 }
 
 /* The track holds its content twice and travels exactly -50%, so the loop is
