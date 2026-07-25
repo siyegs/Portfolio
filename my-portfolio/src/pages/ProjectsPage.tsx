@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { motion } from "framer-motion";
 import Layout from "../components/Layout";
 import SEO from "../components/SEO";
 import projectsData from "../data/projectsData";
@@ -18,6 +19,8 @@ interface WorkPageProps {
    still leave room for the gaps justify-between distributes. */
 const MASTHEAD = ["W", "O", "R", "K"];
 
+const ALL = "All";
+
 const WorkPage: React.FC<WorkPageProps> = ({
   theme,
   toggleTheme,
@@ -25,8 +28,16 @@ const WorkPage: React.FC<WorkPageProps> = ({
 }) => {
   const t = tone(theme);
   const [preview, setPreview] = useState<Preview | null>(null);
+  const [active, setActive] = useState(ALL);
 
   const disciplines = Array.from(new Set(projectsData.map((p) => p.category)));
+  const filters = [ALL, ...disciplines];
+
+  /* Carry the original position through the filter so a project keeps its
+     register number: 06 is Packa whether or not the list is filtered. */
+  const shown = projectsData
+    .map((project, i) => ({ project, i }))
+    .filter(({ project }) => active === ALL || project.category === active);
 
   return (
     <Layout theme={theme} toggleTheme={toggleTheme} hoveredName={hoveredName}>
@@ -78,10 +89,54 @@ const WorkPage: React.FC<WorkPageProps> = ({
           </div>
         </Shell>
 
-        {/* The index */}
+        {/* Filter register. Numbers stay tied to the full list, so an entry
+            keeps its identity no matter which discipline is showing. */}
         <Shell className="mt-14 md:mt-20">
-          <ul>
-            {projectsData.map((project, i) => (
+          <div className="flex flex-wrap items-center gap-x-7 gap-y-3">
+            {filters.map((filter) => {
+              const isActive = filter === active;
+              return (
+                <button
+                  key={filter}
+                  type="button"
+                  onClick={() => setActive(filter)}
+                  aria-pressed={isActive}
+                  className={`meta-label relative pb-2 transition-colors duration-300 ${
+                    isActive
+                      ? ""
+                      : `${t.faint} ${
+                          t.isDark ? "hover:text-paper/80" : "hover:text-ink/80"
+                        }`
+                  }`}
+                >
+                  {filter}
+                  {isActive && (
+                    <motion.span
+                      layoutId="work-filter-rule"
+                      aria-hidden
+                      className={`absolute inset-x-0 bottom-0 h-px ${t.accentFill}`}
+                      transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+                    />
+                  )}
+                </button>
+              );
+            })}
+
+            <MetaLabel className={`tnum ml-auto ${t.faint}`}>
+              {String(shown.length).padStart(2, "0")} shown
+            </MetaLabel>
+          </div>
+        </Shell>
+
+        {/* The index */}
+        <Shell className="mt-6">
+          <motion.ul
+            key={active}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+          >
+            {shown.map(({ project, i }) => (
               <IndexRow
                 key={project.slug}
                 project={project}
@@ -97,7 +152,7 @@ const WorkPage: React.FC<WorkPageProps> = ({
                 onClearPreview={() => setPreview(null)}
               />
             ))}
-          </ul>
+          </motion.ul>
         </Shell>
 
         <HoverPreview preview={preview} tone={t} />
