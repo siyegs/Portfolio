@@ -47,12 +47,19 @@ function ScrollToTop() {
 }
 
 /**
- * Fades each route in on arrival.
+ * Eases each route in on arrival.
  *
  * Keying on the pathname remounts the wrapper per navigation, which the route
  * change does anyway. There is deliberately no exit animation: waiting for one
  * would hold the old page on screen and make every link feel slower, and the
- * arrival fade alone is what removes the hard cut.
+ * arrival ease alone is what removes the hard cut.
+ *
+ * The short delay exists for the menu path: the index overlay leaves as a
+ * 0.55s curtain lift, and without the delay the page's entrance was half
+ * spent before the curtain uncovered it, which read as hurried. Delaying the
+ * start and running longer keeps the page still settling as it is revealed;
+ * on bare navigations (no overlay) the delay is small enough to read as
+ * intent rather than lag.
  */
 function RouteTransition({ children }: { children: ReactNode }) {
   const { pathname } = useLocation();
@@ -60,9 +67,9 @@ function RouteTransition({ children }: { children: ReactNode }) {
   return (
     <motion.div
       key={pathname}
-      initial={{ opacity: 0, y: 8 }}
+      initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.32, ease: [0.16, 1, 0.3, 1] }}
+      transition={{ duration: 0.65, delay: 0.12, ease: [0.16, 1, 0.3, 1] }}
     >
       {children}
     </motion.div>
