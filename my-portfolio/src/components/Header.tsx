@@ -83,8 +83,8 @@ const Header = ({ theme, toggleTheme }: HeaderProps) => {
   return (
     <>
       <header
-        className={`fixed inset-x-0 top-0 z-[100] border-b transition-[transform,background-color,border-color] duration-500 ease-editorial ${
-          hidden && !menuOpen ? "-translate-y-full" : "translate-y-0"
+        className={`fixed inset-x-0 top-0 z-[120] border-b transition-[transform,background-color,border-color] duration-500 ease-editorial ${
+          hidden || menuOpen ? "-translate-y-full" : "translate-y-0"
         } ${
           scrolled && !menuOpen
             ? `${t.rule} ${t.isDark ? "bg-ink/85" : "bg-paper/85"} backdrop-blur-md`
@@ -146,7 +146,12 @@ const Header = ({ theme, toggleTheme }: HeaderProps) => {
       </header>
 
       {/* Index overlay. Numbered rows, one per route, with the contact rail
-          underneath so the menu doubles as the site's shortcut sheet. */}
+          underneath so the menu doubles as the site's shortcut sheet.
+
+          It sits above the chat launcher (z-100) so that is not left floating
+          over the index, and below the bar (z-120) so Close stays reachable.
+          It scrolls rather than clipping when the rows outgrow the viewport,
+          and the nav padding clears the fixed bar. */}
       <AnimatePresence>
         {menuOpen && (
           <motion.div
@@ -154,11 +159,44 @@ const Header = ({ theme, toggleTheme }: HeaderProps) => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
-            className={`fixed inset-0 z-[99] flex flex-col justify-center ${
+            className={`fixed inset-0 z-[110] overflow-y-auto ${
               t.isDark ? "bg-ink text-paper" : "bg-paper text-ink"
             }`}
           >
-            <nav className="mx-auto w-full max-w-shell px-5 md:px-10 lg:px-16">
+            {/* The bar retracts while this is open, so the overlay carries its
+                own rail: the mark on the left, Close on the right. */}
+            <div className="mx-auto flex h-16 w-full max-w-shell items-center justify-between gap-6 px-5 md:h-[4.5rem] md:px-10 lg:px-16">
+              <Link
+                to="/"
+                aria-label="Home"
+                onClick={() => setMenuOpen(false)}
+                className="flex shrink-0 items-center gap-2.5"
+              >
+                <img
+                  src={t.isDark ? logoWhite : logoBlack}
+                  alt=""
+                  className="h-6 w-auto object-contain md:h-7"
+                />
+                <span className="font-display text-lg tracking-tight md:text-xl">
+                  ISK
+                </span>
+              </Link>
+
+              <button
+                type="button"
+                onClick={() => setMenuOpen(false)}
+                aria-label="Close menu"
+                className="group flex items-center gap-3"
+              >
+                <MetaLabel className="hidden sm:inline">Close</MetaLabel>
+                <span className="relative flex h-4 w-6 items-center justify-center">
+                  <span className="absolute block h-px w-full rotate-45 bg-current" />
+                  <span className="absolute block h-px w-full -rotate-45 bg-current" />
+                </span>
+              </button>
+            </div>
+
+            <nav className="mx-auto flex min-h-[calc(100%-4rem)] w-full max-w-shell flex-col justify-center px-5 pb-14 pt-6 md:min-h-[calc(100%-4.5rem)] md:px-10 md:pb-16 lg:px-16">
               {NAV.map((item, i) => {
                 const current = location.pathname === item.path;
                 return (
