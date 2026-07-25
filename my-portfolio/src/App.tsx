@@ -1,13 +1,11 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, lazy, Suspense } from "react";
 import {
   BrowserRouter as Router,
   Routes,
   Route,
   useLocation,
 } from "react-router-dom";
-import { Canvas } from "@react-three/fiber";
 import { useMediaQuery } from "react-responsive";
-import Scene from "./components/Scene";
 import InterviewChat from "./components/InterviewChat";
 import "./App.css";
 import HomePage from "./pages/HomePage";
@@ -16,6 +14,8 @@ import AboutPage from "./pages/AboutPage";
 import ContactPage from "./pages/ContactPage";
 import ProjectDetailsPage from "./pages/projectDetails";
 import NotFoundPage from "./pages/NotFound";
+
+const BackgroundScene = lazy(() => import("./components/BackgroundScene"));
 
 // Reset scroll to the top on every route change so a detail page never opens
 // part-scrolled (which left the title hidden under the fixed navbar).
@@ -58,22 +58,9 @@ function App() {
   return (
     <>
       {showScene && (
-        <Canvas
-          camera={{ position: [0, 0, 5], fov: 45 }}
-          dpr={[1, 1.5]}
-          gl={{ antialias: false, powerPreference: "high-performance" }}
-          performance={{ min: 0.5 }}
-          style={{
-            position: "fixed",
-            top: 0,
-            left: 0,
-            width: "100vw",
-            height: "100vh",
-            zIndex: -1,
-          }}
-        >
-          <Scene hoveredName={hoveredName} theme={theme} />
-        </Canvas>
+        <Suspense fallback={null}>
+          <BackgroundScene theme={theme} hoveredName={hoveredName} />
+        </Suspense>
       )}
       <Router>
         <ScrollToTop />
