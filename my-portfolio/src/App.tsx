@@ -6,6 +6,7 @@ import {
   useLocation,
 } from "react-router-dom";
 import { Canvas } from "@react-three/fiber";
+import { useMediaQuery } from "react-responsive";
 import Scene from "./components/Scene";
 import InterviewChat from "./components/InterviewChat";
 import "./App.css";
@@ -35,6 +36,17 @@ function App() {
   const [theme, setTheme] = useState("dark");
   const [hoveredName, setHoveredName] = useState<string | null>(null);
 
+  /* The blob field is atmosphere, not content. It costs a continuous GPU loop
+     behind every page, which is the first thing to make the cursor, the
+     marquees and the hover plate stutter, so it is only rendered where there
+     is headroom for it: wide viewports, motion allowed. Everything below that
+     falls back to the flat canvas, the grain and the vignette. */
+  const wideViewport = useMediaQuery({ minWidth: 1024 });
+  const reducedMotion = useMediaQuery({
+    query: "(prefers-reduced-motion: reduce)",
+  });
+  const showScene = wideViewport && !reducedMotion;
+
   const toggleTheme = () => {
     setTheme((prevTheme) => (prevTheme === "dark" ? "light" : "dark"));
   };
@@ -45,19 +57,24 @@ function App() {
 
   return (
     <>
-      <Canvas
-        camera={{ position: [0, 0, 5], fov: 45 }}
-        style={{
-          position: "fixed",
-          top: 0,
-          left: 0,
-          width: "100vw",
-          height: "100vh",
-          zIndex: -1,
-        }}
-      >
-        <Scene hoveredName={hoveredName} theme={theme} />
-      </Canvas>
+      {showScene && (
+        <Canvas
+          camera={{ position: [0, 0, 5], fov: 45 }}
+          dpr={[1, 1.5]}
+          gl={{ antialias: false, powerPreference: "high-performance" }}
+          performance={{ min: 0.5 }}
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            width: "100vw",
+            height: "100vh",
+            zIndex: -1,
+          }}
+        >
+          <Scene hoveredName={hoveredName} theme={theme} />
+        </Canvas>
+      )}
       <Router>
         <ScrollToTop />
         <Routes>

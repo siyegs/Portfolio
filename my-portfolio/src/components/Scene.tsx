@@ -1,5 +1,6 @@
 import { useFrame } from "@react-three/fiber";
 import {
+  AdaptiveDpr,
   Preload,
   Float,
   Sphere,
@@ -24,14 +25,17 @@ interface BlobCfg {
   speed: number;
 }
 
-// Glossy gradient blobs scattered around the edges, framing the centre.
+/* Glossy blobs scattered around the edges, framing the centre.
+   The light-mode tints are drawn from the light theme itself - sage, clay,
+   sand, olive - rather than the saturated emerald/pink/indigo/amber set they
+   started as, which belonged to no palette on the site. */
 const BLOBS: BlobCfg[] = [
-  { pos: [-3.9, 1.5, -1.0], scale: 1.35, light: "#34d399", distort: 0.42, speed: 1.6 },
-  { pos: [3.9, 1.1, -1.4], scale: 1.15, light: "#f472b6", distort: 0.46, speed: 1.9 },
-  { pos: [-3.3, -1.9, -1.0], scale: 1.2, light: "#818cf8", distort: 0.38, speed: 1.4 },
-  { pos: [3.5, -1.8, -1.2], scale: 1.3, light: "#fbbf24", distort: 0.44, speed: 1.7 },
-  { pos: [0.4, 2.7, -2.4], scale: 0.85, light: "#22d3ee", distort: 0.5, speed: 2.1 },
-  { pos: [-0.2, -2.8, -2.0], scale: 0.95, light: "#a78bfa", distort: 0.4, speed: 1.5 },
+  { pos: [-3.9, 1.5, -1.0], scale: 1.35, light: "#9fb389", distort: 0.42, speed: 1.6 },
+  { pos: [3.9, 1.1, -1.4], scale: 1.15, light: "#c9a87c", distort: 0.46, speed: 1.9 },
+  { pos: [-3.3, -1.9, -1.0], scale: 1.2, light: "#90754c", distort: 0.38, speed: 1.4 },
+  { pos: [3.5, -1.8, -1.2], scale: 1.3, light: "#dccfb4", distort: 0.44, speed: 1.7 },
+  { pos: [0.4, 2.7, -2.4], scale: 0.85, light: "#8fa39a", distort: 0.5, speed: 2.1 },
+  { pos: [-0.2, -2.8, -2.0], scale: 0.95, light: "#7d8b68", distort: 0.4, speed: 1.5 },
 ];
 
 const DARK_BLOB = "#15171e";
@@ -40,7 +44,9 @@ const Blob = ({ cfg, isLight }: { cfg: BlobCfg; isLight: boolean }) => {
   return (
     <Float speed={cfg.speed} rotationIntensity={0.6} floatIntensity={1.2}>
       <group position={cfg.pos} scale={cfg.scale}>
-        <Sphere args={[1, 64, 64]}>
+        {/* 40 segments still reads as a smooth distorted surface at this size;
+            64 was quadrupling the vertex count for no visible gain. */}
+        <Sphere args={[1, 40, 40]}>
           <MeshDistortMaterial
             distort={cfg.distort}
             speed={cfg.speed}
@@ -93,15 +99,15 @@ const Scene = ({ theme }: SceneProps) => {
           ))}
         </ParallaxGroup>
 
-        {/* Colourful light-formers give the holographic speculars without an
-            external HDR. Dimmer/whiter set for the dark-glossy mode. */}
-        <Environment resolution={256}>
+        {/* Light-formers give the speculars without an external HDR. Warm set
+            for the paper theme, dimmer and whiter for the dark-glossy mode. */}
+        <Environment resolution={128}>
           {isLight ? (
             <>
-              <Lightformer form="circle" intensity={2.2} color="#ff6ec7" position={[-3, 2, 2]} scale={4} />
-              <Lightformer form="circle" intensity={2.2} color="#7afcff" position={[3, -2, 2]} scale={4} />
-              <Lightformer form="circle" intensity={2.0} color="#ffd36e" position={[3, 2, -2]} scale={4} />
-              <Lightformer form="circle" intensity={2.0} color="#a78bfa" position={[-3, -2, -2]} scale={4} />
+              <Lightformer form="circle" intensity={2.2} color="#f6e7c8" position={[-3, 2, 2]} scale={4} />
+              <Lightformer form="circle" intensity={2.0} color="#cfe0cd" position={[3, -2, 2]} scale={4} />
+              <Lightformer form="circle" intensity={2.0} color="#e8d3ae" position={[3, 2, -2]} scale={4} />
+              <Lightformer form="circle" intensity={1.8} color="#b8a887" position={[-3, -2, -2]} scale={4} />
               <Lightformer form="ring" intensity={1.6} color="#ffffff" position={[0, 0, 3]} scale={3} />
             </>
           ) : (
@@ -116,7 +122,12 @@ const Scene = ({ theme }: SceneProps) => {
         <Preload all />
       </Suspense>
 
-      <EffectComposer enableNormalPass={false}>
+      {/* Drops the render resolution while the frame rate is under pressure and
+          restores it once things settle, so a heavy page never drags the whole
+          window down with it. Pairs with performance.min on the Canvas. */}
+      <AdaptiveDpr pixelated />
+
+      <EffectComposer enableNormalPass={false} multisampling={0}>
         <Bloom
           intensity={isLight ? 0.4 : 0.6}
           luminanceThreshold={0.6}
