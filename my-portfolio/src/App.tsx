@@ -1,10 +1,18 @@
-import { useState, useEffect, lazy, Suspense } from "react";
+import {
+  useState,
+  useEffect,
+  useLayoutEffect,
+  lazy,
+  Suspense,
+  type ReactNode,
+} from "react";
 import {
   BrowserRouter as Router,
   Routes,
   Route,
   useLocation,
 } from "react-router-dom";
+import { motion } from "framer-motion";
 import { useMediaQuery } from "react-responsive";
 import InterviewChat from "./components/InterviewChat";
 import "./App.css";
@@ -17,12 +25,18 @@ import NotFoundPage from "./pages/NotFound";
 
 const BackgroundScene = lazy(() => import("./components/BackgroundScene"));
 
-// Reset scroll to the top on every route change so a detail page never opens
-// part-scrolled (which left the title hidden under the fixed navbar).
+/**
+ * Reset scroll to the top on every route change, before the browser paints.
+ *
+ * useEffect runs after paint, so the new page was showing for one frame at the
+ * old scroll offset and then snapped: the jolt that made navigation feel like
+ * it arrived forcefully. useLayoutEffect puts the reset ahead of that paint,
+ * so the page is simply already at the top.
+ */
 function ScrollToTop() {
   const { pathname } = useLocation();
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if ("scrollRestoration" in window.history) {
       window.history.scrollRestoration = "manual";
     }
@@ -30,6 +44,29 @@ function ScrollToTop() {
   }, [pathname]);
 
   return null;
+}
+
+/**
+ * Fades each route in on arrival.
+ *
+ * Keying on the pathname remounts the wrapper per navigation, which the route
+ * change does anyway. There is deliberately no exit animation: waiting for one
+ * would hold the old page on screen and make every link feel slower, and the
+ * arrival fade alone is what removes the hard cut.
+ */
+function RouteTransition({ children }: { children: ReactNode }) {
+  const { pathname } = useLocation();
+
+  return (
+    <motion.div
+      key={pathname}
+      initial={{ opacity: 0, y: 8 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.32, ease: [0.16, 1, 0.3, 1] }}
+    >
+      {children}
+    </motion.div>
+  );
 }
 
 function App() {
@@ -64,69 +101,71 @@ function App() {
       )}
       <Router>
         <ScrollToTop />
-        <Routes>
-          <Route
-            path="/"
-            element={
-              <HomePage
-                theme={theme}
-                toggleTheme={toggleTheme}
-                setHoveredName={setHoveredName}
-                hoveredName={hoveredName}
-              />
-            }
-          />
-          <Route
-            path="/projects"
-            element={
-              <ProjectsPage
-                theme={theme}
-                toggleTheme={toggleTheme}
-                hoveredName={hoveredName}
-              />
-            }
-          />
-          <Route
-            path="/about"
-            element={
-              <AboutPage
-                theme={theme}
-                toggleTheme={toggleTheme}
-                hoveredName={hoveredName}
-              />
-            }
-          />
-          <Route
-            path="/contact"
-            element={
-              <ContactPage
-                theme={theme}
-                toggleTheme={toggleTheme}
-                hoveredName={hoveredName}
-              />
-            }
-          />
-          <Route
-            path="/projects/:slugTextId"
-            element={
-              <ProjectDetailsPage
-                theme={theme}
-                toggleTheme={toggleTheme}
-                hoveredName={hoveredName}
-              />
-            }
-          />
-          <Route
-            path="*"
-            element={
-              <NotFoundPage
-                theme={theme}
-                toggleTheme={toggleTheme}
-                hoveredName={hoveredName}
-              />
-            }
-          />
-        </Routes>
+        <RouteTransition>
+          <Routes>
+            <Route
+              path="/"
+              element={
+                <HomePage
+                  theme={theme}
+                  toggleTheme={toggleTheme}
+                  setHoveredName={setHoveredName}
+                  hoveredName={hoveredName}
+                />
+              }
+            />
+            <Route
+              path="/projects"
+              element={
+                <ProjectsPage
+                  theme={theme}
+                  toggleTheme={toggleTheme}
+                  hoveredName={hoveredName}
+                />
+              }
+            />
+            <Route
+              path="/about"
+              element={
+                <AboutPage
+                  theme={theme}
+                  toggleTheme={toggleTheme}
+                  hoveredName={hoveredName}
+                />
+              }
+            />
+            <Route
+              path="/contact"
+              element={
+                <ContactPage
+                  theme={theme}
+                  toggleTheme={toggleTheme}
+                  hoveredName={hoveredName}
+                />
+              }
+            />
+            <Route
+              path="/projects/:slugTextId"
+              element={
+                <ProjectDetailsPage
+                  theme={theme}
+                  toggleTheme={toggleTheme}
+                  hoveredName={hoveredName}
+                />
+              }
+            />
+            <Route
+              path="*"
+              element={
+                <NotFoundPage
+                  theme={theme}
+                  toggleTheme={toggleTheme}
+                  hoveredName={hoveredName}
+                />
+              }
+            />
+          </Routes>
+        </RouteTransition>
       </Router>
       <InterviewChat theme={theme} />
     </>
