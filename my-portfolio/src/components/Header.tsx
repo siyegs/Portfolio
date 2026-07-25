@@ -157,8 +157,11 @@ const Header = ({ theme, toggleTheme }: HeaderProps) => {
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
+            /* Leaves faster than it arrives. The route has already changed by
+               the time this unmounts, so a slow fade just holds the new page
+               behind an overlay nobody is reading any more. */
+            exit={{ opacity: 0, transition: { duration: 0.18 } }}
+            transition={{ duration: 0.28 }}
             className={`fixed inset-0 z-[110] overflow-y-auto ${
               t.isDark ? "bg-ink text-paper" : "bg-paper text-ink"
             }`}
