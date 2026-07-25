@@ -3,6 +3,8 @@ import Layout from "../components/Layout";
 import SEO from "../components/SEO";
 import { useNavigate } from "react-router-dom";
 import projectsData from "../data/projectsData";
+import { LineReveal, MetaLabel, Shell } from "../components/work/primitives";
+import { tone } from "../lib/work";
 
 interface WorkPageProps {
   theme: string;
@@ -10,16 +12,20 @@ interface WorkPageProps {
   hoveredName: string | null;
 }
 
+/* Set edge to edge rather than at a fixed size, so the masthead fills the
+   viewport at every width. The face is very wide, so four letters at 21vw
+   still leave room for the gaps justify-between distributes. */
+const MASTHEAD = ["W", "O", "R", "K"];
+
 const WorkPage: React.FC<WorkPageProps> = ({
   theme,
   toggleTheme,
   hoveredName,
 }) => {
   const navigate = useNavigate();
+  const t = tone(theme);
 
-  // One neutral card surface for every project (cool slate, brand family) so
-  // the grid reads calm instead of rainbow.
-  const cardBg = theme === "dark" ? "bg-[#222530]" : "bg-[#e5e6ef]";
+  const disciplines = Array.from(new Set(projectsData.map((p) => p.category)));
 
   const renderProjectCard = (proj: (typeof projectsData)[0]) => (
     <div
@@ -28,7 +34,9 @@ const WorkPage: React.FC<WorkPageProps> = ({
     >
       {/* Placeholder Thumbnail*/}
       <div
-        className={`relative flex items-center justify-center mb-4 p-6 rounded-lg ${cardBg} sm:h-[200px] sm:w-[280px] md:h-[240px] md:w-[320px] lg:w-[290px] xl:w-[350px] 2xl:w-[430px] hover:scale-95 transition-all duration-200`}
+        className={`relative flex items-center justify-center mb-4 p-6 rounded-lg ${
+          t.inset
+        } sm:h-[200px] sm:w-[280px] md:h-[240px] md:w-[320px] lg:w-[290px] xl:w-[350px] 2xl:w-[430px] hover:scale-95 transition-all duration-200`}
       >
         {proj.image ? (
           <img
@@ -41,24 +49,16 @@ const WorkPage: React.FC<WorkPageProps> = ({
           <span>{proj.title[0]}</span>
         )}
 
-        <div className="absolute top-3 left-4">
-          {proj.ongoing && (
-            <span className="bg-[black]/70 text-white text-xs font-semibold px-2 py-1 rounded">
-              <span className="inline-block rounded-full bg-green-600 w-2 h-2 mr-1 align-middle animate-pulse"></span>
-              Ongoing
-            </span>
-          )}
-        </div>
-
-        <div className="absolute top-3 left-4">
-          {proj.underMaintenance && (
-            <span className="bg-[black]/70 text-white text-xs font-semibold px-2 py-1 rounded">
-              <span className="inline-block rounded-full bg-red-600 w-2 h-2 mr-1 align-middle animate-pulse"></span>
-              Under Maintenance
-            </span>
-          )}
-        </div>
-
+        {(proj.ongoing || proj.underMaintenance) && (
+          <span className="absolute left-4 top-3 rounded bg-[black]/70 px-2 py-1 text-xs font-semibold text-white">
+            <span
+              className={`mr-1 inline-block h-2 w-2 animate-pulse rounded-full align-middle ${
+                proj.ongoing ? "bg-green-600" : "bg-red-600"
+              }`}
+            />
+            {proj.ongoing ? "Ongoing" : "Under Maintenance"}
+          </span>
+        )}
       </div>
 
       {/* Project Info - centered below image */}
@@ -81,69 +81,94 @@ const WorkPage: React.FC<WorkPageProps> = ({
         path="/projects"
         description="Selected projects by Iyegere Success Karboloo - influencer marketing apps, ERPs, e-commerce platforms and real-time products across web, mobile and backend."
       />
-      <div
-        className={`min-h-screen w-full flex flex-col items-center px-4 pt-24 pb-20 transition-colors duration-30 overflow-x-hidden ${theme === "dark"
-          ? "bg-[#18181b]/90  text-[#f3f2f9]"
-          : "bg-[#f3f2f9]/90 text-[#18181b]"
-          } `}
-        style={{ fontFamily: "Space Grotesk" }}
+      <main
+        className={`relative z-[1] min-h-screen w-full overflow-x-hidden pb-24 pt-28 md:pt-36 ${t.page}`}
       >
-        {/* Header */}
-        <div className="w-full flex flex-col items-start mb-4 mt-[30px] md:mt-[90px] md:mb-10 md:w-[90%] overflow-x-hidden">
+        {/* Masthead */}
+        <Shell>
+          <div className={`flex items-end justify-between gap-6 border-b pb-4 ${t.rule}`}>
+            <MetaLabel className={t.dim}>Selected work</MetaLabel>
+            <MetaLabel className={`tnum ${t.dim}`}>
+              {String(projectsData.length).padStart(2, "0")} entries
+            </MetaLabel>
+          </div>
+
           <h1
-            className="font-bold tracking-tight mb-6"
-            style={{ fontSize: "clamp(33px, 2vw, 35px)" }}
+            aria-label="Work"
+            className="mt-6 flex w-full justify-between font-display text-[min(21vw,13rem)] leading-[0.8]"
           >
-            Work
+            {MASTHEAD.map((letter, i) => (
+              <LineReveal key={letter} delay={0.08 + i * 0.07}>
+                <span aria-hidden>{letter}</span>
+              </LineReveal>
+            ))}
           </h1>
-          <p
-            className={`text-base font-semibold mb-3 ${theme === "dark" ? "text-gray-300" : "text-gray-800"
-              }`}
-          >
-            A collection of projects I've built and contributed to
-          </p>
-        </div>
+
+          <div className={`mt-8 grid gap-8 border-t pt-6 md:grid-cols-12 ${t.rule}`}>
+            <p
+              className={`text-[clamp(16px,2vw,20px)] leading-relaxed md:col-span-6 lg:col-span-5 ${t.body}`}
+            >
+              Products I have built and contributed to, across web, mobile and
+              backend. Most are live: in the app stores, on npm, or running a
+              business today.
+            </p>
+
+            <dl className="md:col-span-4 md:col-start-9">
+              <dt>
+                <MetaLabel className={t.faint}>Disciplines</MetaLabel>
+              </dt>
+              <dd className={`mt-3 text-[15px] leading-relaxed ${t.body}`}>
+                {disciplines.join(" · ")}
+              </dd>
+            </dl>
+          </div>
+        </Shell>
 
         {/* Projects List */}
-        <div className="w-full md:w-[90%] mx-auto grid sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-9 overflow-x-hidden">
-          {projectsData.map(renderProjectCard)}
-        </div>
+        <Shell className="mt-16">
+          <div className="grid gap-6 sm:grid-cols-2 md:gap-9 lg:grid-cols-3">
+            {projectsData.map(renderProjectCard)}
+          </div>
+        </Shell>
 
         {/* Call to Action */}
-        <div
-          className={`w-full grid md:w-screen md:py-12 mt-8 rounded-xl py-7 ${theme === "dark"
-            ? "bg-[#232336]/30 text-[#f3f2f9]"
-            : "bg-[#e9e6fa] text-[#18181b]"
+        <Shell className="mt-8">
+          <div
+            className={`grid w-full rounded-xl py-7 md:py-12 ${
+              theme === "dark"
+                ? "bg-[#232336]/30 text-[#f3f2f9]"
+                : "bg-[#e9e6fa] text-[#18181b]"
             }`}
-        >
-          <div className="grid md:grid-cols-2 md:gap-4 w-[85%] mx-auto">
-            <div className="flex justify-center items-center">
-              <h2
-                className="font-bold mb-3 md:font-black"
-                style={{ fontSize: "clamp(20px, 3vw, 100px)" }}
-              >
-                Ready to go live with your dream?
-              </h2>
-            </div>
+          >
+            <div className="mx-auto grid w-[85%] md:grid-cols-2 md:gap-4">
+              <div className="flex items-center justify-center">
+                <h2
+                  className="mb-3 font-bold md:font-black"
+                  style={{ fontSize: "clamp(20px, 3vw, 100px)" }}
+                >
+                  Ready to go live with your dream?
+                </h2>
+              </div>
 
-            <div>
-              <p
-                className="font-semibold mb-6"
-                style={{ fontSize: "clamp(15px, 2vw, 20px)" }}
-              >
-                I'm excited to help bring your dream project to life! I'm ready
-                to collaborate and help you make the most of your web presence.
-              </p>
-              <a
-                href="mailto:iyegeresuccess@gmail.com"
-                className="inline-block px-4 py-2 font-semibold text-sm transition-all duration-200 shadow-md bg-[#aab2d1] text-[#18181b] hover:bg-[whitesmoke] hover:text-[#18181b]"
-              >
-                Collab with ISK
-              </a>
+              <div>
+                <p
+                  className="mb-6 font-semibold"
+                  style={{ fontSize: "clamp(15px, 2vw, 20px)" }}
+                >
+                  I'm excited to help bring your dream project to life! I'm ready
+                  to collaborate and help you make the most of your web presence.
+                </p>
+                <a
+                  href="mailto:iyegeresuccess@gmail.com"
+                  className="inline-block bg-[#aab2d1] px-4 py-2 text-sm font-semibold text-[#18181b] shadow-md transition-all duration-200 hover:bg-[whitesmoke] hover:text-[#18181b]"
+                >
+                  Collab with ISK
+                </a>
+              </div>
             </div>
           </div>
-        </div>
-      </div>
+        </Shell>
+      </main>
     </Layout>
   );
 };
