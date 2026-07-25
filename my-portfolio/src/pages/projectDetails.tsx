@@ -1,9 +1,21 @@
-import { useParams, useNavigate } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
+import { FiArrowLeft } from "react-icons/fi";
 import projectsData from "../data/projectsData";
 import Layout from "../components/Layout";
 import SEO from "../components/SEO";
 import NotFoundPage from "./NotFound";
-import { FiExternalLink, FiArrowLeft } from "react-icons/fi";
+import Gallery from "../components/work/Gallery";
+import NextProject from "../components/work/NextProject";
+import ProjectActions from "../components/work/ProjectActions";
+import SpecRegister, { type Spec } from "../components/work/SpecRegister";
+import {
+  LineReveal,
+  MetaLabel,
+  Reveal,
+  Shell,
+  StatusTag,
+} from "../components/work/primitives";
+import { indexLabel, statusOf, tone } from "../lib/work";
 
 const SITE_URL = "https://iyegeresk.web.app";
 
@@ -19,9 +31,9 @@ const ProjectDetailsPage: React.FC<ProjectDetailsPageProps> = ({
   hoveredName,
 }) => {
   const { slugTextId } = useParams();
-  const navigate = useNavigate();
-  const project = projectsData.find((p) => p.slug === slugTextId);
-  const isDark = theme === "dark";
+  const position = projectsData.findIndex((p) => p.slug === slugTextId);
+  const project = position === -1 ? undefined : projectsData[position];
+  const t = tone(theme);
 
   if (!project) {
     return (
@@ -35,37 +47,34 @@ const ProjectDetailsPage: React.FC<ProjectDetailsPageProps> = ({
     );
   }
 
-  const isLive =
-    !!project.iosAppStoreUrl ||
-    !!project.androidDownloadUrl ||
-    (!!project.url && project.url.length > 0);
+  const status = statusOf(project);
 
-  // Label the primary link by where it actually points: an open-source repo or
-  // npm package is not a "live site".
-  const urlCtaLabel = project.url?.includes("npmjs.com")
-    ? "View on npm"
+  /* Where a visitor can actually reach this project, stated plainly. */
+  const availability = project.iosAppStoreUrl || project.androidDownloadUrl
+    ? [project.iosAppStoreUrl && "App Store", project.androidDownloadUrl && "Google Play"]
+        .filter(Boolean)
+        .join(" · ")
+    : project.hasRBAC
+    ? "Role-scoped live demo"
+    : project.url?.includes("npmjs.com")
+    ? "Published on npm"
     : project.url?.includes("github.com")
-    ? "View on GitHub"
-    : "Visit Live Site";
+    ? "Open source on GitHub"
+    : project.url
+    ? "Live on the web"
+    : project.requestDemoEmail
+    ? "Demo on request"
+    : "Not yet public";
 
-  const status = project.ongoing
-    ? { label: "Ongoing", dot: "bg-green-500", pulse: true }
-    : project.underMaintenance
-    ? { label: "Under Maintenance", dot: "bg-red-500", pulse: true }
-    : isLive
-    ? { label: "Live", dot: "bg-emerald-500", pulse: false }
-    : null;
+  const specs: Spec[] = [
+    { label: "Discipline", value: project.category },
+    ...(status ? [{ label: "State", value: status.label }] : []),
+    { label: "Availability", value: availability },
+    ...(project.tags.length ? [{ label: "Focus", value: project.tags.join(" · ") }] : []),
+  ];
 
-  const moreProjects = projectsData
-    .filter((p) => p.slug !== project.slug)
-    .slice(0, 3);
-
-  const subtleBorder = isDark ? "border-white/10" : "border-black/10";
-  const cardBg = isDark ? "bg-[#222530]" : "bg-[#e5e6ef]";
-  const bodyText = isDark ? "text-[#f3f2f9]/85" : "text-[#18181b]/85";
-  const storePill = isDark
-    ? "border-white/[0.12] bg-white/[0.05] text-white hover:border-white/25"
-    : "border-[#18181b]/15 bg-[#18181b] text-white hover:bg-black";
+  /* Wrap around at the end of the register so the tour never dead-ends. */
+  const next = projectsData[(position + 1) % projectsData.length];
 
   const metaDescription =
     project.description.length > 155
@@ -79,245 +88,121 @@ const ProjectDetailsPage: React.FC<ProjectDetailsPageProps> = ({
         path={`/projects/${project.slug}`}
         description={metaDescription}
         image={
-          project.image?.startsWith("/")
-            ? `${SITE_URL}${project.image}`
-            : undefined
+          project.image?.startsWith("/") ? `${SITE_URL}${project.image}` : undefined
         }
       />
-      <div
-        className={`min-h-screen flex flex-col items-center px-5 lg:px-20 py-16 pt-32 ${
-          isDark
-            ? "bg-[#18181b]/90 text-[#f3f2f9]"
-            : "bg-[#f3f2f9]/90 text-[#18181b]"
-        }`}
-        style={{ fontFamily: "Space Grotesk" }}
+      <main
+        className={`relative z-[1] min-h-screen w-full overflow-x-hidden pb-24 pt-28 md:pt-36 ${t.page}`}
       >
-        {/* Back */}
-        <div className="w-full max-w-5xl mx-auto">
-          <button
-            onClick={() => navigate("/projects")}
-            className="flex items-center gap-2 text-base font-semibold hover:underline"
-          >
-            <FiArrowLeft /> Back to Projects
-          </button>
-        </div>
-
-        {/* Header */}
-        <header className="mt-10 w-full max-w-3xl mx-auto text-center">
-          {status && (
-            <div className="mb-4 flex items-center justify-center gap-1.5 text-xs font-semibold uppercase tracking-[0.18em] opacity-70">
-              <span
-                className={`h-1.5 w-1.5 rounded-full ${status.dot} ${
-                  status.pulse ? "animate-pulse" : ""
-                }`}
+        {/* Masthead */}
+        <Shell>
+          <div className={`flex items-center justify-between gap-6 border-b pb-4 ${t.rule}`}>
+            <Link
+              to="/projects"
+              className={`group inline-flex items-center gap-2 transition-colors duration-300 ${t.dim} ${
+                t.isDark ? "hover:text-paper" : "hover:text-ink"
+              }`}
+            >
+              <FiArrowLeft
+                aria-hidden
+                className="transition-transform duration-500 ease-editorial group-hover:-translate-x-1"
               />
-              {status.label}
-            </div>
-          )}
+              <MetaLabel>Index</MetaLabel>
+            </Link>
 
-          <h1 className="text-3xl font-bold tracking-tight md:text-5xl">
-            {project.title}
+            <MetaLabel className={`tnum ${t.faint}`}>
+              {indexLabel(position)} / {project.category}
+            </MetaLabel>
+          </div>
+
+          <h1 className="mt-7 font-display text-[clamp(30px,7.4vw,104px)] leading-[0.9]">
+            <LineReveal>
+              <span className="block break-words">{project.title}</span>
+            </LineReveal>
           </h1>
 
-          {project.tags.length > 0 && (
-            <div className="mt-5 flex flex-wrap items-center justify-center gap-2">
-              {project.tags.map((tag) => (
-                <span
-                  key={tag}
-                  className={`rounded-full border px-3 py-1 text-xs font-medium ${
-                    isDark
-                      ? "border-white/10 bg-white/[0.04] text-[#f3f2f9]/80"
-                      : "border-black/10 bg-black/[0.03] text-[#18181b]/80"
-                  }`}
-                >
-                  {tag}
-                </span>
-              ))}
-            </div>
-          )}
-
-          {/* Primary actions (RBAC projects use the demo-role chips below instead) */}
-          {!project.hasRBAC && (
-            <div className="mt-7 flex flex-wrap items-center justify-center gap-3">
-              {project.androidDownloadUrl || project.iosAppStoreUrl ? (
-              <div className="flex flex-wrap justify-center gap-3">
-                {project.androidDownloadUrl && (
-                  <a
-                    href={project.androidDownloadUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label={`Get ${project.title} on Google Play`}
-                    className={`flex items-center gap-2.5 rounded-xl border px-4 py-2.5 transition-colors ${storePill}`}
-                  >
-                    <svg viewBox="0 0 24 24" className="h-6 w-6" fill="none">
-                      <path d="M3.18 2.04C3.06 2.17 3 2.37 3 2.63v18.74c0 .26.06.46.18.59l.03.03L13.4 12.3v-.07-.07L3.21 2.01l-.03.03z" fill="#4285F4" />
-                      <path d="M16.81 15.72l-3.41-3.42v-.07-.07l3.41-3.42.08.04 4.03 2.29c1.15.65 1.15 1.72 0 2.38l-4.03 2.29-.08.04z" fill="#FBBC04" />
-                      <path d="M16.89 15.68L13.4 12.16 3.18 22.37c.38.4 1 .45 1.71.05l11.99-6.73z" fill="#EA4335" />
-                      <path d="M16.89 8.58L4.89 1.85c-.7-.4-1.33-.35-1.71.05L13.4 12.16l3.49-3.58z" fill="#34A853" />
-                    </svg>
-                    <div className="text-left leading-none">
-                      <div className="text-[9px] font-medium uppercase tracking-wide text-white/50">
-                        Get it on
-                      </div>
-                      <div className="-mt-0.5 text-sm font-bold">Google Play</div>
-                    </div>
-                  </a>
-                )}
-
-                {project.iosAppStoreUrl && (
-                  <a
-                    href={project.iosAppStoreUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label={`Download ${project.title} on the App Store`}
-                    className={`flex items-center gap-2.5 rounded-xl border px-4 py-2.5 transition-colors ${storePill}`}
-                  >
-                    <svg viewBox="0 0 24 24" className="h-6 w-6" fill="currentColor">
-                      <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z" />
-                    </svg>
-                    <div className="text-left leading-none">
-                      <div className="text-[9px] font-medium uppercase tracking-wide text-white/50">
-                        Download on the
-                      </div>
-                      <div className="-mt-0.5 text-sm font-bold">App Store</div>
-                    </div>
-                  </a>
-                )}
-              </div>
-            ) : project.url ? (
-              <a
-                href={project.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex w-fit items-center gap-2 rounded-full bg-[#aab2d1] px-5 py-2.5 text-sm font-semibold text-[#18181b] transition hover:bg-[#e5e7eb]"
-              >
-                {urlCtaLabel} <FiExternalLink />
-              </a>
-            ) : project.requestDemoEmail ? (
-              <a
-                href={`mailto:${project.requestDemoEmail}`}
-                className="inline-flex w-fit items-center gap-2 rounded-full bg-[#aab2d1] px-5 py-2.5 text-sm font-semibold text-[#18181b] transition hover:bg-[#e5e7eb]"
-              >
-                Request Live Demo
-              </a>
-            ) : (
-              <div className="inline-flex w-fit items-center gap-2 rounded-full bg-[#aab2d1] px-5 py-2.5 text-sm font-semibold text-[#18181b]">
-                <svg className="h-4 w-4" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09l.01-.01zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z" />
-                </svg>
-                <span>Coming Soon</span>
-              </div>
-              )}
-            </div>
-          )}
-
-          {project.hasRBAC && (
-            <div className="mt-7">
-              <p className="mb-3 text-xs font-semibold uppercase tracking-[0.18em] opacity-50">
-                View the live demo as
-              </p>
-              <div className="flex flex-wrap justify-center gap-2">
-                {project.demoRolesURL?.map((role) => (
-                  <a
-                    key={role.role}
-                    href={role.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={`flex items-center gap-x-2 rounded-full border px-3 py-1 text-xs font-medium transition ${
-                      isDark
-                        ? "bg-[#1a1a22] text-[#aab2d1] border-[#333] hover:border-[#555]"
-                        : "bg-[#f3f2f9] text-[#18181b] border-[#ccc] hover:border-[#999]"
-                    }`}
-                  >
-                    {role.role} <FiExternalLink />
-                  </a>
-                ))}
-              </div>
-            </div>
-          )}
-        </header>
-
-        {/* Hero image */}
-        <div className="relative mt-12 w-full max-w-5xl mx-auto">
+          {/* State and the primary action, on one hairline strip. */}
           <div
-            aria-hidden
-            className={`pointer-events-none absolute -inset-2 rounded-[2rem] opacity-25 blur-3xl ${project.color}`}
-          />
-          <div
-            className={`relative overflow-hidden rounded-2xl border transition-transform duration-300 hover:scale-[1.01] ${
-              isDark ? "border-white/10 bg-white/[0.03]" : "border-black/10 bg-white/50"
-            }`}
+            className={`mt-8 flex flex-col gap-5 border-t pt-6 md:flex-row md:items-center md:justify-between ${t.rule}`}
           >
+            <ProjectActions project={project} tone={t} />
+            {status && <StatusTag status={status} tone={t} />}
+          </div>
+        </Shell>
+
+        {/* Hero plate. Full bleed: the work should be the widest thing here. */}
+        <Reveal className="mt-12 md:mt-16">
+          <div className={`border-y ${t.rule} ${t.inset}`}>
             <img
               src={project.image}
               alt={`${project.title} - ${project.category} by Iyegere Success Karboloo`}
-              className="mx-auto max-h-[460px] w-full object-contain p-3 sm:p-5"
+              className="mx-auto max-h-[70vh] w-full max-w-shell object-contain p-5 md:p-10"
             />
           </div>
-        </div>
+        </Reveal>
 
-        {/* Body */}
-        <div className="mt-12 w-full max-w-3xl mx-auto">
-          <p className={`text-[clamp(16px,2.4vw,19px)] leading-relaxed ${bodyText}`}>
-            {project.description}
-          </p>
-
-          {project.highlights && project.highlights.length > 0 && (
-            <div className="mt-9">
-              <p className="mb-4 text-xs font-semibold uppercase tracking-[0.18em] opacity-50">
-                Highlights
+        {/* Statement and spec sheet */}
+        <Shell className="mt-14 md:mt-20">
+          <div className="grid gap-10 md:grid-cols-12 md:gap-8">
+            <div className="md:col-span-7">
+              <MetaLabel className={t.faint}>The problem, and the build</MetaLabel>
+              <p
+                className={`mt-5 max-w-read text-[clamp(17px,2.2vw,21px)] leading-relaxed ${t.body}`}
+              >
+                {project.description}
               </p>
-              <ul className="space-y-3">
-                {project.highlights.map((h) => (
-                  <li key={h} className="flex items-start gap-3">
-                    <span
-                      className={`mt-[7px] h-1.5 w-1.5 flex-shrink-0 rounded-full ${project.color}`}
-                    />
-                    <span className={`text-[15px] leading-relaxed ${bodyText}`}>
-                      {h}
-                    </span>
-                  </li>
-                ))}
-              </ul>
             </div>
-          )}
-        </div>
 
-        {/* More projects */}
-        {moreProjects.length > 0 && (
-          <div className="mt-16 w-full max-w-5xl mx-auto">
-            <div className={`border-t pt-8 ${subtleBorder}`}>
-              <p className="mb-6 text-xs font-semibold uppercase tracking-[0.18em] opacity-50">
-                More projects
-              </p>
-              <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 sm:gap-6">
-                {moreProjects.map((p) => (
-                  <button
-                    key={p.slug}
-                    onClick={() => navigate(`/projects/${p.slug}`)}
-                    className="group text-left"
-                  >
-                    <div
-                      className={`mb-3 flex aspect-[4/3] items-center justify-center overflow-hidden rounded-xl p-4 ${cardBg}`}
-                    >
-                      <img
-                        src={p.image}
-                        alt={p.title}
-                        className={`h-full w-full object-cover transition-transform duration-200 group-hover:scale-95 ${
-                          p.curveImg ? "rounded-md" : ""
-                        }`}
-                      />
-                    </div>
-                    <p className="text-sm font-semibold group-hover:underline">
-                      {p.title}
-                    </p>
-                  </button>
-                ))}
-              </div>
+            <div className="md:col-span-4 md:col-start-9">
+              <MetaLabel className={t.faint}>Spec</MetaLabel>
+              <SpecRegister specs={specs} tone={t} className="mt-4" />
             </div>
           </div>
+        </Shell>
+
+        {/* Highlights, as a numbered register rather than a bullet list. */}
+        {project.highlights && project.highlights.length > 0 && (
+          <Shell className="mt-16 md:mt-24">
+            <div className={`border-b pb-3 ${t.rule}`}>
+              <MetaLabel className={t.faint}>What it does</MetaLabel>
+            </div>
+            <ul>
+              {project.highlights.map((highlight, i) => (
+                <li key={highlight} className={`border-b ${t.rule}`}>
+                  <Reveal delay={i * 0.06}>
+                    <div className="flex items-baseline gap-5 py-5 md:gap-10">
+                      <MetaLabel className={`tnum shrink-0 ${t.accent}`}>
+                        {indexLabel(i)}
+                      </MetaLabel>
+                      <p className="max-w-read text-[clamp(16px,2vw,19px)] leading-relaxed">
+                        {highlight}
+                      </p>
+                    </div>
+                  </Reveal>
+                </li>
+              ))}
+            </ul>
+          </Shell>
         )}
-      </div>
+
+        {project.slideshowImages && project.slideshowImages.length > 0 && (
+          <Shell className="mt-16 md:mt-24">
+            <Gallery
+              images={project.slideshowImages}
+              title={project.title}
+              tone={t}
+            />
+          </Shell>
+        )}
+
+        <Shell className="mt-20 md:mt-28">
+          <NextProject
+            project={next}
+            position={(position + 1) % projectsData.length}
+            tone={t}
+          />
+        </Shell>
+      </main>
     </Layout>
   );
 };
