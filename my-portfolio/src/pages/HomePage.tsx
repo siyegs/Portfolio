@@ -5,7 +5,12 @@ import { FiArrowUpRight } from "react-icons/fi";
 import "../App.css";
 import Layout from "../components/Layout";
 import SEO from "../components/SEO";
-import { LineReveal, MetaLabel, Shell } from "../components/work/primitives";
+import {
+  LineReveal,
+  MetaLabel,
+  Shell,
+  useEntranceHoldSeconds,
+} from "../components/work/primitives";
 import { tone } from "../lib/work";
 
 interface HomePageProps {
@@ -30,6 +35,10 @@ const HomePage: React.FC<HomePageProps> = ({
   setHoveredName,
 }) => {
   const t = tone(theme);
+
+  /* Zero on reloads; a short hold when the menu mounted this page early
+     behind its panel, so the rails appear on the reveal, not before it. */
+  const hold = useEntranceHoldSeconds();
 
   /* The name is the hero. Hovering it swells the custom cursor, which is the
      one interaction the whole site is built around. */
@@ -60,7 +69,7 @@ const HomePage: React.FC<HomePageProps> = ({
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 0.8, delay: 0.5 }}
+            transition={{ duration: 0.8, delay: 0.5 + hold }}
             className={`flex items-center justify-between gap-4 border-b pb-3 ${t.rule}`}
           >
             <MetaLabel className={t.dim}>Full-Stack Engineer</MetaLabel>
@@ -97,7 +106,7 @@ const HomePage: React.FC<HomePageProps> = ({
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.55, ease: EASE }}
+            transition={{ duration: 0.8, delay: 0.55 + hold, ease: EASE }}
             className={`grid gap-8 border-t pt-6 md:grid-cols-12 ${t.rule}`}
           >
             <p
