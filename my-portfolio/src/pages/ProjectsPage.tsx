@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
+import { FiArrowUpRight } from "react-icons/fi";
 import Layout from "../components/Layout";
 import SEO from "../components/SEO";
 import projectsData from "../data/projectsData";
@@ -20,6 +22,10 @@ interface WorkPageProps {
 const MASTHEAD = ["W", "O", "R", "K"];
 
 const ALL = "All";
+
+/* The closing band. Two copies of this run in the track, which is what makes
+   the -50% keyframe loop seamlessly. */
+const MARQUEE = ["LET'S BUILD SOMETHING", "-", "AVAILABLE FOR WORK", "-"];
 
 const WorkPage: React.FC<WorkPageProps> = ({
   theme,
@@ -157,40 +163,61 @@ const WorkPage: React.FC<WorkPageProps> = ({
 
         <HoverPreview preview={preview} tone={t} />
 
-        {/* Call to Action */}
-        <Shell className="mt-8">
-          <div
-            className={`grid w-full rounded-xl py-7 md:py-12 ${
-              theme === "dark"
-                ? "bg-[#232336]/30 text-[#f3f2f9]"
-                : "bg-[#e9e6fa] text-[#18181b]"
-            }`}
-          >
-            <div className="mx-auto grid w-[85%] md:grid-cols-2 md:gap-4">
-              <div className="flex items-center justify-center">
-                <h2
-                  className="mb-3 font-bold md:font-black"
-                  style={{ fontSize: "clamp(20px, 3vw, 100px)" }}
-                >
-                  Ready to go live with your dream?
-                </h2>
-              </div>
+        {/* Closing statement. Full bleed, so it breaks out of the shell. */}
+        <Link
+          to="/contact"
+          aria-label="Start a project"
+          className={`group mt-20 block border-y py-8 md:mt-28 md:py-12 ${t.rule}`}
+        >
+          <div className="marquee-mask">
+            <div
+              className="marquee-track"
+              style={{ animationDuration: "34s" }}
+              aria-hidden
+            >
+              {[0, 1].map((copy) => (
+                <span key={copy} className="flex shrink-0 items-center">
+                  {MARQUEE.map((phrase) => (
+                    <span
+                      key={phrase}
+                      className={`stroked-text whitespace-nowrap px-6 font-display text-[13vw] leading-[0.9] text-transparent transition-colors duration-700 md:px-10 ${
+                        t.isDark
+                          ? "group-hover:text-accent"
+                          : "group-hover:text-accent-warm"
+                      }`}
+                    >
+                      {phrase}
+                    </span>
+                  ))}
+                </span>
+              ))}
+            </div>
+          </div>
+        </Link>
 
-              <div>
-                <p
-                  className="mb-6 font-semibold"
-                  style={{ fontSize: "clamp(15px, 2vw, 20px)" }}
-                >
-                  I'm excited to help bring your dream project to life! I'm ready
-                  to collaborate and help you make the most of your web presence.
-                </p>
-                <a
-                  href="mailto:iyegeresuccess@gmail.com"
-                  className="inline-block bg-[#aab2d1] px-4 py-2 text-sm font-semibold text-[#18181b] shadow-md transition-all duration-200 hover:bg-[whitesmoke] hover:text-[#18181b]"
-                >
-                  Collab with ISK
-                </a>
-              </div>
+        <Shell className="mt-8">
+          <div className="grid gap-6 md:grid-cols-12">
+            <p
+              className={`text-[clamp(16px,2vw,19px)] leading-relaxed md:col-span-5 ${t.body}`}
+            >
+              Have something you want built, or an existing product that needs
+              someone to own it end to end? Tell me what you are working on.
+            </p>
+
+            <div className="md:col-span-4 md:col-start-9">
+              <MetaLabel className={t.faint}>Start here</MetaLabel>
+              <a
+                href="mailto:iyegeresuccess@gmail.com"
+                className={`group mt-3 flex items-center justify-between gap-4 border-b pb-2 transition-colors duration-300 ${t.rule}`}
+              >
+                <span className="text-[15px] md:text-base">
+                  iyegeresuccess@gmail.com
+                </span>
+                <FiArrowUpRight
+                  aria-hidden
+                  className="shrink-0 transition-transform duration-500 ease-editorial group-hover:-translate-y-1 group-hover:translate-x-1"
+                />
+              </a>
             </div>
           </div>
         </Shell>
