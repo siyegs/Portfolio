@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import Layout from "../components/Layout";
 import SEO from "../components/SEO";
-import { useNavigate } from "react-router-dom";
 import projectsData from "../data/projectsData";
+import HoverPreview, { type Preview } from "../components/work/HoverPreview";
+import IndexRow from "../components/work/IndexRow";
 import { LineReveal, MetaLabel, Shell } from "../components/work/primitives";
-import { tone } from "../lib/work";
+import { indexLabel, tone } from "../lib/work";
 
 interface WorkPageProps {
   theme: string;
@@ -22,57 +23,10 @@ const WorkPage: React.FC<WorkPageProps> = ({
   toggleTheme,
   hoveredName,
 }) => {
-  const navigate = useNavigate();
   const t = tone(theme);
+  const [preview, setPreview] = useState<Preview | null>(null);
 
   const disciplines = Array.from(new Set(projectsData.map((p) => p.category)));
-
-  const renderProjectCard = (proj: (typeof projectsData)[0]) => (
-    <div
-      key={proj.title}
-      className={`flex flex-col items-center mx-auto transition-all duration-200`}
-    >
-      {/* Placeholder Thumbnail*/}
-      <div
-        className={`relative flex items-center justify-center mb-4 p-6 rounded-lg ${
-          t.inset
-        } sm:h-[200px] sm:w-[280px] md:h-[240px] md:w-[320px] lg:w-[290px] xl:w-[350px] 2xl:w-[430px] hover:scale-95 transition-all duration-200`}
-      >
-        {proj.image ? (
-          <img
-            src={proj.image}
-            alt={`${proj.title} - ${proj.category} project by Iyegere Success Karboloo`}
-            className={`object-cover w-full h-full cursor-pointer ${proj.curveImg ? 'rounded-md' : ''}`}
-            onClick={() => navigate(`/projects/${proj.slug}`)}
-          />
-        ) : (
-          <span>{proj.title[0]}</span>
-        )}
-
-        {(proj.ongoing || proj.underMaintenance) && (
-          <span className="absolute left-4 top-3 rounded bg-[black]/70 px-2 py-1 text-xs font-semibold text-white">
-            <span
-              className={`mr-1 inline-block h-2 w-2 animate-pulse rounded-full align-middle ${
-                proj.ongoing ? "bg-green-600" : "bg-red-600"
-              }`}
-            />
-            {proj.ongoing ? "Ongoing" : "Under Maintenance"}
-          </span>
-        )}
-      </div>
-
-      {/* Project Info - centered below image */}
-      <div className="px-[3px] md:px-0 w-full flex flex-col mb-10">
-        <p
-          className={`font-semibold flex items-center gap-1 cursor-pointer mb-1 text-center hover:transition-all hover:duration-500 hover:ease-in-out w-fit`}
-          style={{ fontSize: "clamp(19px, 2vw, 34px" }}
-          onClick={() => navigate(`/projects/${proj.slug}`)}
-        >
-          {proj.title}
-        </p>
-      </div>
-    </div>
-  );
 
   return (
     <Layout theme={theme} toggleTheme={toggleTheme} hoveredName={hoveredName}>
@@ -124,12 +78,29 @@ const WorkPage: React.FC<WorkPageProps> = ({
           </div>
         </Shell>
 
-        {/* Projects List */}
-        <Shell className="mt-16">
-          <div className="grid gap-6 sm:grid-cols-2 md:gap-9 lg:grid-cols-3">
-            {projectsData.map(renderProjectCard)}
-          </div>
+        {/* The index */}
+        <Shell className="mt-14 md:mt-20">
+          <ul>
+            {projectsData.map((project, i) => (
+              <IndexRow
+                key={project.slug}
+                project={project}
+                position={i}
+                tone={t}
+                onPreview={() =>
+                  setPreview({
+                    src: project.image,
+                    alt: project.title,
+                    caption: `${indexLabel(i)} / ${project.category}`,
+                  })
+                }
+                onClearPreview={() => setPreview(null)}
+              />
+            ))}
+          </ul>
         </Shell>
+
+        <HoverPreview preview={preview} tone={t} />
 
         {/* Call to Action */}
         <Shell className="mt-8">
