@@ -45,6 +45,31 @@ body.light::after {
     background: radial-gradient(ellipse at 50% 42%, transparent 42%, rgba(120, 110, 80, 0.28) 100%);
 }
 
+/* --------------------------------------------------------------------------
+   Editorial helpers (work index + project pages)
+   -------------------------------------------------------------------------- */
+
+/* Small tracked uppercase key. Used for indices, spec labels and statuses.
+   Kept in CSS rather than a Tailwind chain because it repeats everywhere. */
+.meta-label {
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  line-height: 1.2;
+}
+
+@media (min-width: 768px) {
+  .meta-label {
+    font-size: 0.75rem;
+  }
+}
+
+/* Figures in the index must not jitter as rows animate. */
+.tnum {
+  font-variant-numeric: tabular-nums;
+}
+
 @keyframes noise-animation {
   0% { background-position: 0 0; }
   10% { background-position: -5% -10%; }
@@ -57,4 +82,28 @@ body.light::after {
   80% { background-position: 25% 35%; }
   90% { background-position: -10% 10%; }
   100% { background-position: 0 0; }
+}
+
+/* --------------------------------------------------------------------------
+   Motion preferences
+   --------------------------------------------------------------------------
+   The grain loop and the marquee run forever, so honour the OS setting.
+   -------------------------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  body::before {
+    animation: none;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
