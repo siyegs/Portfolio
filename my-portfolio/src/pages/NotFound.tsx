@@ -1,7 +1,9 @@
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+import { FiArrowUpRight } from "react-icons/fi";
 import Layout from "../components/Layout";
 import SEO from "../components/SEO";
-import { FiArrowLeft } from "react-icons/fi";
+import { LineReveal, MetaLabel, Shell } from "../components/work/primitives";
+import { tone } from "../lib/work";
 
 interface NotFoundPageProps {
   theme: string;
@@ -11,6 +13,13 @@ interface NotFoundPageProps {
   message?: string;
 }
 
+const DESTINATIONS = [
+  { label: "Work", path: "/projects" },
+  { label: "About", path: "/about" },
+  { label: "Contact", path: "/contact" },
+  { label: "Home", path: "/" },
+];
+
 const NotFoundPage: React.FC<NotFoundPageProps> = ({
   theme,
   toggleTheme,
@@ -18,56 +27,66 @@ const NotFoundPage: React.FC<NotFoundPageProps> = ({
   heading = "Page not found",
   message = "The page you are looking for does not exist or may have been moved. Let us get you back on track.",
 }) => {
-  const navigate = useNavigate();
-  const isDark = theme === "dark";
+  const t = tone(theme);
 
   return (
     <Layout theme={theme} toggleTheme={toggleTheme} hoveredName={hoveredName}>
       <SEO title={heading} noindex description={message} />
-      <div
-        className={`min-h-screen flex flex-col items-center justify-center px-5 text-center ${
-          isDark
-            ? "bg-[#18181b]/90 text-[#f3f2f9]"
-            : "bg-[#f3f2f9]/90 text-[#18181b]"
-        }`}
-        style={{ fontFamily: "Space Grotesk" }}
+
+      <main
+        className={`relative z-[1] min-h-screen w-full overflow-x-hidden pb-24 pt-28 md:pt-36 ${t.page}`}
       >
-        <div className="relative flex flex-col items-center">
-          <p className="select-none text-[clamp(96px,22vw,190px)] font-black leading-none tracking-tighter opacity-[0.07]">
-            404
-          </p>
-          <h1 className="-mt-7 text-2xl font-bold md:-mt-10 md:text-4xl">
-            {heading}
+        <Shell>
+          <div className={`flex items-center justify-between gap-4 border-b pb-4 ${t.rule}`}>
+            <MetaLabel className={t.dim}>Error</MetaLabel>
+            <MetaLabel className={`tnum ${t.dim}`}>404</MetaLabel>
+          </div>
+
+          <h1
+            aria-label={heading}
+            className="mt-6 flex w-full justify-between font-display text-[min(29vw,17rem)] leading-[0.8]"
+          >
+            {["4", "0", "4"].map((digit, i) => (
+              <LineReveal key={i} delay={0.08 + i * 0.08}>
+                <span aria-hidden>{digit}</span>
+              </LineReveal>
+            ))}
           </h1>
-        </div>
 
-        <p
-          className={`mt-4 max-w-md text-[15px] leading-relaxed ${
-            isDark ? "text-[#f3f2f9]/65" : "text-[#18181b]/65"
-          }`}
-        >
-          {message}
-        </p>
+          <div className={`mt-8 grid gap-8 border-t pt-6 md:grid-cols-12 ${t.rule}`}>
+            <div className="md:col-span-6">
+              <p className="text-[clamp(19px,2.6vw,28px)] leading-snug">{heading}</p>
+              <p
+                className={`mt-4 max-w-read text-[15px] leading-relaxed md:text-base ${t.body}`}
+              >
+                {message}
+              </p>
+            </div>
 
-        <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
-          <button
-            onClick={() => navigate("/")}
-            className="inline-flex items-center gap-2 rounded-full bg-[#aab2d1] px-6 py-2.5 text-sm font-semibold text-[#18181b] transition hover:bg-[#e5e7eb]"
-          >
-            <FiArrowLeft /> Back Home
-          </button>
-          <button
-            onClick={() => navigate("/projects")}
-            className={`inline-flex items-center gap-2 rounded-full border px-6 py-2.5 text-sm font-semibold transition ${
-              isDark
-                ? "border-white/15 hover:bg-white/5"
-                : "border-black/15 hover:bg-black/5"
-            }`}
-          >
-            Browse Projects
-          </button>
-        </div>
-      </div>
+            <nav className="md:col-span-4 md:col-start-9">
+              <MetaLabel className={t.faint}>Try one of these</MetaLabel>
+              <ul className="mt-3">
+                {DESTINATIONS.map((destination) => (
+                  <li key={destination.path} className={`border-t ${t.rule} last:border-b`}>
+                    <Link
+                      to={destination.path}
+                      className="group flex items-center justify-between gap-4 py-3.5"
+                    >
+                      <span className="text-[15px] md:text-base">
+                        {destination.label}
+                      </span>
+                      <FiArrowUpRight
+                        aria-hidden
+                        className={`transition-transform duration-500 ease-editorial group-hover:-translate-y-1 group-hover:translate-x-1 ${t.faint}`}
+                      />
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+          </div>
+        </Shell>
+      </main>
     </Layout>
   );
 };
