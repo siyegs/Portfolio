@@ -2,11 +2,11 @@ import shopCo from "../assets/shopCo.webp";
 import asl from "../assets/asl.webp";
 import kdc from "../assets/kdc.webp";
 // import chatApp from "../assets/chatAppTablet.png"; // ISK Chat removed
-import mystra from "../assets/iuy.png";
+import mystra from "../assets/iuy.webp";
 import payKit from "../assets/pay-kit.png";
 import losslessTrim from "../assets/react-native-lossless-trim.svg";
 import packaMark from "../assets/packa-mark.jpg";
-import mystraLandingPage from "../assets/mystra-landing-page/ipad-pro-mockup.png";
+import mystraLandingPage from "../assets/mystra-landing-page/ipad-pro-mockup.webp";
 import proverseDisplay from "../assets/proverse-display.png";
 
 //kdcERP
