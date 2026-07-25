@@ -2,6 +2,7 @@ import {
   useState,
   useEffect,
   useLayoutEffect,
+  useMemo,
   lazy,
   Suspense,
   type ReactNode,
@@ -22,6 +23,8 @@ import AboutPage from "./pages/AboutPage";
 import ContactPage from "./pages/ContactPage";
 import ProjectDetailsPage from "./pages/projectDetails";
 import NotFoundPage from "./pages/NotFound";
+import { EntranceAtContext } from "./components/work/primitives";
+import { readEntranceAt } from "./lib/entrance";
 
 const BackgroundScene = lazy(() => import("./components/BackgroundScene"));
 
@@ -64,15 +67,23 @@ function ScrollToTop() {
 function RouteTransition({ children }: { children: ReactNode }) {
   const { pathname } = useLocation();
 
+  /* When this route's entrance choreography may begin. Zero (or long past)
+     on reloads and ordinary navigations; a future moment when the menu
+     mounted the page early behind its panel, so LineReveal/Reveal hold and
+     then play in full on the reveal instead of being caught mid-flight. */
+  const entranceAt = useMemo(() => readEntranceAt(), [pathname]);
+
   return (
-    <motion.div
-      key={pathname}
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.65, delay: 0.12, ease: [0.16, 1, 0.3, 1] }}
-    >
-      {children}
-    </motion.div>
+    <EntranceAtContext.Provider value={entranceAt}>
+      <motion.div
+        key={pathname}
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.65, delay: 0.12, ease: [0.16, 1, 0.3, 1] }}
+      >
+        {children}
+      </motion.div>
+    </EntranceAtContext.Provider>
   );
 }
 

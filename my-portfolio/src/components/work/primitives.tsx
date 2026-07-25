@@ -1,8 +1,54 @@
 import { motion } from "framer-motion";
-import type { ReactNode } from "react";
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  type ReactNode,
+} from "react";
 import type { Status, Tone } from "../../lib/work";
 
 const EASE = [0.16, 1, 0.3, 1] as const;
+
+/**
+ * When the current route's entrance choreography may begin, as a
+ * performance.now() timestamp. Provided per navigation by RouteTransition in
+ * App. Zero (the default, and every ordinary navigation or reload) means
+ * "immediately". The menu sets a future moment so a page it mounted early,
+ * behind its panel, plays its full entrance on reveal instead of being caught
+ * halfway through it (see src/lib/entrance.ts).
+ */
+export const EntranceAtContext = createContext(0);
+
+/** Ms still to wait, measured once at mount, before entrances may start. */
+function useEntranceHoldMs(): number {
+  const entranceAt = useContext(EntranceAtContext);
+  const [holdMs] = useState(() => Math.max(0, entranceAt - performance.now()));
+  return holdMs;
+}
+
+/** The same hold in seconds, for pages that animate with raw motion props. */
+export function useEntranceHoldSeconds(): number {
+  return useEntranceHoldMs() / 1000;
+}
+
+/**
+ * False until this element's entrance may play, true from then on. Elements
+ * mounted after the hold has passed (anything below the fold, later pages)
+ * arm immediately, so the hold only ever touches the arrival it was set for.
+ */
+function useArmed(): boolean {
+  const holdMs = useEntranceHoldMs();
+  const [armed, setArmed] = useState(holdMs <= 0);
+
+  useEffect(() => {
+    if (armed) return;
+    const id = window.setTimeout(() => setArmed(true), holdMs);
+    return () => window.clearTimeout(id);
+  }, [armed, holdMs]);
+
+  return armed;
+}
 
 /** Page gutters. One value for every section so nothing drifts. */
 export function Shell({
@@ -40,10 +86,12 @@ export function Reveal({
   delay?: number;
   className?: string;
 }) {
+  const armed = useArmed();
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 22 }}
-      whileInView={{ opacity: 1, y: 0 }}
+      whileInView={armed ? { opacity: 1, y: 0 } : undefined}
       viewport={{ once: true, margin: "-60px" }}
       transition={{ duration: 0.7, delay, ease: EASE }}
       className={className}
@@ -72,6 +120,8 @@ export function LineReveal({
   delay?: number;
   className?: string;
 }) {
+  const armed = useArmed();
+
   return (
     <span
       className={`block overflow-hidden pb-[0.16em] pl-[0.06em] -mb-[0.16em] -ml-[0.06em] ${className}`}
@@ -79,7 +129,7 @@ export function LineReveal({
       <motion.span
         className="block"
         initial={{ y: "140%" }}
-        animate={{ y: "0%" }}
+        animate={{ y: armed ? "0%" : "140%" }}
         transition={{ duration: 0.95, delay, ease: EASE }}
       >
         {children}
