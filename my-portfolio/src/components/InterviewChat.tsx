@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { FiMessageSquare, FiSend, FiX } from "react-icons/fi";
+import { FiSend, FiX } from "react-icons/fi";
+import { tone } from "../lib/work";
+import { MetaLabel } from "./work/primitives";
 
 interface InterviewChatProps {
   theme: string;
@@ -15,11 +17,9 @@ interface ChatMessage {
 // VITE_CHAT_ENDPOINT. In dev it falls back to the Vite middleware at /api/chat.
 const ENDPOINT = import.meta.env.VITE_CHAT_ENDPOINT || "/api/chat";
 
-const ACCENT = "#2563EB";
-
 const SUGGESTIONS = [
   "What's your strongest project?",
-  "Do you have payments / fintech experience?",
+  "Do you have payments experience?",
   "Tell me about Mystra.",
   "What's your tech stack?",
 ];
@@ -53,7 +53,7 @@ function renderContent(text: string) {
 }
 
 const InterviewChat: React.FC<InterviewChatProps> = ({ theme }) => {
-  const dark = theme === "dark";
+  const t = tone(theme);
   const [open, setOpen] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState("");
@@ -73,6 +73,12 @@ const InterviewChat: React.FC<InterviewChatProps> = ({ theme }) => {
   useEffect(() => {
     if (open) setTimeout(() => inputRef.current?.focus(), 250);
   }, [open]);
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false);
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, []);
 
   useEffect(() => () => controllerRef.current?.abort(), []);
 
@@ -171,108 +177,91 @@ const InterviewChat: React.FC<InterviewChatProps> = ({ theme }) => {
     }
   }
 
-  const panelText = dark ? "text-[#f3f2f9]" : "text-[#18181b]";
-  const subtle = dark ? "text-white/50" : "text-black/50";
-  const border = dark ? "border-white/10" : "border-black/10";
-  const assistantBubble = dark
-    ? "bg-white/[0.06] text-[#f3f2f9]/90"
-    : "bg-black/[0.05] text-[#18181b]/90";
-  const inputBg = dark ? "bg-white/[0.06]" : "bg-black/[0.04]";
-  const chip = dark
-    ? "border-white/10 bg-white/[0.04] text-white/75 hover:bg-white/[0.1]"
-    : "border-black/10 bg-black/[0.04] text-black/75 hover:bg-black/[0.08]";
-
+  const panel = t.isDark ? "bg-ink/95 text-paper" : "bg-paper/95 text-ink";
+  const userBubble = `${t.accentFill} ${t.isDark ? "text-ink" : "text-paper"}`;
   const empty = messages.length === 0;
 
   return (
-    <div
-      className="fixed bottom-5 right-5 z-[100] flex flex-col items-end"
-      style={{ fontFamily: "Space Grotesk" }}
-    >
+    <div className="fixed bottom-5 right-5 z-[100] flex flex-col items-end">
       <AnimatePresence>
         {open && (
           <motion.div
-            initial={{ opacity: 0, y: 24, scale: 0.96 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 24, scale: 0.96 }}
-            transition={{ type: "spring", stiffness: 320, damping: 30 }}
-            className={`mb-3 flex h-[min(600px,75vh)] w-[min(380px,calc(100vw-2.5rem))] flex-col overflow-hidden rounded-2xl border ${border} shadow-2xl backdrop-blur-xl ${
-              dark ? "bg-[#18181b]/95" : "bg-[#f3f2f9]/95"
-            } ${panelText}`}
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 16 }}
+            transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+            className={`mb-3 flex h-[min(600px,75vh)] w-[min(380px,calc(100vw-2.5rem))] flex-col overflow-hidden border ${t.rule} ${panel} shadow-2xl backdrop-blur-xl`}
           >
             {/* Header */}
-            <div className={`flex items-center gap-3 border-b ${border} px-4 py-3`}>
-              <div
-                className="flex h-9 w-9 items-center justify-center rounded-full text-sm font-bold text-white"
-                style={{ backgroundColor: ACCENT }}
+            <div className={`flex items-center gap-3 border-b px-4 py-3 ${t.rule}`}>
+              <span
+                className={`flex h-8 w-8 shrink-0 items-center justify-center font-display text-xs ${t.invert}`}
               >
                 SK
-              </div>
+              </span>
               <div className="min-w-0 flex-1">
-                <p className="text-sm font-bold leading-tight">Interview me</p>
-                <p className={`text-xs leading-tight ${subtle}`}>
+                <MetaLabel>Interview me</MetaLabel>
+                <p className={`mt-0.5 text-[11px] leading-tight ${t.faint}`}>
                   AI trained on my work
                 </p>
               </div>
               <button
                 onClick={() => setOpen(false)}
                 aria-label="Close chat"
-                className={`rounded-full p-1.5 transition-colors ${
-                  dark ? "hover:bg-white/10" : "hover:bg-black/10"
+                className={`p-1.5 transition-colors duration-300 ${t.dim} ${
+                  t.isDark ? "hover:text-paper" : "hover:text-ink"
                 }`}
               >
-                <FiX size={18} />
+                <FiX size={17} />
               </button>
             </div>
 
             {/* Messages */}
-            <div
-              ref={scrollRef}
-              className="flex-1 space-y-4 overflow-y-auto px-4 py-4"
-            >
+            <div ref={scrollRef} className="flex-1 space-y-5 overflow-y-auto px-4 py-4">
               {empty ? (
-                <div className="space-y-4">
-                  <div className={`rounded-2xl px-4 py-3 text-sm ${assistantBubble}`}>
-                    {GREETING}
-                  </div>
-                  <div className="flex flex-wrap gap-2">
-                    {SUGGESTIONS.map((q) => (
+                <div className="space-y-5">
+                  <p className={`text-sm leading-relaxed ${t.body}`}>{GREETING}</p>
+                  <div className="flex flex-col items-start gap-2">
+                    {SUGGESTIONS.map((question) => (
                       <button
-                        key={q}
-                        onClick={() => send(q)}
-                        className={`rounded-full border px-3 py-1.5 text-xs transition-colors ${chip}`}
+                        key={question}
+                        onClick={() => send(question)}
+                        className={`border px-3 py-2 text-left text-xs transition-colors duration-300 ${
+                          t.rule
+                        } ${t.isDark ? "hover:border-paper/40" : "hover:border-ink/40"}`}
                       >
-                        {q}
+                        {question}
                       </button>
                     ))}
                   </div>
                 </div>
               ) : (
-                messages.map((m, i) => {
-                  const isUser = m.role === "user";
+                messages.map((message, i) => {
+                  const isUser = message.role === "user";
                   const streaming =
-                    busy && i === messages.length - 1 && m.role === "assistant";
+                    busy && i === messages.length - 1 && message.role === "assistant";
                   return (
                     <div
                       key={i}
                       className={`flex ${isUser ? "justify-end" : "justify-start"}`}
                     >
                       <div
-                        className={`max-w-[85%] whitespace-pre-wrap rounded-2xl px-4 py-2.5 text-sm leading-relaxed ${
-                          isUser ? "text-white" : assistantBubble
+                        className={`max-w-[86%] whitespace-pre-wrap text-sm leading-relaxed ${
+                          isUser
+                            ? `px-3.5 py-2.5 ${userBubble}`
+                            : `border-l pl-3.5 ${t.ruleStrong} ${t.body}`
                         }`}
-                        style={isUser ? { backgroundColor: ACCENT } : undefined}
                       >
-                        {m.content ? (
-                          renderContent(m.content)
+                        {message.content ? (
+                          renderContent(message.content)
                         ) : streaming ? (
                           <span className="inline-flex gap-1">
-                            <Dot delay={0} dark={dark} />
-                            <Dot delay={0.15} dark={dark} />
-                            <Dot delay={0.3} dark={dark} />
+                            <Dot delay={0} fill={t.accentFill} />
+                            <Dot delay={0.15} fill={t.accentFill} />
+                            <Dot delay={0.3} fill={t.accentFill} />
                           </span>
                         ) : null}
-                        {streaming && m.content && (
+                        {streaming && message.content && (
                           <span className="ml-0.5 inline-block h-4 w-[2px] translate-y-0.5 animate-pulse bg-current" />
                         )}
                       </div>
@@ -282,13 +271,13 @@ const InterviewChat: React.FC<InterviewChatProps> = ({ theme }) => {
               )}
             </div>
 
-            {/* Input */}
+            {/* Input. Underlined rather than boxed, like the rest of the site. */}
             <form
               onSubmit={(e) => {
                 e.preventDefault();
                 send(input);
               }}
-              className={`flex items-end gap-2 border-t ${border} p-3`}
+              className={`flex items-end gap-3 border-t p-3 ${t.rule}`}
             >
               <textarea
                 ref={inputRef}
@@ -301,44 +290,55 @@ const InterviewChat: React.FC<InterviewChatProps> = ({ theme }) => {
                   }
                 }}
                 rows={1}
-                placeholder="Ask about my work..."
-                className={`max-h-28 flex-1 resize-none rounded-xl px-3 py-2 text-sm outline-none ${inputBg} ${panelText} placeholder:${subtle}`}
+                placeholder="Ask about my work"
+                className={`max-h-28 flex-1 resize-none border-b bg-transparent px-1 py-1.5 text-sm outline-none transition-colors duration-300 ${t.rule} ${
+                  t.isDark
+                    ? "placeholder:text-paper/35 focus:border-paper/40"
+                    : "placeholder:text-ink/40 focus:border-ink/40"
+                }`}
               />
               <button
                 type="submit"
                 disabled={busy || !input.trim()}
                 aria-label="Send"
-                className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl text-white transition-opacity disabled:opacity-40"
-                style={{ backgroundColor: ACCENT }}
+                className={`flex h-9 w-9 shrink-0 items-center justify-center transition-opacity duration-300 disabled:opacity-40 ${userBubble}`}
               >
-                <FiSend size={16} />
+                <FiSend size={15} />
               </button>
             </form>
           </motion.div>
         )}
       </AnimatePresence>
 
-      {/* Launcher */}
-      <motion.button
-        whileHover={{ scale: 1.05 }}
-        whileTap={{ scale: 0.95 }}
-        onClick={() => setOpen((o) => !o)}
-        aria-label={open ? "Close chat" : "Chat with my AI"}
-        className="flex h-14 w-14 items-center justify-center rounded-full text-white shadow-xl"
-        style={{ backgroundColor: ACCENT }}
+      {/* Launcher. Labelled, because a bare speech bubble does not tell anyone
+          there is an AI behind it that answers as Success. */}
+      <button
+        type="button"
+        onClick={() => setOpen((isOpen) => !isOpen)}
+        aria-label={open ? "Close chat" : "Interview me: chat with my AI"}
+        aria-expanded={open}
+        className={`group inline-flex items-center gap-2.5 border px-4 py-3 shadow-xl backdrop-blur-md transition-colors duration-300 ${t.rule} ${panel} ${
+          t.isDark ? "hover:border-paper/40" : "hover:border-ink/40"
+        }`}
       >
-        {open ? <FiX size={22} /> : <FiMessageSquare size={22} />}
-      </motion.button>
+        {open ? (
+          <FiX size={16} />
+        ) : (
+          <span
+            aria-hidden
+            className={`h-1.5 w-1.5 animate-pulse rounded-full ${t.accentFill}`}
+          />
+        )}
+        <MetaLabel>{open ? "Close" : "Interview me"}</MetaLabel>
+      </button>
     </div>
   );
 };
 
-function Dot({ delay, dark }: { delay: number; dark: boolean }) {
+function Dot({ delay, fill }: { delay: number; fill: string }) {
   return (
     <motion.span
-      className={`inline-block h-1.5 w-1.5 rounded-full ${
-        dark ? "bg-white/50" : "bg-black/40"
-      }`}
+      className={`inline-block h-1.5 w-1.5 rounded-full ${fill}`}
       animate={{ opacity: [0.3, 1, 0.3] }}
       transition={{ duration: 1, repeat: Infinity, delay }}
     />
