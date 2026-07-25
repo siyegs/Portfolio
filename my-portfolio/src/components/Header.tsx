@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { startTransition, useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import { FiArrowUpRight, FiMoon, FiSun } from "react-icons/fi";
@@ -66,6 +66,20 @@ const Header = ({ theme, toggleTheme }: HeaderProps) => {
   }, []);
 
   useEffect(() => setMenuOpen(false), [location.pathname]);
+
+  /**
+   * Close the index in the same update as the navigation it triggered.
+   *
+   * React Router wraps navigations in startTransition, so a route change is a
+   * non-urgent update. Closing the menu with a plain setState is an urgent one,
+   * and React commits urgent work first - which painted one frame with the
+   * overlay already gone and the page you were leaving still mounted behind
+   * it. That frame was the flash of the previous screen. Scheduling the close
+   * as a transition too puts both in the same lane, so they commit together
+   * and the overlay only lifts once the new route is on screen.
+   */
+  const closeMenuWithNavigation = () =>
+    startTransition(() => setMenuOpen(false));
 
   useEffect(() => {
     document.body.style.overflow = menuOpen ? "hidden" : "";
@@ -172,7 +186,7 @@ const Header = ({ theme, toggleTheme }: HeaderProps) => {
               <Link
                 to="/"
                 aria-label="Home"
-                onClick={() => setMenuOpen(false)}
+                onClick={closeMenuWithNavigation}
                 className="flex shrink-0 items-center gap-2.5"
               >
                 <img
@@ -211,7 +225,7 @@ const Header = ({ theme, toggleTheme }: HeaderProps) => {
                   >
                     <Link
                       to={item.path}
-                      onClick={() => setMenuOpen(false)}
+                      onClick={closeMenuWithNavigation}
                       className={`group relative flex items-center gap-5 border-t py-5 md:gap-10 md:py-7 ${
                         t.rule
                       } ${i === NAV.length - 1 ? "border-b" : ""}`}
