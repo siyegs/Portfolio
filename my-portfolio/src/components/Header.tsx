@@ -1,4 +1,4 @@
-import { startTransition, useEffect, useState } from "react";
+import { startTransition, useEffect, useRef, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import { FiArrowUpRight, FiMoon, FiSun } from "react-icons/fi";
@@ -67,6 +67,10 @@ const Header = ({ theme, toggleTheme }: HeaderProps) => {
 
   useEffect(() => setMenuOpen(false), [location.pathname]);
 
+  /* True while the menu is closing because a link in it was tapped, so the
+     exit variant can tell the two goodbyes apart (see the overlay below). */
+  const closedByNavigation = useRef(false);
+
   /**
    * Close the index in the same update as the navigation it triggered.
    *
@@ -75,11 +79,13 @@ const Header = ({ theme, toggleTheme }: HeaderProps) => {
    * and React commits urgent work first - which painted one frame with the
    * overlay already gone and the page you were leaving still mounted behind
    * it. That frame was the flash of the previous screen. Scheduling the close
-   * as a transition too puts both in the same lane, so they commit together
-   * and the overlay only lifts once the new route is on screen.
+   * as a transition too puts both in the same lane, so they commit together:
+   * the instant the overlay leaves, the new route is what is behind it.
    */
-  const closeMenuWithNavigation = () =>
+  const closeMenuWithNavigation = () => {
+    closedByNavigation.current = true;
     startTransition(() => setMenuOpen(false));
+  };
 
   useEffect(() => {
     document.body.style.overflow = menuOpen ? "hidden" : "";
@@ -166,18 +172,40 @@ const Header = ({ theme, toggleTheme }: HeaderProps) => {
           over the index, and below the bar (z-120) so Close stays reachable.
           It scrolls rather than clipping when the rows outgrow the viewport,
           and the nav padding clears the fixed bar. */}
-      <AnimatePresence>
+      <AnimatePresence
+        custom={closedByNavigation.current}
+        onExitComplete={() => {
+          closedByNavigation.current = false;
+        }}
+      >
         {menuOpen && (
           <motion.div
-            initial={{ opacity: 0, y: 0 }}
-            animate={{ opacity: 1, y: 0 }}
-            /* Leaves as a curtain, not a fade. The new route mounts behind
-               this panel, so a fade-out revealed a page whose own entrance had
-               already played while hidden - it looked finished the moment you
-               saw it. Sliding the panel up uncovers the page top-down while
-               its entrance is still running, so the two motions read as one. */
-            exit={{ y: "-100%", transition: { duration: 0.55, ease: EASE } }}
-            transition={{ duration: 0.28 }}
+            /* Two different goodbyes. When a link in the menu was tapped, the
+               overlay vanishes instantly: the navigation commits in the same
+               update, so what appears in its place is the new page playing the
+               exact same arrival it plays from any in-page link - one motion,
+               nothing competing with it. (An earlier curtain lift here ran on
+               top of that arrival and the pair never read as smooth.) Closing
+               without navigating keeps the curtain, since there is no page
+               change to compete with. */
+            variants={{
+              hidden: { opacity: 0, y: 0 },
+              visible: {
+                opacity: 1,
+                y: 0,
+                transition: { duration: 0.28 },
+              },
+              exit: (byNavigation: boolean) =>
+                byNavigation
+                  ? { opacity: 0, transition: { duration: 0 } }
+                  : {
+                      y: "-100%",
+                      transition: { duration: 0.55, ease: EASE },
+                    },
+            }}
+            initial="hidden"
+            animate="visible"
+            exit="exit"
             className={`fixed inset-0 z-[110] overflow-y-auto ${
               t.isDark ? "bg-ink text-paper" : "bg-paper text-ink"
             }`}
