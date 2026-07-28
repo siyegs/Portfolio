@@ -66,7 +66,7 @@ const projectsData: Project[] = [
     image: payKit,
     curveImg: true,
     ongoing: false,
-    url: "https://github.com/siyegs/pay-kit",
+    url: "https://sdk-paykit.web.app",
     description: `Every serious African product ends up wiring both Paystack and Flutterwave for coverage and better rates, then rewriting the same fragile glue each time - different APIs, webhook signatures, and currency units. pay-kit removes that: one typed SDK over both providers to collect money (initialize, verify, refunds) and send it out (bank payouts and transfers), with signature-verified webhooks and automatic provider fallback so a Paystack outage does not stop you taking money. Amounts stay subunit-safe to kill rounding bugs, everything is fully typed, and it ships to npm with a green test suite.`,
     highlights: [
       "One typed API across Paystack and Flutterwave",
