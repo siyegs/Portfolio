@@ -1,7 +1,7 @@
 import shopCo from "../assets/shopCo.webp";
 import asl from "../assets/asl.webp";
 import kdc from "../assets/kdc.webp";
-// import chatApp from "../assets/chatAppTablet.png"; // ISK Chat removed
+// ISK Chat removed; its image was deleted with the other unused assets.
 import mystra from "../assets/iuy.webp";
 import payKit from "../assets/pay-kit.png";
 import losslessTrim from "../assets/react-native-lossless-trim.svg";
