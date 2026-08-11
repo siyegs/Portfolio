@@ -5,6 +5,7 @@ import kdc from "../assets/kdc.webp";
 import mystra from "../assets/iuy.webp";
 import payKit from "../assets/pay-kit.png";
 import losslessTrim from "../assets/react-native-lossless-trim.svg";
+import otaGuard from "../assets/expo-ota-guard.svg";
 import packaMark from "../assets/packa-mark.jpg";
 import mystraLandingPage from "../assets/mystra-landing-page/ipad-pro-mockup.webp";
 import proverseDisplay from "../assets/proverse-display.png";
@@ -117,7 +118,25 @@ const projectsData: Project[] = [
       { role: "Admin", url: "https://erp.fluxdevs.com/admin/dashboard" },
     ],
   },
-    {
+  {
+    title: "expo-ota-guard",
+    slug: "expo-ota-guard",
+    category: "Open Source",
+    tags: ["OTA vs Native Classifier", "Live Runtime Discovery", "CI Safety Gate", "Zero Config CLI"],
+    color: "bg-[#f59e0b]",
+    image: otaGuard,
+    curveImg: true,
+    ongoing: false,
+    url: "https://github.com/siyegs/expo-ota-guard",
+    description: `Expo teams ship over-the-air updates blind. Add a native dependency or touch a config plugin, publish an OTA, and expo-updates fails silently: the JS lands on a binary that cannot run it, so the feature no-ops or the app crashes, and nothing in the publish output warned you. expo-ota-guard is a zero-config CLI that reads your pending changes and answers one question before you run eas update - is this safe to ship over the air, and to which live runtime? It classifies every changed file and explains each call: dependencies are judged by what is actually installed in node_modules (android/, ios/, cpp/, podspec, build.gradle, config plugin), app config is diffed field by field against native versus JS-only tables, and anything unrecognized is surfaced for review rather than assumed safe. It also reads live runtimes from eas update:list - the only source that sees local and CI builds - flags channel-to-branch mismatches that would send an update to nobody, and audits the stale-bundle config trap that makes good fixes look broken. With --ci it emits JSON and exits non-zero, so the publish step never runs on a change that needed a build instead.`,
+    highlights: [
+      "Classifies every pending change as OTA-safe or native-affecting, with a reason",
+      "Reads live runtimes from eas update:list, which sees local and CI builds",
+      "Warns on channel-to-branch mismatches that send updates to nobody",
+      "--ci gate: JSON output and a non-zero exit before eas update runs",
+    ],
+  },
+  {
     title: "ProVerse",
     slug: "proverse",
     url: "",
