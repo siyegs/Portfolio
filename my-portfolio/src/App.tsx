@@ -89,13 +89,12 @@ function RouteTransition({ children }: { children: ReactNode }) {
 
 function App() {
   const [theme, setTheme] = useState("dark");
-  const [hoveredName, setHoveredName] = useState<string | null>(null);
 
   /* The blob field is atmosphere, not content. It costs a continuous GPU loop
-     behind every page, which is the first thing to make the cursor, the
-     marquees and the hover plate stutter, so it is only rendered where there
-     is headroom for it: wide viewports, motion allowed. Everything below that
-     falls back to the flat canvas, the grain and the vignette. */
+     behind every page, which is the first thing to make the marquees and the
+     hover plate stutter, so it is only rendered where there is headroom for
+     it: wide viewports, motion allowed. Everything below that falls back to
+     the flat canvas, the grain and the vignette. */
   const wideViewport = useMediaQuery({ minWidth: 1024 });
   const reducedMotion = useMediaQuery({
     query: "(prefers-reduced-motion: reduce)",
@@ -114,7 +113,7 @@ function App() {
     <>
       {showScene && (
         <Suspense fallback={null}>
-          <BackgroundScene theme={theme} hoveredName={hoveredName} />
+          <BackgroundScene theme={theme} />
         </Suspense>
       )}
       <Router>
@@ -124,12 +123,7 @@ function App() {
             <Route
               path="/"
               element={
-                <HomePage
-                  theme={theme}
-                  toggleTheme={toggleTheme}
-                  setHoveredName={setHoveredName}
-                  hoveredName={hoveredName}
-                />
+                <HomePage theme={theme} toggleTheme={toggleTheme} />
               }
             />
             <Route
@@ -138,7 +132,6 @@ function App() {
                 <ProjectsPage
                   theme={theme}
                   toggleTheme={toggleTheme}
-                  hoveredName={hoveredName}
                 />
               }
             />
@@ -148,7 +141,6 @@ function App() {
                 <AboutPage
                   theme={theme}
                   toggleTheme={toggleTheme}
-                  hoveredName={hoveredName}
                 />
               }
             />
@@ -158,7 +150,6 @@ function App() {
                 <ContactPage
                   theme={theme}
                   toggleTheme={toggleTheme}
-                  hoveredName={hoveredName}
                 />
               }
             />
@@ -168,7 +159,6 @@ function App() {
                 <ProjectDetailsPage
                   theme={theme}
                   toggleTheme={toggleTheme}
-                  hoveredName={hoveredName}
                 />
               }
             />
@@ -178,7 +168,6 @@ function App() {
                 <NotFoundPage
                   theme={theme}
                   toggleTheme={toggleTheme}
-                  hoveredName={hoveredName}
                 />
               }
             />

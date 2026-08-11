@@ -16,8 +16,6 @@ import { tone } from "../lib/work";
 interface HomePageProps {
   theme: string;
   toggleTheme: () => void;
-  hoveredName: string | null;
-  setHoveredName: (name: string | null) => void;
 }
 
 const ROUTES = [
@@ -31,8 +29,6 @@ const EASE = [0.16, 1, 0.3, 1] as const;
 const HomePage: React.FC<HomePageProps> = ({
   theme,
   toggleTheme,
-  hoveredName,
-  setHoveredName,
 }) => {
   const t = tone(theme);
 
@@ -40,16 +36,15 @@ const HomePage: React.FC<HomePageProps> = ({
      behind its panel, so the rails appear on the reveal, not before it. */
   const hold = useEntranceHoldSeconds();
 
-  /* The name is the hero. Hovering it swells the custom cursor, which is the
-     one interaction the whole site is built around. */
-  const nameProps = (name: string) => ({
-    onMouseEnter: () => setHoveredName(name),
-    onMouseLeave: () => setHoveredName(null),
+  /* The name is the hero: accented, and holding the arrow rather than a text
+     caret so it does not read as selectable copy. The hover used to swell the
+     custom cursor; with that gone there is nothing left to notify. */
+  const nameProps = () => ({
     className: `${t.accent} cursor-default`,
   });
 
   return (
-    <Layout theme={theme} toggleTheme={toggleTheme} hoveredName={hoveredName}>
+    <Layout theme={theme} toggleTheme={toggleTheme}>
       <SEO isHome title="Iyegere Success Karboloo - Full-Stack Engineer" path="/" />
 
       {/* Visually hidden, crawler- and screen-reader-friendly summary. The
@@ -85,18 +80,18 @@ const HomePage: React.FC<HomePageProps> = ({
             </LineReveal>
 
             <LineReveal delay={0.12} className="text-[clamp(38px,11.5vw,10rem)]">
-              <span {...nameProps("IYEGERE")}>IYEGERE</span>
+              <span {...nameProps()}>IYEGERE</span>
             </LineReveal>
 
             <LineReveal delay={0.19} className="text-[clamp(38px,11.5vw,10rem)]">
-              <span {...nameProps("SUCCESS")}>SUCCESS</span>
+              <span {...nameProps()}>SUCCESS</span>
             </LineReveal>
 
             <LineReveal delay={0.28} className="mt-3 text-[clamp(15px,2.6vw,30px)]">
               <span className="stroked-text text-transparent">
                 BUT YOU CAN CALL ME{" "}
               </span>
-              <span {...nameProps("KARBOLOO")}>KARBOLOO</span>
+              <span {...nameProps()}>KARBOLOO</span>
             </LineReveal>
           </h1>
         </Shell>

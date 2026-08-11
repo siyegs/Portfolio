@@ -22,13 +22,11 @@ const SITE_URL = "https://iyegeresk.web.app";
 interface ProjectDetailsPageProps {
   theme: string;
   toggleTheme: () => void;
-  hoveredName: string | null;
 }
 
 const ProjectDetailsPage: React.FC<ProjectDetailsPageProps> = ({
   theme,
   toggleTheme,
-  hoveredName,
 }) => {
   const { slugTextId } = useParams();
   const position = projectsData.findIndex((p) => p.slug === slugTextId);
@@ -40,7 +38,6 @@ const ProjectDetailsPage: React.FC<ProjectDetailsPageProps> = ({
       <NotFoundPage
         theme={theme}
         toggleTheme={toggleTheme}
-        hoveredName={hoveredName}
         heading="Project not found"
         message="The project you are looking for does not exist or may have been moved. Let us get you back to the work."
       />
@@ -82,7 +79,7 @@ const ProjectDetailsPage: React.FC<ProjectDetailsPageProps> = ({
       : project.description;
 
   return (
-    <Layout theme={theme} toggleTheme={toggleTheme} hoveredName={hoveredName}>
+    <Layout theme={theme} toggleTheme={toggleTheme}>
       <SEO
         title={project.title}
         path={`/projects/${project.slug}`}

@@ -8,7 +8,6 @@ import { tone } from "../lib/work";
 interface ContactPageProps {
   theme: string;
   toggleTheme: () => void;
-  hoveredName?: string | null;
 }
 
 const EMAIL = "iyegeresuccess@gmail.com";
@@ -28,7 +27,6 @@ const MARQUEE = ["SAY HELLO", "-", "WANNA BE STARTING SOMETHING?", "-"];
 const ContactPage: React.FC<ContactPageProps> = ({
   theme,
   toggleTheme,
-  hoveredName,
 }) => {
   const t = tone(theme);
   const [copied, setCopied] = useState(false);
@@ -50,7 +48,7 @@ const ContactPage: React.FC<ContactPageProps> = ({
   };
 
   return (
-    <Layout theme={theme} toggleTheme={toggleTheme} hoveredName={hoveredName}>
+    <Layout theme={theme} toggleTheme={toggleTheme}>
       <SEO
         title="Contact"
         path="/contact"

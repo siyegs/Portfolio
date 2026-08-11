@@ -8,7 +8,6 @@ import { tone } from "../lib/work";
 interface NotFoundPageProps {
   theme: string;
   toggleTheme: () => void;
-  hoveredName: string | null;
   heading?: string;
   message?: string;
 }
@@ -23,14 +22,13 @@ const DESTINATIONS = [
 const NotFoundPage: React.FC<NotFoundPageProps> = ({
   theme,
   toggleTheme,
-  hoveredName,
   heading = "Page not found",
   message = "The page you are looking for does not exist or may have been moved. Let us get you back on track.",
 }) => {
   const t = tone(theme);
 
   return (
-    <Layout theme={theme} toggleTheme={toggleTheme} hoveredName={hoveredName}>
+    <Layout theme={theme} toggleTheme={toggleTheme}>
       <SEO title={heading} noindex description={message} />
 
       <main

@@ -13,7 +13,6 @@ import { Suspense, useRef } from "react";
 import * as THREE from "three";
 
 interface SceneProps {
-  hoveredName: string | null;
   theme: string;
 }
 

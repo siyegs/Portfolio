@@ -9,13 +9,7 @@ import Scene from "./Scene";
  * including the phones that never render the scene at all. Loaded lazily, the
  * page paints first and the field arrives behind it.
  */
-export default function BackgroundScene({
-  theme,
-  hoveredName,
-}: {
-  theme: string;
-  hoveredName: string | null;
-}) {
+export default function BackgroundScene({ theme }: { theme: string }) {
   return (
     <Canvas
       camera={{ position: [0, 0, 5], fov: 45 }}
@@ -31,7 +25,7 @@ export default function BackgroundScene({
         zIndex: -1,
       }}
     >
-      <Scene hoveredName={hoveredName} theme={theme} />
+      <Scene theme={theme} />
     </Canvas>
   );
 }

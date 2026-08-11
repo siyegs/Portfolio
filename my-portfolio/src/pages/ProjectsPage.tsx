@@ -13,7 +13,6 @@ import { indexLabel, tone } from "../lib/work";
 interface WorkPageProps {
   theme: string;
   toggleTheme: () => void;
-  hoveredName: string | null;
 }
 
 /* Set edge to edge rather than at a fixed size, so the masthead fills the
@@ -30,7 +29,6 @@ const MARQUEE = ["LET'S BUILD SOMETHING", "-", "AVAILABLE FOR WORK", "-"];
 const WorkPage: React.FC<WorkPageProps> = ({
   theme,
   toggleTheme,
-  hoveredName,
 }) => {
   const t = tone(theme);
   const [preview, setPreview] = useState<Preview | null>(null);
@@ -46,7 +44,7 @@ const WorkPage: React.FC<WorkPageProps> = ({
     .filter(({ project }) => active === ALL || project.category === active);
 
   return (
-    <Layout theme={theme} toggleTheme={toggleTheme} hoveredName={hoveredName}>
+    <Layout theme={theme} toggleTheme={toggleTheme}>
       <SEO
         title="Projects"
         path="/projects"

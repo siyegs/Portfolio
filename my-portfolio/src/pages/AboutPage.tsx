@@ -11,18 +11,16 @@ import { tone } from "../lib/work";
 interface AboutPageProps {
   theme: string;
   toggleTheme: () => void;
-  hoveredName: string | null;
 }
 
 const AboutPage: React.FC<AboutPageProps> = ({
   theme,
   toggleTheme,
-  hoveredName,
 }) => {
   const t = tone(theme);
 
   return (
-    <Layout theme={theme} toggleTheme={toggleTheme} hoveredName={hoveredName}>
+    <Layout theme={theme} toggleTheme={toggleTheme}>
       <SEO
         title="About"
         path="/about"
