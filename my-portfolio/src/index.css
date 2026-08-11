@@ -10,15 +10,7 @@
 body {
   background-color: #19191c;
   font-family: 'Space Grotesk', sans-serif;
-  cursor: none;
   position: relative;
-}
-
-/* Touch devices get no custom cursor, so they must keep the real one. */
-@media (pointer: coarse) {
-  body {
-    cursor: auto;
-  }
 }
 
 /* Self-hosted film grain (was hotlinking itssharl.ee). Sits above the 3D
